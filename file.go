@@ -40,6 +40,18 @@ const (
 	PTT_FNLEN = 28
 )
 
+const (
+	PosOfFilename  = 0
+	PosOfModified  = PosOfFilename + PTT_FNLEN
+	PosOfRecommend = 1 + PosOfModified + 4
+	PosOfOwner     = PosOfRecommend + 1
+	PosOfDate      = PosOfOwner + PTT_IDLEN + 2
+	PosOfTitle     = PosOfDate + 6
+
+	PosOfUnionMulti = 1 + PosOfTitle + PTT_TTLEN + 1
+	PosOfFilemode   = PosOfUnionMulti + 4
+)
+
 type VoteLimits struct {
 	Posts   uint8
 	Logins  uint8
@@ -75,8 +87,8 @@ func OpenFileHeaderFile(filename string) ([]*FileHeader, error) {
 
 	for {
 		hdr := make([]byte, 128)
-		len, err := file.Read(hdr)
-		log.Println(len, err)
+		_, err := file.Read(hdr)
+		// log.Println(len, err)
 		if err == io.EOF {
 			break
 		}
@@ -86,7 +98,7 @@ func OpenFileHeaderFile(filename string) ([]*FileHeader, error) {
 			return nil, err
 		}
 		ret = append(ret, f)
-		log.Println(f.Filename)
+		// log.Println(f.Filename)
 
 	}
 
@@ -95,17 +107,6 @@ func OpenFileHeaderFile(filename string) ([]*FileHeader, error) {
 }
 
 func NewFileHeaderWithByte(data []byte) (*FileHeader, error) {
-	const (
-		PosOfFilename  = 0
-		PosOfModified  = PosOfFilename + PTT_FNLEN
-		PosOfRecommend = 1 + PosOfModified + 4
-		PosOfOwner     = PosOfRecommend + 1
-		PosOfDate      = PosOfOwner + PTT_IDLEN + 2
-		PosOfTitle     = PosOfDate + 6
-
-		PosOfUnionMulti = 1 + PosOfTitle + PTT_TTLEN + 1
-		PosOfFilemode   = PosOfUnionMulti + 4
-	)
 
 	ret := FileHeader{}
 	ret.Filename = string(bytes.Trim(data[PosOfFilename:+PosOfFilename+PTT_FNLEN], "\x00"))
@@ -134,6 +135,22 @@ func NewFileHeaderWithByte(data []byte) (*FileHeader, error) {
 	// ret.Title = binary.LittleEndian.Uint8(data[PTT_FNLEN+5+PTT_IDLEN+2+6 : PTT_FNLEN+5+PTT_IDLEN+2+6+PTT_TTLEN+1])
 
 	return &ret, nil
+}
+
+func (h *FileHeader) MarshalToByte() ([]byte, error) {
+	ret := make([]byte, 128)
+
+	copy(ret[PosOfFilename:PosOfFilename+PTT_FNLEN], h.Filename)
+	binary.LittleEndian.PutUint32(ret[PosOfModified:PosOfModified+4], uint32(h.Modified.Unix()))
+
+	ret[PosOfRecommend] = byte(h.Recommend)
+	copy(ret[PosOfOwner:PosOfOwner+PTT_IDLEN+2], h.Owner)
+	copy(ret[PosOfDate:PosOfDate+6], h.Date)
+	copy(ret[PosOfTitle:PosOfTitle+PTT_TTLEN+1], Utf8ToBig5(h.Title))
+
+	// TODO: Check file mode for set Money or AnnoUid ... etc
+
+	return ret, nil
 }
 
 func (h *FileHeader) IsVotePost() bool {

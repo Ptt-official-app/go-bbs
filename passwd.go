@@ -1,6 +1,7 @@
 package bbs
 
 import (
+	"bytes"
 	"encoding/binary"
 	"io"
 	"log"
@@ -8,9 +9,11 @@ import (
 )
 
 var (
-	PosOfPTTUserecPos = 0
+	PosOfPTTUserecVersionPos = 0
+	PosOfPTTUserecUseridPos  = 4
 )
 
+// https://github.com/ptt/pttbbs/blob/master/include/pttstruct.h
 type Userec struct {
 	Version  uint32
 	Userid   string
@@ -40,7 +43,7 @@ func OpenUserecFile(filename string) ([]*Userec, error) {
 	ret := []*Userec{}
 
 	for {
-		hdr := make([]byte, 128)
+		hdr := make([]byte, 512)
 		_, err := file.Read(hdr)
 		// log.Println(len, err)
 		if err == io.EOF {
@@ -64,9 +67,8 @@ func NewUserecWithByte(data []byte) (*Userec, error) {
 
 	ret := Userec{}
 
-	ret.Version = binary.LittleEndian.Uint32(data[PosOfPTTUserecPos : PosOfPTTUserecPos+4])
-
-	// ret.Filename = string(bytes.Trim(data[PosOfPTTFilename:+PosOfPTTFilename+PTT_FNLEN], "\x00"))
+	ret.Version = binary.LittleEndian.Uint32(data[PosOfPTTUserecVersionPos : PosOfPTTUserecVersionPos+4])
+	ret.Userid = string(bytes.Trim(data[PosOfPTTUserecUseridPos:PosOfPTTUserecUseridPos+PTT_IDLEN+1], "\x00"))
 
 	// modifiedInt := binary.LittleEndian.Uint32(data[PosOfPTTModified : PosOfPTTModified+4])
 	// ret.Modified = time.Unix(int64(modifiedInt), 0)

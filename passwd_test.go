@@ -1,6 +1,7 @@
 package bbs
 
 import (
+	"log"
 	"testing"
 )
 
@@ -14,18 +15,52 @@ func TestParseUserRecordHeader(t *testing.T) {
 	expected := []Userec{
 		{
 			Version: 4194,
+			Userid:  "SYSOP",
+		},
+		{
+			Version: 4194,
+			Userid:  "CodingMan",
+		},
+		{
+			Version: 4194,
+			Userid:  "pichu",
+		},
+		{
+			Version: 4194,
+			Userid:  "Kahou",
+		},
+		{
+			Version: 4194,
+			Userid:  "Kahou2",
 		},
 		{},
+		{},
+		{},
+		{},
+		{},
+		{},
+		{},
+		{},
+		{},
+		{},
+		{},
+		{},
+		{},
+		{},
 	}
-
+	log.Printf("records: %d", len(headers))
 	for index, header := range headers {
 		if len(expected) <= index {
 			return
 		}
-		t.Logf("version: %d", header.Version)
+		// t.Logf("version: %d", header.Version)
 		if header.Version != expected[index].Version {
 			t.Logf("lena :%d %d", (header.Version), (expected[index].Version))
 			t.Errorf("Version not match in index %d, expected: %d, got: %d", index, expected[index].Version, header.Version)
+		}
+
+		if header.Userid != expected[index].Userid {
+			t.Errorf("Userid not match in index %d, expected: %s, got: %s", index, expected[index].Userid, header.Userid)
 		}
 
 		// if header.Modified.Sub(expected[index].Modified) != 0 {

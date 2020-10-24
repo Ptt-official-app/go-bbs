@@ -1,4 +1,4 @@
-module go-bbs
+module github.com/PichuChen/go-bbs
 
 go 1.14
 

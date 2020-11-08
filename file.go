@@ -11,6 +11,7 @@ package bbs
 import (
 	"bytes"
 	"encoding/binary"
+
 	// "iconv"
 	"io"
 	"log"
@@ -119,7 +120,7 @@ func NewFileHeaderWithByte(data []byte) (*FileHeader, error) {
 	ret.Recommend = int8(data[PosOfPTTRecommend])
 	ret.Owner = string(bytes.Trim(data[PosOfPTTOwner:PosOfPTTOwner+PTT_IDLEN+2], "\x00"))
 	ret.Date = string(bytes.Trim(data[PosOfPTTDate:PosOfPTTDate+6], "\x00"))
-	ret.Title = Big5ToUtf8(string(bytes.Trim(data[PosOfPTTTitle:PosOfPTTTitle+PTT_TTLEN+1], "\x00")))
+	ret.Title = Big5ToUtf8(bytes.Trim(data[PosOfPTTTitle:PosOfPTTTitle+PTT_TTLEN+1], "\x00"))
 	// log.Println("PosOfUnionMulti:", PosOfUnionMulti, data[PosOfUnionMulti])
 
 	ret.Money = int(binary.LittleEndian.Uint32(data[PosOfPTTUnionMulti : PosOfPTTUnionMulti+4]))

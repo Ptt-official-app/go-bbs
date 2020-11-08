@@ -61,7 +61,7 @@ func NewFomosaBBSFileHeaderWithByte(data []byte) (*FileHeader, error) {
 	// ret.Recommend = int8(data[PosOfRecommend])
 	ret.Owner = string(bytes.Trim(data[PosOfFormosaBBSOwner:PosOfFormosaBBSOwner+72], "\x00"))
 	// ret.Date = string(bytes.Trim(data[PosOfDate:PosOfDate+6], "\x00"))
-	ret.Title = Big5ToUtf8(string(bytes.Trim(data[PosOfFormosaBBSTitle:PosOfFormosaBBSTitle+67], "\x00")))
+	ret.Title = Big5ToUtf8(bytes.Trim(data[PosOfFormosaBBSTitle:PosOfFormosaBBSTitle+67], "\x00"))
 	// // log.Println("PosOfUnionMulti:", PosOfUnionMulti, data[PosOfUnionMulti])
 
 	// ret.Money = int(binary.LittleEndian.Uint32(data[PosOfUnionMulti : PosOfUnionMulti+4]))

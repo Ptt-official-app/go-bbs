@@ -14,7 +14,8 @@ import (
 
 const (
 	// specified in bbscrypt.c: line 594
-	PASSWD_LEN = 13
+	// specified in pttstruct.h: line 51 (len(content) + 1)
+	PASSLEN = 13
 )
 
 var (
@@ -39,6 +40,6 @@ func Fcrypt(input []byte, expected []byte) ([]byte, error) {
 		return nil, err
 	}
 
-	passwd := C.GoBytes(cpasswd, PASSWD_LEN)
+	passwd := C.GoBytes(cpasswd, PASSLEN)
 	return passwd, nil
 }

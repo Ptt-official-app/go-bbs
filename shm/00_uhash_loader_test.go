@@ -2,7 +2,9 @@ package shm
 
 import "testing"
 
-func TestLoadHash(t *testing.T) {
+func TestLoadUHash(t *testing.T) {
+	isTest = true
+
 	tests := []struct {
 		name    string
 		wantErr bool
@@ -12,8 +14,8 @@ func TestLoadHash(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if err := LoadHash(); (err != nil) != tt.wantErr {
-				t.Errorf("LoadHash() error = %v, wantErr %v", err, tt.wantErr)
+			if err := loadUHash(); (err != nil) != tt.wantErr {
+				t.Errorf("loadUHash() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
 	}

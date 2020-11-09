@@ -9,8 +9,15 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-func LoadHash() error {
-	// Always got "file-exists error" in the error.
+//LoadUHash
+//Load user-hash into SHM.
+//This should be done with the original uhash_loader program.
+//Currently it's only for testing.
+func loadUHash() error {
+	if !isTest {
+		return ErrInvalidOp
+	}
+	// always got "file-exists error" in the error.
 	// err is not an indicator of wrong-op in C.load_uhash.
 	// use ret instead.
 	ret, _ := C.load_uhash()

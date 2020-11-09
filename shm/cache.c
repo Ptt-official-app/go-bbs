@@ -217,6 +217,7 @@ remove_from_uhash(int n)
 int
 dosearchuser(const char *userid, char *rightid)
 {
+    //fprintf(stderr, "dosearchuser: userid: %lu rightid: %lu\n", (unsigned long)userid, (unsigned long)rightid);
     int             h, p, times;
     STATINC(STAT_SEARCHUSER);
     h = StringHash(userid)%(1<<HASH_BITS);

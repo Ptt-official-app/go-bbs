@@ -11,7 +11,7 @@ int load_uhash(void) {
 #endif
 		   0600 | IPC_CREAT | IPC_EXCL);
     err = errno;
-    fprintf(stderr, "after shmget: err: %d EEXIST: %d SHM_KEY: %d SHMSIZE: %luSHM_t: %lu SHMALIGNEDSIZE: %d\n", err, EEXIST, SHM_KEY, SHMSIZE, sizeof(SHM_t), SHMALIGNEDSIZE);
+    fprintf(stderr, "after shmget: err: %d EEXIST: %d SHM_KEY: %d SHMSIZE: %lu SHM_t: %lu SHMALIGNEDSIZE: %d\n", err, EEXIST, SHM_KEY, SHMSIZE, sizeof(SHM_t), SHMALIGNEDSIZE);
     if( err == EEXIST )
 	shmid = shmget(SHM_KEY, SHMSIZE,
 #ifdef USE_HUGETLB

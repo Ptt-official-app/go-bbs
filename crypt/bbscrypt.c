@@ -1,5 +1,3 @@
-// from https://github.com/ptt/pttbbs/blob/master/common/sys/crypt.c
-
 /* This file is crypt.c taken from ssh 1.2.33, only modified for compile */
 /**
  * FreeBSD 及 Linux glibc 附的 crypt() 都會用到大 table 加速多次 crypt().
@@ -11,7 +9,7 @@
  */
 #define PROTO
 /* This file is fcrypt.c taken from SSLeay-0.4.3a.  This file is only compiled
-   in on those systems that don't have crypt() in the system libraries.
+   in on those systems that don't have crypt() in the system libraries. 
    //ylo */
 
 /* fcrypt.c */
@@ -442,7 +440,7 @@ struct des_ks_struct *schedule;
 		/* table contained 0213 4657 */
 		*(k++)=((t<<16)|(s&0x0000ffff))&0xffffffff;
 		s=     ((s>>16)|(t&0xffff0000));
-
+		
 		s=(s<<4)|(s>>28);
 		*(k++)=s&0xffffffff;
 		}
@@ -454,7 +452,7 @@ struct des_ks_struct *schedule;
  ******************************************************************/
 
 /* The changes to this macro may help or hinder, depending on the
- * compiler and the achitecture.  gcc2 always seems to do well :-).
+ * compiler and the achitecture.  gcc2 always seems to do well :-). 
  * Inspired by Dana How <how@isl.stanford.edu>
  * DO NOT use the alternative version on machines with 8 byte longs.
  */
@@ -529,11 +527,11 @@ char *des_crypt(buf,salt)
 char *fcrypt(buf, salt)
 char *buf;
 char *salt;
-
-
+          
+           
 #endif
-
-
+     
+      
 	{
 	unsigned int i,j,x,y;
 	unsigned long Eswap0=0,Eswap1=0;

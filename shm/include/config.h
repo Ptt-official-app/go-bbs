@@ -4,6 +4,7 @@
 
 #include <syslog.h>
 #include "../pttbbs.conf"
+#include "../make.conf"
 
 #define BBSPROG         BBSHOME "/bin/mbbsd"         /* 主程式 */
 #define BAN_FILE        "BAN"                        /* 關站通告檔 */

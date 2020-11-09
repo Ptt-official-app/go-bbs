@@ -27,4 +27,4 @@ void userec_add_to_uhash(int n, userec_t *id, int onfly);
 int fill_uhash(int onfly);
 int load_uhash(void);
 
-#endif
+#endif // __BBS_UHASH_LOADER_H__

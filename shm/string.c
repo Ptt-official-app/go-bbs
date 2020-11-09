@@ -222,7 +222,7 @@ strat_ansi(int count, const char *s)
     return s - os;
 }
 
-int 
+int
 strlen_noansi(const char *s)
 {
     // XXX this is almost identical to
@@ -704,7 +704,7 @@ str_iconv(
     }
     /* Start translation */
     while (srclen > 0 && dstlen > 0) {
-	iconv_ret = iconv(iconv_descriptor, &src, &srclen,
+	iconv_ret = iconv(iconv_descriptor, (char **)&src, &srclen,
 			  &dst, &dstlen);
 	if (iconv_ret != 0) {
 	    switch (errno) {
@@ -816,41 +816,4 @@ str_decode_M3(char *str)
     *dst = 0;
     assert(strlen(str) >= strlen((char*)buf));
     strcpy(str, (char*)buf);
-}
-
-/**
- * Obtain random bytes from /dev/urandom.
- */
-void
-must_getrandom(void *buf, size_t len)
-{
-    while (1) {
-	ssize_t r = getrandom(buf, len, 0);
-	if (r == (ssize_t)len)
-	    return;
-	if (r < 0 && errno == EINTR)
-	    continue;
-	assert(!"getrandom failed");
-	exit(1);
-    }
-}
-
-
-/**
- * Generate a random ascii text code.
- */
-void
-random_text_code(char *buf, size_t len)
-{
-    // prevent ambigious characters: oOlI
-    static const char chars[] = "qwertyuipasdfghjkzxcvbnmoQWERTYUPASDFGHJKLZXCVBNM";
-    static size_t charslen = (sizeof(chars) / sizeof(chars[0])) - 1;
-
-    must_getrandom(buf, sizeof(*buf) * len);
-
-    // read rand values as unsigned
-    const unsigned char *rnd = (const unsigned char *)buf;
-    for (size_t i = 0; i < len; i++)
-	buf[i] = chars[rnd[i] % charslen];
-    buf[len] = '\0';
 }

@@ -4,6 +4,7 @@ package shm
 // #cgo linux LDFLAGS: -lbsd
 // #cgo darwin LDFLAGS: -liconv
 // #include "cache.h"
+// #include "proto.h"
 import "C"
 import "unsafe"
 
@@ -18,6 +19,8 @@ func DoSearchUser(userID string, rightID string) (int, error) {
 
 	crightID := C.CString(rightID)
 	defer C.free(unsafe.Pointer(crightID))
+
+	_, _ = C.syncnow()
 
 	cusernum, err := C.dosearchuser(cuserID, crightID)
 	if err != nil {

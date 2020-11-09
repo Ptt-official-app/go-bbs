@@ -25,7 +25,7 @@ void setuserhashedfile(char *buf, const char *filename);
 /* money.c */
 const char* money_level(int money);
 
-/* string.c */  
+/* string.c */
 void obfuscate_ipstr(char *s);
 bool is_valid_brdname(const char *brdname);
 const char *subject_ex(const char *title, int *ptype);
@@ -61,7 +61,7 @@ BanIpList *cached_banip_list(const char *basefile, const char *cachefile);
 #define getbottomtotal(bid) SHM->n_bottom[bid-1]
 unsigned int safe_sleep(unsigned int seconds);
 void *attach_shm(int shmkey, int shmsize);
-#define attach_SHM()	attach_check_SHM(SHM_VERSION, sizeof(SHM_t))
+void attach_SHM();
 void attach_check_SHM(int version, int SHM_t_size);
 void add_to_uhash(int n, const char *id);
 void remove_from_uhash(int n);

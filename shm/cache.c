@@ -33,6 +33,10 @@
 #define abort_bbs YOU_FAILED
 #define log_usies YOU_FAILED
 
+void attach_SHM() {
+   attach_check_SHM(SHM_VERSION, sizeof(SHM_t));
+}
+
 /*
  * the reason for "safe_sleep" is that we may call sleep during SIGALRM
  * handler routine, while SIGALRM is blocked. if we use the original sleep,
@@ -93,7 +97,7 @@ attach_shm(int shmkey, int shmsize)
     return shmptr;
 }
 
-static void 
+static void
 shm_check_error()
 {
     fprintf(stderr, "Please use the source code version corresponding to SHM,\n"
@@ -119,12 +123,12 @@ attach_check_SHM(int version, int SHM_t_size)
     }
     // check common bbs library -> SHM
     if (SHM->version != SHM_VERSION) {
-	fprintf(stderr, "Error: SHM->version(%d) != SHM_VERSION(%d)\n", 
+	fprintf(stderr, "Error: SHM->version(%d) != SHM_VERSION(%d)\n",
 		SHM->version, SHM_VERSION);
 	shm_check_error();
     }
     if (SHM->size    != sizeof(SHM_t)) {
-	fprintf(stderr, "Error: SHM->size(%d) != sizeof(SHM_t)(%zd)\n", 
+	fprintf(stderr, "Error: SHM->size(%d) != sizeof(SHM_t)(%zd)\n",
 		SHM->size, sizeof(SHM_t));
 	shm_check_error();
     }
@@ -153,7 +157,7 @@ attach_check_SHM(int version, int SHM_t_size)
  * data into the hash. (that program could be run in rc-scripts or something
  * like that) after loading completes, the stand-alone program sets loaded to
  * 1 and exits.
- * 
+ *
  * the bbs exits if it can't attach to the shared memory or the hash is not
  * loaded yet.
  */
@@ -372,6 +376,7 @@ search_ulist_userid(const char *userid)
 /*
  * section - money cache
  */
+/*
 int
 setumoney(int uid, int money)
 {
@@ -393,6 +398,7 @@ deumoney(int uid, int money)
     else
 	return setumoney(uid, SHM->money[uid - 1] + money);
 }
+*/
 
 /*
  * section - board cache
@@ -485,7 +491,7 @@ reload_bcache(void)
     fprintf(stderr, "load bottom in background\r\n");
     if( (pid = fork()) > 0 )
 	return;
-    setproctitle("loading bottom");
+    //setproctitle("loading bottom");
     for( i = 0 ; i < MAX_BOARD ; ++i )
 	if( SHM->bcache[i].brdname[0] ){
 	    char    fn[PATHLEN];
@@ -703,7 +709,7 @@ buildBMcache(int bid) /* bid starts from 1 */
  * section - PTT cache (adbanner cache?)
  * 笆篈狾籔ㄤウ
  */
-int 
+int
 filter_aggressive(const char*s)
 {
     (void)s;
@@ -717,11 +723,12 @@ filter_aggressive(const char*s)
     return 0;
 }
 
-int 
+int
 filter_dirtywords(const char*s)
 {
+    static char dirtryword[7] = {-73, 70, -89, 65, -82, 81, 0};
     if (
-	strstr(s, "稦甉") != NULL ||
+	strstr(s, dirtryword) != NULL ||
 	0)
 	return 1;
     return 0;
@@ -730,7 +737,7 @@ filter_dirtywords(const char*s)
 #define AGGRESSIVE_FN ".aggressive"
 static char drop_aggressive = 0;
 
-void 
+void
 load_aggressive_state()
 {
     if (dashf(AGGRESSIVE_FN))
@@ -739,7 +746,7 @@ load_aggressive_state()
 	drop_aggressive = 0;
 }
 
-void 
+void
 set_aggressive_state(int s)
 {
     FILE *fp = NULL;
@@ -784,7 +791,7 @@ reload_pttcache(void)
 		if (item.title[3] != '<' || item.title[8] != '>')
 		    continue;
 
-#define ORDERSONG_FOLDERNAME	"<翴簈>"
+    static char ORDERSONG_FOLDERNAME[7] = {'<', -62, 73, -70, 113, '>', 0};
 		if (strncmp(item.title+3, ORDERSONG_FOLDERNAME, strlen(ORDERSONG_FOLDERNAME)) == 0)
 		    is_ordersong_dir = 1;
 
@@ -829,8 +836,8 @@ reload_pttcache(void)
 			    id++;
 			// Debug purpose
 			// fprintf(stderr, "found aggressive: %s\r\n", buf);
-		    } 
-		    else 
+		    }
+		    else
 		    {
 			id++;
 		    }
@@ -894,7 +901,7 @@ resolve_garbage(void)
 
 /*
  * section - from host (deprecated by fromd / logind?)
- * cache for from host 籔程絬计 
+ * cache for from host 籔程絬计
  */
 void
 reload_fcache(void)
@@ -979,7 +986,7 @@ is_hidden_board_friend(int bid, int uid)
 void add_cooldowntime(int uid, int min)
 {
     // Ptt: I will use the number below 15 seconds.
-    time4_t base= now > SHM->cooldowntime[uid - 1]? 
+    time4_t base= now > SHM->cooldowntime[uid - 1]?
                     now : SHM->cooldowntime[uid - 1];
     base += min*60;
     base &= 0xFFFFFFF0;

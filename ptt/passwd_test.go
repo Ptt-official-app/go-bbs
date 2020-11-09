@@ -1,4 +1,4 @@
-package bbs
+package ptt
 
 import (
 	"log"

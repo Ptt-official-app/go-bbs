@@ -1,4 +1,4 @@
-package bbs
+package ptt
 
 //
 // For Current PTT
@@ -17,6 +17,8 @@ import (
 	"log"
 	"os"
 	"time"
+
+	"github.com/PichuChen/go-bbs/bbs"
 )
 
 const (
@@ -120,7 +122,7 @@ func NewFileHeaderWithByte(data []byte) (*FileHeader, error) {
 	ret.Recommend = int8(data[PosOfPTTRecommend])
 	ret.Owner = string(bytes.Trim(data[PosOfPTTOwner:PosOfPTTOwner+PTT_IDLEN+2], "\x00"))
 	ret.Date = string(bytes.Trim(data[PosOfPTTDate:PosOfPTTDate+6], "\x00"))
-	ret.Title = Big5ToUtf8(bytes.Trim(data[PosOfPTTTitle:PosOfPTTTitle+PTT_TTLEN+1], "\x00"))
+	ret.Title = bbs.Big5ToUtf8(bytes.Trim(data[PosOfPTTTitle:PosOfPTTTitle+PTT_TTLEN+1], "\x00"))
 	// log.Println("PosOfUnionMulti:", PosOfUnionMulti, data[PosOfUnionMulti])
 
 	ret.Money = int(binary.LittleEndian.Uint32(data[PosOfPTTUnionMulti : PosOfPTTUnionMulti+4]))
@@ -149,7 +151,7 @@ func (h *FileHeader) MarshalToByte() ([]byte, error) {
 	ret[PosOfPTTRecommend] = byte(h.Recommend)
 	copy(ret[PosOfPTTOwner:PosOfPTTOwner+PTT_IDLEN+2], h.Owner)
 	copy(ret[PosOfPTTDate:PosOfPTTDate+6], h.Date)
-	copy(ret[PosOfPTTTitle:PosOfPTTTitle+PTT_TTLEN+1], Utf8ToBig5(h.Title))
+	copy(ret[PosOfPTTTitle:PosOfPTTTitle+PTT_TTLEN+1], bbs.Utf8ToBig5(h.Title))
 
 	// TODO: Check file mode for set Money or AnnoUid ... etc
 

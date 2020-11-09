@@ -1,10 +1,12 @@
 package bbs
 
 import (
-	"encoding/binary"
 	"io"
 	"log"
 	"os"
+
+	"github.com/PichuChen/go-bbs/ptttype"
+	"github.com/PichuChen/go-bbs/types"
 )
 
 // https://github.com/ptt/pttbbs/blob/master/include/pttstruct.h
@@ -55,9 +57,7 @@ func OpenUserecFile(filename string) ([]*Userec, error) {
 }
 
 func NewUserecWithFile(file *os.File) (*Userec, error) {
-	userecRaw := &UserecRaw{}
-
-	err := binary.Read(file, binary.LittleEndian, userecRaw)
+	userecRaw, err := ptttype.NewUserecRawWithFile(file)
 	if err != nil {
 		return nil, err
 	}
@@ -67,13 +67,13 @@ func NewUserecWithFile(file *os.File) (*Userec, error) {
 	return user, nil
 }
 
-func NewUserecFromRaw(userecRaw *UserecRaw) *Userec {
+func NewUserecFromRaw(userecRaw *ptttype.UserecRaw) *Userec {
 	user := &Userec{}
 	user.Version = userecRaw.Version
-	user.Userid = CstrToString(userecRaw.UserID[:])
-	user.Realname = Big5ToUtf8(CstrToBytes(userecRaw.RealName[:]))
-	user.Nickname = Big5ToUtf8(CstrToBytes(userecRaw.Nickname[:]))
-	user.Passwd = CstrToString(userecRaw.PasswdHash[:])
+	user.Userid = types.CstrToString(userecRaw.UserID[:])
+	user.Realname = Big5ToUtf8(types.CstrToBytes(userecRaw.RealName[:]))
+	user.Nickname = Big5ToUtf8(types.CstrToBytes(userecRaw.Nickname[:]))
+	user.Passwd = types.CstrToString(userecRaw.PasswdHash[:])
 	user.Pad1 = userecRaw.Pad1
 
 	user.Uflag = userecRaw.UFlag
@@ -83,7 +83,7 @@ func NewUserecFromRaw(userecRaw *UserecRaw) *Userec {
 	user.Numposts = userecRaw.NumPosts
 	user.Firstlogin = uint32(userecRaw.FirstLogin)
 	user.Lastlogin = uint32(userecRaw.LastLogin)
-	user.Lasthost = CstrToString(userecRaw.LastHost[:])
+	user.Lasthost = types.CstrToString(userecRaw.LastHost[:])
 
 	return user
 }

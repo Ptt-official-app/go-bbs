@@ -1,4 +1,4 @@
-package bbs
+package types
 
 import "bytes"
 
@@ -13,6 +13,15 @@ import "bytes"
 //
 //See tests for more examples of how to use fixed-bytes with Cstr to get no-\0 string / []byte
 type Cstr []byte
+
+func CstrLen(cstr Cstr) int {
+	theLen := bytes.IndexByte(cstr, 0x00)
+	if theLen == -1 {
+		return len(cstr)
+	}
+
+	return theLen
+}
 
 //CstrToString
 //
@@ -40,10 +49,6 @@ func CstrToString(cstr Cstr) string {
 //Return
 //	[]byte: bytes
 func CstrToBytes(cstr Cstr) []byte {
-	len := bytes.IndexByte(cstr, 0x00)
-	if len == -1 {
-		return cstr
-	}
-
-	return cstr[:len]
+	theLen := CstrLen(cstr)
+	return cstr[:theLen]
 }

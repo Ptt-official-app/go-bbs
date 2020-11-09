@@ -1,4 +1,4 @@
-package bbs
+package types
 
 import (
 	"reflect"

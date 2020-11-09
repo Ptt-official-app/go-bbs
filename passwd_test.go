@@ -3,6 +3,8 @@ package bbs
 import (
 	"reflect"
 	"testing"
+
+	"github.com/PichuChen/go-bbs/ptttype"
 )
 
 func TestNewUserecFromRaw(t *testing.T) {
@@ -10,7 +12,7 @@ func TestNewUserecFromRaw(t *testing.T) {
 	defer teardownTest()
 
 	type args struct {
-		userecraw *UserecRaw
+		userecraw *ptttype.UserecRaw
 	}
 	tests := []struct {
 		name     string

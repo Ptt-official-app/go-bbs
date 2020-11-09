@@ -5,13 +5,15 @@ import (
 	"golang.org/x/text/transform"
 )
 
-func Utf8ToBig5(input string) []byte {
+type Big5String []byte
+
+func Utf8ToBig5(input string) Big5String {
 	utf8ToBig5 := traditionalchinese.Big5.NewEncoder()
 	big5, _, _ := transform.Bytes(utf8ToBig5, []byte(input))
 	return big5
 }
 
-func Big5ToUtf8(input []byte) string {
+func Big5ToUtf8(input Big5String) string {
 	big5ToUTF8 := traditionalchinese.Big5.NewDecoder()
 	utf8, _, _ := transform.String(big5ToUTF8, string(input))
 	return utf8

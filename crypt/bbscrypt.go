@@ -10,12 +10,8 @@ import "C"
 import (
 	"errors"
 	"sync"
-)
 
-const (
-	// specified in bbscrypt.c: line 594
-	// specified in pttstruct.h: line 51 (len(content) + 1)
-	PASSLEN = 14
+	"github.com/PichuChen/go-bbs/ptttype"
 )
 
 var (
@@ -48,8 +44,8 @@ func Fcrypt(key []byte, salt []byte) ([]byte, error) {
 		return nil, err
 	}
 
-	passwdHash := C.GoBytes(cpasswdHash, PASSLEN)
+	passwdHash := C.GoBytes(cpasswdHash, ptttype.PASSLEN)
 	// specified in bbscrypt.c: line 592
-	passwdHash[PASSLEN-1] = 0
+	passwdHash[ptttype.PASSLEN-1] = 0
 	return passwdHash, nil
 }

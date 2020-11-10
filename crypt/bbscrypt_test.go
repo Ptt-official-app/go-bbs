@@ -6,6 +6,9 @@ import (
 )
 
 func TestFcrypt(t *testing.T) {
+	setupTest()
+	defer teardownTest()
+
 	type args struct {
 		input    []byte
 		expected []byte

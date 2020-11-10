@@ -3,7 +3,8 @@ package shm
 import "testing"
 
 func TestLoadUHash(t *testing.T) {
-	isTest = true
+	setupTest()
+	defer teardownTest()
 
 	tests := []struct {
 		name    string

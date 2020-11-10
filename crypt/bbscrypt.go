@@ -15,7 +15,7 @@ import (
 const (
 	// specified in bbscrypt.c: line 594
 	// specified in pttstruct.h: line 51 (len(content) + 1)
-	PASSLEN = 13
+	PASSLEN = 14
 )
 
 var (
@@ -23,23 +23,33 @@ var (
 	mu              sync.Mutex
 )
 
-func Fcrypt(input []byte, expected []byte) ([]byte, error) {
+//Fcrypt
+//Params
+//	key: the input-key (input-passwd) to be encrypted / checked
+//	salt: the salt (expected-passwd-hash) in crypt(3)
+//
+//Return
+//	[]byte: encrypted passwd, should be the same as salt if salt is the expected-passwd-hash.
+//  error: err
+func Fcrypt(key []byte, salt []byte) ([]byte, error) {
 	// cpasswd is static unsigned char buff[20], requiring mutex.
 	mu.Lock()
 	defer mu.Unlock()
 
-	cinput := C.CBytes(input)
-	defer C.free(cinput)
+	ckey := C.CBytes(key)
+	defer C.free(ckey)
 
-	cexpected := C.CBytes(expected)
-	defer C.free(cexpected)
+	csalt := C.CBytes(salt)
+	defer C.free(csalt)
 
 	// cpasswd is static unsigned char buff[20] in bbscrypt.c: line 543, no need to free.
-	cpasswd, err := C.fcrypt_wrapper(cinput, cexpected)
+	cpasswdHash, err := C.fcrypt_wrapper(ckey, csalt)
 	if err != nil {
 		return nil, err
 	}
 
-	passwd := C.GoBytes(cpasswd, PASSLEN)
-	return passwd, nil
+	passwdHash := C.GoBytes(cpasswdHash, PASSLEN)
+	// specified in bbscrypt.c: line 592
+	passwdHash[PASSLEN-1] = 0
+	return passwdHash, nil
 }

@@ -45,8 +45,7 @@ func doSearchUser(userID string, isReturn bool) (int, string, error) {
 	cuserID := C.CString(userID)
 	defer C.free(unsafe.Pointer(cuserID))
 
-	rightID := ""
-
+	rightID := string(make([]byte, PTT_IDLEN+1))
 	crightID := C.CString(rightID)
 	defer C.free(unsafe.Pointer(crightID))
 

@@ -13,10 +13,13 @@ var (
 func setupTest() {
 	isTest = true
 	origBBSHOME = ptttype.SetBBSHOME("./testcase")
+	shm.IsTest = true
+	shm.LoadUHash()
 	shm.AttachSHM()
 }
 
 func teardownTest() {
-	isTest = false
+	shm.IsTest = false
 	ptttype.SetBBSHOME(origBBSHOME)
+	isTest = false
 }

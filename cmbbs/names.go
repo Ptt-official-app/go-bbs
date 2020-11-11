@@ -2,6 +2,13 @@ package cmbbs
 
 import "github.com/PichuChen/go-bbs/ptttype"
 
+//IsValidUserID
+//
+//Params
+//	userID: user-id
+//
+//Return
+//	bool: is valid user-id
 func IsValidUserID(userID *[ptttype.IDLEN + 1]byte) bool {
 	if userID == nil {
 		return false

@@ -8,9 +8,17 @@ import (
 	"github.com/PichuChen/go-bbs/crypt"
 	"github.com/PichuChen/go-bbs/ptttype"
 	"github.com/PichuChen/go-bbs/shm"
-	log "github.com/sirupsen/logrus"
 )
 
+//CheckPasswd
+//Params
+//	expected: expected-passwd-hash
+//	input: input-passwd
+//	isHash: whether the input-passwd is already hashed.
+//
+//Return
+//	bool: true: good (password matched). false: bad (password not matched).
+//	error: err
 func CheckPasswd(expected []byte, input []byte, isHashed bool) (bool, error) {
 	if isHashed {
 		return reflect.DeepEqual(expected, input), nil
@@ -25,14 +33,20 @@ func CheckPasswd(expected []byte, input []byte, isHashed bool) (bool, error) {
 func LogAttempt(userID *[ptttype.IDLEN + 1]byte, ip [ptttype.IPV4LEN + 1]byte, isWithUserHome bool) {
 }
 
+//PasswdLoadUSer
+//Params
+//	userID: user-id
+//
+//Return
+//	int: user-num in passwd file.
+//	*ptttype.UserecBig5: user.
+//	error: err.
 func PasswdLoadUser(userID *[ptttype.IDLEN + 1]byte) (int, *ptttype.UserecBig5, error) {
 	if userID == nil || userID[0] == 0 {
 		return 0, nil, ptttype.ErrInvalidUserID
 	}
 
-	log.Debugf("PasswdLoadUser: to SearchUserBig5: userID: %v", userID)
 	usernum, _, err := shm.SearchUserBig5(userID[:], false)
-	log.Debugf("PasswdLoadUser: after SearchUserBig5: userID: %v usernum: %v err :%v", userID, usernum, err)
 	if err != nil {
 		return 0, nil, err
 	}
@@ -49,6 +63,13 @@ func PasswdLoadUser(userID *[ptttype.IDLEN + 1]byte) (int, *ptttype.UserecBig5, 
 	return usernum, user, nil
 }
 
+//PasswdQuery
+//Params
+//	num: user-num in passwd file.
+//
+//Return
+//	*ptttype.UserecBig5: user.
+//	error: err.
 func PasswdQuery(num int) (*ptttype.UserecBig5, error) {
 	if num < 1 || num > ptttype.MAX_USERS {
 		return nil, ptttype.ErrInvalidUserID

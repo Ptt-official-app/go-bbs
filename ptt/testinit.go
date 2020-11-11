@@ -13,6 +13,8 @@ var (
 func setupTest() {
 	isTest = true
 	origBBSHOME = ptttype.SetBBSHOME("./testcase")
+	shm.IsTest = true
+	shm.LoadUHash()
 	shm.AttachSHM()
 }
 

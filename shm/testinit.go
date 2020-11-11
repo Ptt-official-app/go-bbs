@@ -1,13 +1,13 @@
 package shm
 
 var (
-	isTest = false
+	IsTest = false
 )
 
 func setupTest() {
-	isTest = true
+	IsTest = true
 }
 
 func teardownTest() {
-	isTest = false
+	IsTest = false
 }

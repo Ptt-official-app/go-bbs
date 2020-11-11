@@ -13,8 +13,8 @@ import (
 //Load user-hash into SHM.
 //This should be done with the original uhash_loader program.
 //Currently it's only for testing.
-func loadUHash() error {
-	if !isTest {
+func LoadUHash() error {
+	if !IsTest {
 		return ErrInvalidOp
 	}
 	// always got "file-exists error" in the error.

@@ -11,6 +11,9 @@ func TestLoginQuery(t *testing.T) {
 	setupTest()
 	defer teardownTest()
 
+	userid1 := [ptttype.IDLEN + 1]byte{}
+	copy(userid1[:], []byte("SYSOP"))
+
 	type args struct {
 		userID   *[ptttype.IDLEN + 1]byte
 		passwd   []byte
@@ -24,12 +27,15 @@ func TestLoginQuery(t *testing.T) {
 		wantErr bool
 	}{
 		// TODO: Add test cases.
-		/*
-			{
-				args: args{userID: &[ptttype.IDLEN + 1]byte{'S', 'Y', 'S', 'O', 'P'}, passwd: []byte{'1', '2', '3'}},
-				want: testUserecBig51,
-			},
-		*/
+		{
+			args: args{userID: &userid1, passwd: []byte("123123")},
+			want: testUserecBig51,
+		},
+		{
+			args:    args{userID: &userid1, passwd: []byte("124")},
+			want:    nil,
+			wantErr: false,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

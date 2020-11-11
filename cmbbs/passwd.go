@@ -33,7 +33,7 @@ func CheckPasswd(expected []byte, input []byte, isHashed bool) (bool, error) {
 func LogAttempt(userID *[ptttype.IDLEN + 1]byte, ip [ptttype.IPV4LEN + 1]byte, isWithUserHome bool) {
 }
 
-//PasswdLoadUSer
+//PasswdLoadUser
 //Params
 //	userID: user-id
 //

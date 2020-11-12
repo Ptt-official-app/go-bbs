@@ -1,23 +1,6 @@
 package bbs
 
-//FixedBytesLen
-//
-//Same effect as strlen (length until \0)
-//See tests for more examples.
-//
-//Params
-//	bytes: bytes
-//
-//Return
-//  int: length of the fixed-bytes
-func FixedBytesLen(fixedBytes []byte) int {
-	for idx, c := range fixedBytes {
-		if c == 0 {
-			return idx
-		}
-	}
-	return len(fixedBytes)
-}
+import "bytes"
 
 //FixedBytesToString
 //
@@ -30,8 +13,8 @@ func FixedBytesLen(fixedBytes []byte) int {
 //Return
 //	string: string
 func FixedBytesToString(fixedBytes []byte) string {
-	len := FixedBytesLen(fixedBytes)
-	return string(fixedBytes[:len])
+	theBytes := FixedBytesToBytes(fixedBytes)
+	return string(theBytes)
 }
 
 //FixedBytesToBytes
@@ -45,6 +28,10 @@ func FixedBytesToString(fixedBytes []byte) string {
 //Return
 //	[]byte: bytes
 func FixedBytesToBytes(fixedBytes []byte) []byte {
-	len := FixedBytesLen(fixedBytes)
+	len := bytes.IndexByte(fixedBytes, 0)
+	if len == -1 {
+		return fixedBytes
+	}
+
 	return fixedBytes[:len]
 }

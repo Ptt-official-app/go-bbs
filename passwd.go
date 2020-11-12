@@ -39,13 +39,15 @@ func OpenUserecFile(filename string) ([]*Userec, error) {
 	for {
 		user, eachErr := NewUserecWithFile(file)
 		if eachErr != nil {
+			// io.EOF is reading correctly to the end the file.
+			if eachErr == io.EOF {
+				break
+			}
+
 			err = eachErr
 			break
 		}
 		ret = append(ret, user)
-	}
-	if err == io.EOF {
-		err = nil
 	}
 
 	return ret, err

@@ -13,20 +13,20 @@ func TestNewUserecFromBig5(t *testing.T) {
 		userecraw *UserecRaw
 	}
 	tests := []struct {
-		name string
-		args args
-		want *Userec
+		name     string
+		args     args
+		expected *Userec
 	}{
 		// TODO: Add test cases.
 		{
-			args: args{testUserecBig51},
-			want: testUserec1,
+			args:     args{testUserecBig51},
+			expected: testUserec1,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := NewUserecFromRaw(tt.args.userecraw); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("NewUserecFromBig5() = %v, want %v", got, tt.want)
+			if got := NewUserecFromRaw(tt.args.userecraw); !reflect.DeepEqual(got, tt.expected) {
+				t.Errorf("NewUserecFromBig5() = %v, want %v", got, tt.expected)
 			}
 		})
 	}
@@ -40,15 +40,15 @@ func TestOpenUserecFile(t *testing.T) {
 		filename string
 	}
 	tests := []struct {
-		name    string
-		args    args
-		want    []*Userec
-		wantErr bool
+		name     string
+		args     args
+		expected []*Userec
+		wantErr  bool
 	}{
 		// TODO: Add test cases.
 		{
-			args: args{"testcase/passwd/01.PASSWDS"},
-			want: testOpenUserecFile1,
+			args:     args{"testcase/passwd/01.PASSWDS"},
+			expected: testOpenUserecFile1,
 		},
 	}
 	for _, tt := range tests {
@@ -59,8 +59,8 @@ func TestOpenUserecFile(t *testing.T) {
 				return
 			}
 
-			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("OpenUserecFile() = %v, want %v", got, tt.want)
+			if !reflect.DeepEqual(got, tt.expected) {
+				t.Errorf("OpenUserecFile() = %v, want %v", got, tt.expected)
 			}
 		})
 	}

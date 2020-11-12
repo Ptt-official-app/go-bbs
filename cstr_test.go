@@ -21,35 +21,35 @@ func TestCstrToBytes(t *testing.T) {
 		cstr Cstr
 	}
 	tests := []struct {
-		name string
-		args args
-		want []byte
+		name     string
+		args     args
+		expected []byte
 	}{
 		{
-			name: "init",
-			args: args{str1[:]},
-			want: []byte{},
+			name:     "init",
+			args:     args{str1[:]},
+			expected: []byte{},
 		},
 		{
-			name: "with only 3 letters",
-			args: args{str2[:]},
-			want: []byte("123"),
+			name:     "with only 3 letters",
+			args:     args{str2[:]},
+			expected: []byte("123"),
 		},
 		{
-			name: "with no 0",
-			args: args{str3[:]},
-			want: []byte("0123456789"),
+			name:     "with no 0",
+			args:     args{str3[:]},
+			expected: []byte("0123456789"),
 		},
 		{
-			name: "cutoff at str4[5]",
-			args: args{str4[:]},
-			want: []byte("01234"),
+			name:     "cutoff at str4[5]",
+			args:     args{str4[:]},
+			expected: []byte("01234"),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := CstrToBytes(tt.args.cstr); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("CstrToBytes() = %v, want %v", got, tt.want)
+			if got := CstrToBytes(tt.args.cstr); !reflect.DeepEqual(got, tt.expected) {
+				t.Errorf("CstrToBytes() = %v, want %v", got, tt.expected)
 			}
 		})
 	}
@@ -71,36 +71,36 @@ func TestCstrToString(t *testing.T) {
 		cstr Cstr
 	}
 	tests := []struct {
-		name string
-		args args
-		want string
+		name     string
+		args     args
+		expected string
 	}{
 		// TODO: Add test cases.
 		{
-			name: "init",
-			args: args{str1[:]},
-			want: "",
+			name:     "init",
+			args:     args{str1[:]},
+			expected: "",
 		},
 		{
-			name: "with only 3 letters",
-			args: args{str2[:]},
-			want: "123",
+			name:     "with only 3 letters",
+			args:     args{str2[:]},
+			expected: "123",
 		},
 		{
-			name: "with no 0",
-			args: args{str3[:]},
-			want: "0123456789",
+			name:     "with no 0",
+			args:     args{str3[:]},
+			expected: "0123456789",
 		},
 		{
-			name: "cutoff at str4[5]",
-			args: args{str4[:]},
-			want: "01234",
+			name:     "cutoff at str4[5]",
+			args:     args{str4[:]},
+			expected: "01234",
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := CstrToString(tt.args.cstr); got != tt.want {
-				t.Errorf("CstrToString() = %v, want %v", got, tt.want)
+			if got := CstrToString(tt.args.cstr); got != tt.expected {
+				t.Errorf("CstrToString() = %v, want %v", got, tt.expected)
 			}
 		})
 	}

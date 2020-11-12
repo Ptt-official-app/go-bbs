@@ -10,13 +10,13 @@ package bbs
 //
 //Return
 //  int: length of the fixed-bytes
-func FixedBytesLen(bytes []byte) int {
-	for idx, c := range bytes {
+func FixedBytesLen(fixedBytes []byte) int {
+	for idx, c := range fixedBytes {
 		if c == 0 {
 			return idx
 		}
 	}
-	return len(bytes)
+	return len(fixedBytes)
 }
 
 //FixedBytesToString
@@ -25,13 +25,13 @@ func FixedBytesLen(bytes []byte) int {
 //See tests for more examples.
 //
 //Params
-//	bytes: bytes
+//	fixedBytes: bytes
 //
 //Return
 //	string: string
-func FixedBytesToString(bytes []byte) string {
-	len := FixedBytesLen(bytes)
-	return string(bytes[:len])
+func FixedBytesToString(fixedBytes []byte) string {
+	len := FixedBytesLen(fixedBytes)
+	return string(fixedBytes[:len])
 }
 
 //FixedBytesToBytes
@@ -40,11 +40,11 @@ func FixedBytesToString(bytes []byte) string {
 //See tests for more examples.
 //
 //Params
-//	bytes: fixed-bytes
+//	fixedBytes: fixed-bytes
 //
 //Return
 //	[]byte: bytes
-func FixedBytesToBytes(bytes []byte) []byte {
-	len := FixedBytesLen(bytes)
-	return bytes[:len]
+func FixedBytesToBytes(fixedBytes []byte) []byte {
+	len := FixedBytesLen(fixedBytes)
+	return fixedBytes[:len]
 }

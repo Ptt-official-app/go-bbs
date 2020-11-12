@@ -1,16 +1,10 @@
 package bbs
 
-var (
-	isTest = false
-)
-
 func setupTest() {
-	isTest = true
 	initTestVars()
 }
 
 func teardownTest() {
-	isTest = false
 	freeTestVars()
 }
 

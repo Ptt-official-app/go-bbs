@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func TestNewUserecFromBig5(t *testing.T) {
+func TestNewUserecFromRaw(t *testing.T) {
 	setupTest()
 	defer teardownTest()
 
@@ -19,14 +19,14 @@ func TestNewUserecFromBig5(t *testing.T) {
 	}{
 		// TODO: Add test cases.
 		{
-			args:     args{testUserecBig51},
+			args:     args{testUserecRaw},
 			expected: testUserec1,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := NewUserecFromRaw(tt.args.userecraw); !reflect.DeepEqual(got, tt.expected) {
-				t.Errorf("NewUserecFromBig5() = %v, expected %v", got, tt.expected)
+				t.Errorf("NewUserecFromRaw() = %v, expected %v", got, tt.expected)
 			}
 		})
 	}

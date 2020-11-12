@@ -1,7 +1,7 @@
 package bbs
 
 var (
-	testUserecBig51 = &UserecRaw{
+	testUserecRaw = &UserecRaw{
 		Version:    PTT_PASSWD_VERSION,
 		UserID:     [PTT_IDLEN + 1]byte{0x53, 0x59, 0x53, 0x4f, 0x50},                          // SYSOP
 		RealName:   [PTT_REALNAMESZ]byte{0x43, 0x6f, 0x64, 0x69, 0x6e, 0x67, 0x4d, 0x61, 0x6e}, // CodingMan

@@ -6,6 +6,8 @@ import (
 	"io"
 	"log"
 	"os"
+
+	"github.com/PichuChen/go-bbs/ptttype"
 )
 
 var (
@@ -43,24 +45,53 @@ func OpenUserecFile(filename string) ([]*Userec, error) {
 	ret := []*Userec{}
 
 	for {
-		hdr := make([]byte, 512)
-		_, err := file.Read(hdr)
-		// log.Println(len, err)
-		if err == io.EOF {
+		user, eachErr := NewUserecWithFile(file)
+		if eachErr != nil {
+			err = eachErr
 			break
 		}
-
-		f, err := NewUserecWithByte(hdr)
-		if err != nil {
-			return nil, err
-		}
-		ret = append(ret, f)
-		// log.Println(f.Filename)
-
+		ret = append(ret, user)
+	}
+	if err == io.EOF {
+		err = nil
 	}
 
-	return ret, nil
+	return ret, err
 
+}
+
+func NewUserecWithFile(file *os.File) (*Userec, error) {
+	userBig5 := &ptttype.UserecBig5{}
+
+	err := binary.Read(file, binary.LittleEndian, userBig5)
+	if err != nil {
+		return nil, err
+	}
+
+	user := NewUserecFromBig5(userBig5)
+
+	return user, nil
+}
+
+func NewUserecFromBig5(userBig5 *ptttype.UserecBig5) *Userec {
+	user := &Userec{}
+	user.Version = userBig5.Version
+	user.Userid = ptttype.FixedBytesToString(userBig5.UserID[:])
+	user.Realname = Big5ToUtf8(ptttype.FixedBytesToBytes(userBig5.RealName[:]))
+	user.Nickname = Big5ToUtf8(ptttype.FixedBytesToBytes(userBig5.Nickname[:]))
+	user.Passwd = ptttype.FixedBytesToString(userBig5.PasswdHash[:])
+	user.Pad1 = userBig5.Pad1
+
+	user.Uflag = userBig5.UFlag
+	user._unused1 = userBig5.Unused1
+	user.Userlevel = userBig5.UserLevel
+	user.Numlogindays = userBig5.NumLoginDays
+	user.Numposts = userBig5.NumPosts
+	user.Firstlogin = uint32(userBig5.FirstLogin)
+	user.Lastlogin = uint32(userBig5.LastLogin)
+	user.Lasthost = ptttype.FixedBytesToString(userBig5.LastHost[:])
+
+	return user
 }
 
 func NewUserecWithByte(data []byte) (*Userec, error) {

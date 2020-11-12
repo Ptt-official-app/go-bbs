@@ -1,100 +1,69 @@
 package bbs
 
 import (
-	"log"
+	"reflect"
 	"testing"
+
+	"github.com/PichuChen/go-bbs/ptttype"
 )
 
-func TestParseUserRecordHeader(t *testing.T) {
+func TestNewUserecFromBig5(t *testing.T) {
+	setupTest()
+	defer teardownTest()
 
-	headers, err := OpenUserecFile("testcase/passwd/01.PASSWDS")
-	if err != nil {
-		t.Error(err)
+	type args struct {
+		userBig5 *ptttype.UserecBig5
 	}
-
-	expected := []Userec{
+	tests := []struct {
+		name string
+		args args
+		want *Userec
+	}{
+		// TODO: Add test cases.
 		{
-			Version: 4194,
-			Userid:  "SYSOP",
+			args: args{testUserecBig51},
+			want: testUserec1,
 		},
-		{
-			Version: 4194,
-			Userid:  "CodingMan",
-		},
-		{
-			Version: 4194,
-			Userid:  "pichu",
-		},
-		{
-			Version: 4194,
-			Userid:  "Kahou",
-		},
-		{
-			Version: 4194,
-			Userid:  "Kahou2",
-		},
-		{},
-		{},
-		{},
-		{},
-		{},
-		{},
-		{},
-		{},
-		{},
-		{},
-		{},
-		{},
-		{},
-		{},
 	}
-	log.Printf("records: %d", len(headers))
-	for index, header := range headers {
-		if len(expected) <= index {
-			return
-		}
-		// t.Logf("version: %d", header.Version)
-		if header.Version != expected[index].Version {
-			t.Logf("lena :%d %d", (header.Version), (expected[index].Version))
-			t.Errorf("Version not match in index %d, expected: %d, got: %d", index, expected[index].Version, header.Version)
-		}
-
-		if header.Userid != expected[index].Userid {
-			t.Errorf("Userid not match in index %d, expected: %s, got: %s", index, expected[index].Userid, header.Userid)
-		}
-
-		// if header.Modified.Sub(expected[index].Modified) != 0 {
-		// 	t.Errorf("Modified not match in index %d, expected: %s, got: %s", index, expected[index].Modified, header.Modified)
-		// }
-		// if header.Recommend != expected[index].Recommend {
-		// 	t.Errorf("Recommend not match in index %d, expected: %q, got: %q", index, expected[index].Recommend, header.Recommend)
-		// }
-		// if header.Owner != expected[index].Owner {
-		// 	t.Errorf("Owner not match in index %d, expected: %s, got: %s", index, expected[index].Owner, header.Owner)
-		// }
-		// if header.Date != expected[index].Date {
-		// 	t.Logf("Date :%d %d", len(header.Date), len(expected[index].Date))
-		// 	t.Errorf("Date not match in index %d, expected: %q, got: %q", index, expected[index].Date, header.Date)
-		// }
-		// if header.Title != expected[index].Title {
-		// 	t.Errorf("Title not match in index %d, expected: %q, got: %q", index, expected[index].Title, header.Title)
-		// }
-		// if header.Money != expected[index].Money {
-		// 	t.Errorf("Money not match in index %d, expected: %q, got: %q", index, expected[index].Money, header.Money)
-		// }
-		// if header.AnnoUid != expected[index].AnnoUid {
-		// 	t.Errorf("AnnoUid not match in index %d, expected: %q, got: %q", index, expected[index].AnnoUid, header.AnnoUid)
-		// }
-		// if header.VoteLimits != expected[index].VoteLimits {
-		// 	t.Errorf("VoteLimits not match in index %d, expected: %q, got: %q", index, expected[index].VoteLimits, header.VoteLimits)
-		// }
-		// if header.ReferRef != expected[index].ReferRef {
-		// 	t.Errorf("ReferRef not match in index %d, expected: %q, got: %q", index, expected[index].ReferRef, header.ReferRef)
-		// }
-		// if header.Filemode != expected[index].Filemode {
-		// 	t.Errorf("Filemode not match in index %d, expected: %q, got: %q", index, expected[index].Filemode, header.Filemode)
-		// }
-
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := NewUserecFromBig5(tt.args.userBig5); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("NewUserecFromBig5() = %v, want %v", got, tt.want)
+			}
+		})
 	}
+}
 
+func TestOpenUserecFile(t *testing.T) {
+	setupTest()
+	defer teardownTest()
+
+	type args struct {
+		filename string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    []*Userec
+		wantErr bool
+	}{
+		// TODO: Add test cases.
+		{
+			args: args{"testcase/passwd/01.PASSWDS"},
+			want: testOpenUserecFile1,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := OpenUserecFile(tt.args.filename)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("OpenUserecFile() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("OpenUserecFile() = %v, want %v", got, tt.want)
+			}
+		})
+	}
 }

@@ -98,5 +98,6 @@ var (
 	}
 	testUserecEmpty = &Userec{}
 
-	testOpenUserecFile1 []*Userec = nil
+	testOpenUserecFile1     []*Userec = nil
+	TEST_N_OPEN_USER_FILE_1           = 50
 )

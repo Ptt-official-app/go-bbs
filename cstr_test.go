@@ -49,7 +49,7 @@ func TestCstrToBytes(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := CstrToBytes(tt.args.cstr); !reflect.DeepEqual(got, tt.expected) {
-				t.Errorf("CstrToBytes() = %v, want %v", got, tt.expected)
+				t.Errorf("CstrToBytes() = %v, expected %v", got, tt.expected)
 			}
 		})
 	}
@@ -100,7 +100,7 @@ func TestCstrToString(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := CstrToString(tt.args.cstr); got != tt.expected {
-				t.Errorf("CstrToString() = %v, want %v", got, tt.expected)
+				t.Errorf("CstrToString() = %v, expected %v", got, tt.expected)
 			}
 		})
 	}

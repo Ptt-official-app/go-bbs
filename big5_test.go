@@ -24,7 +24,7 @@ func TestUtf8ToBig5(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := Utf8ToBig5(tt.args.input); !reflect.DeepEqual(got, tt.expected) {
-				t.Errorf("Utf8ToBig5() = %v, want %v", got, tt.expected)
+				t.Errorf("Utf8ToBig5() = %v, expected %v", got, tt.expected)
 			}
 		})
 	}
@@ -49,7 +49,7 @@ func TestBig5ToUtf8(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := Big5ToUtf8(tt.args.input); !reflect.DeepEqual(got, tt.expected) {
-				t.Errorf("Big5ToUtf8() = %v, want %v", got, tt.expected)
+				t.Errorf("Big5ToUtf8() = %v, expected %v", got, tt.expected)
 			}
 		})
 	}

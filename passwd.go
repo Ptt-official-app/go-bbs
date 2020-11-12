@@ -1,16 +1,10 @@
 package bbs
 
 import (
-	"bytes"
 	"encoding/binary"
 	"io"
 	"log"
 	"os"
-)
-
-var (
-	PosOfPTTUserecVersionPos = 0
-	PosOfPTTUserecUseridPos  = 4
 )
 
 // https://github.com/ptt/pttbbs/blob/master/include/pttstruct.h
@@ -43,55 +37,51 @@ func OpenUserecFile(filename string) ([]*Userec, error) {
 	ret := []*Userec{}
 
 	for {
-		hdr := make([]byte, 512)
-		_, err := file.Read(hdr)
-		// log.Println(len, err)
-		if err == io.EOF {
+		user, eachErr := NewUserecWithFile(file)
+		if eachErr != nil {
+			err = eachErr
 			break
 		}
-
-		f, err := NewUserecWithByte(hdr)
-		if err != nil {
-			return nil, err
-		}
-		ret = append(ret, f)
-		// log.Println(f.Filename)
-
+		ret = append(ret, user)
+	}
+	if err == io.EOF {
+		err = nil
 	}
 
-	return ret, nil
+	return ret, err
 
 }
 
-func NewUserecWithByte(data []byte) (*Userec, error) {
+func NewUserecWithFile(file *os.File) (*Userec, error) {
+	userecRaw := &UserecRaw{}
 
-	ret := Userec{}
+	err := binary.Read(file, binary.LittleEndian, userecRaw)
+	if err != nil {
+		return nil, err
+	}
 
-	ret.Version = binary.LittleEndian.Uint32(data[PosOfPTTUserecVersionPos : PosOfPTTUserecVersionPos+4])
-	ret.Userid = string(bytes.Trim(data[PosOfPTTUserecUseridPos:PosOfPTTUserecUseridPos+PTT_IDLEN+1], "\x00"))
+	user := NewUserecFromRaw(userecRaw)
 
-	// modifiedInt := binary.LittleEndian.Uint32(data[PosOfPTTModified : PosOfPTTModified+4])
-	// ret.Modified = time.Unix(int64(modifiedInt), 0)
+	return user, nil
+}
 
-	// ret.Recommend = int8(data[PosOfPTTRecommend])
-	// ret.Owner = string(bytes.Trim(data[PosOfPTTOwner:PosOfPTTOwner+PTT_IDLEN+2], "\x00"))
-	// ret.Date = string(bytes.Trim(data[PosOfPTTDate:PosOfPTTDate+6], "\x00"))
-	// ret.Title = Big5ToUtf8(string(bytes.Trim(data[PosOfPTTTitle:PosOfPTTTitle+PTT_TTLEN+1], "\x00")))
-	// // log.Println("PosOfUnionMulti:", PosOfUnionMulti, data[PosOfUnionMulti])
+func NewUserecFromRaw(userecRaw *UserecRaw) *Userec {
+	user := &Userec{}
+	user.Version = userecRaw.Version
+	user.Userid = FixedBytesToString(userecRaw.UserID[:])
+	user.Realname = Big5ToUtf8(FixedBytesToBytes(userecRaw.RealName[:]))
+	user.Nickname = Big5ToUtf8(FixedBytesToBytes(userecRaw.Nickname[:]))
+	user.Passwd = FixedBytesToString(userecRaw.PasswdHash[:])
+	user.Pad1 = userecRaw.Pad1
 
-	// ret.Money = int(binary.LittleEndian.Uint32(data[PosOfPTTUnionMulti : PosOfPTTUnionMulti+4]))
-	// ret.AnnoUid = int(binary.LittleEndian.Uint32(data[PosOfPTTUnionMulti : PosOfPTTUnionMulti+4]))
+	user.Uflag = userecRaw.UFlag
+	user._unused1 = userecRaw.Unused1
+	user.Userlevel = userecRaw.UserLevel
+	user.Numlogindays = userecRaw.NumLoginDays
+	user.Numposts = userecRaw.NumPosts
+	user.Firstlogin = uint32(userecRaw.FirstLogin)
+	user.Lastlogin = uint32(userecRaw.LastLogin)
+	user.Lasthost = FixedBytesToString(userecRaw.LastHost[:])
 
-	// ret.Filemode = uint8(data[PosOfPTTFilemode])
-
-	// if ret.IsVotePost() {
-	// 	ret.VoteLimits.Posts = data[PosOfPTTUnionMulti+0]
-	// 	ret.VoteLimits.Logins = data[PosOfPTTUnionMulti+1]
-	// 	ret.VoteLimits.Regtime = data[PosOfPTTUnionMulti+2]
-	// 	ret.VoteLimits.Badpost = data[PosOfPTTUnionMulti+3]
-	// }
-
-	// ret.Title = binary.LittleEndian.Uint8(data[PTT_FNLEN+5+PTT_IDLEN+2+6 : PTT_FNLEN+5+PTT_IDLEN+2+6+PTT_TTLEN+1])
-
-	return &ret, nil
+	return user
 }

@@ -9,6 +9,7 @@ import (
 	"time"
 )
 
+// LoginRecentRecord records Login record, please see https://github.com/ptt/pttbbs/blob/446c2bc34867286a2a093615ea69501f32c127e4/mbbsd/mbbsd.c#L1123
 type LoginRecentRecord struct {
 	LoginStartTime time.Time
 	FromHost       string

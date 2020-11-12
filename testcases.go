@@ -3,10 +3,10 @@ package bbs
 var (
 	testUserecBig51 = &UserecRaw{
 		Version:    PTT_PASSWD_VERSION,
-		UserID:     [PTT_IDLEN + 1]byte{83, 89, 83, 79, 80},
-		RealName:   [PTT_REALNAMESZ]byte{67, 111, 100, 105, 110, 103, 77, 97, 110},
-		Nickname:   [PTT_NICKNAMESZ]byte{175, 171},
-		PasswdHash: [PTT_PASSLEN]byte{98, 104, 119, 118, 79, 74, 116, 102, 84, 49, 84, 65, 73, 0},
+		UserID:     [PTT_IDLEN + 1]byte{0x53, 0x59, 0x53, 0x4f, 0x50},                          // SYSOP
+		RealName:   [PTT_REALNAMESZ]byte{0x43, 0x6f, 0x64, 0x69, 0x6e, 0x67, 0x4d, 0x61, 0x6e}, // CodingMan
+		Nickname:   [PTT_NICKNAMESZ]byte{0xaf, 0xab},                                           // 神
+		PasswdHash: [PTT_PASSLEN]byte{0x62, 0x68, 0x77, 0x76, 0x4f, 0x4a, 0x74, 0x66, 0x54, 0x31, 0x54, 0x41, 0x49, 0x00},
 
 		UFlag:        33557088,
 		UserLevel:    536871943,
@@ -14,11 +14,11 @@ var (
 		NumPosts:     0,
 		FirstLogin:   1600681288,
 		LastLogin:    1600756094,
-		LastHost:     [PTT_IPV4LEN + 1]byte{53, 57, 46, 49, 50, 52, 46, 49, 54, 55, 46, 50, 50, 54},
-		Address:      [PTT_ADDRESSSZ]byte{183, 115, 166, 203, 191, 164, 164, 108, 181, 234, 182, 109, 175, 81, 166, 179, 167, 248, 53, 52, 51, 184, 185},
+		LastHost:     [PTT_IPV4LEN + 1]byte{0x35, 0x39, 0x2e, 0x31, 0x32, 0x34, 0x2e, 0x31, 0x36, 0x37, 0x2e, 0x32, 0x32, 0x36},                                                     //59.124.167.226
+		Address:      [PTT_ADDRESSSZ]byte{0xb7, 0x73, 0xa6, 0xcb, 0xbf, 0xa4, 0xa4, 0x6c, 0xb5, 0xea, 0xb6, 0x6d, 0xaf, 0x51, 0xa6, 0xb3, 0xa7, 0xf8, 0x35, 0x34, 0x31, 0xb8, 0xb9}, //新竹縣子虛鄉烏有村543號
 		Over18:       1,
 		Pager:        1,
-		Career:       [PTT_CAREERSZ]byte{165, 254, 180, 186, 179, 110, 197, 233},
+		Career:       [PTT_CAREERSZ]byte{0xa5, 0xfe, 0xb4, 0xba, 0xb3, 0x6e, 0xc5, 0xe9}, //全景軟體
 		LastSeen:     1600681288,
 	}
 

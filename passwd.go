@@ -68,10 +68,10 @@ func NewUserecWithFile(file *os.File) (*Userec, error) {
 func NewUserecFromRaw(userecRaw *UserecRaw) *Userec {
 	user := &Userec{}
 	user.Version = userecRaw.Version
-	user.Userid = FixedBytesToString(userecRaw.UserID[:])
-	user.Realname = Big5ToUtf8(FixedBytesToBytes(userecRaw.RealName[:]))
-	user.Nickname = Big5ToUtf8(FixedBytesToBytes(userecRaw.Nickname[:]))
-	user.Passwd = FixedBytesToString(userecRaw.PasswdHash[:])
+	user.Userid = CstrToString(userecRaw.UserID[:])
+	user.Realname = Big5ToUtf8(CstrToBytes(userecRaw.RealName[:]))
+	user.Nickname = Big5ToUtf8(CstrToBytes(userecRaw.Nickname[:]))
+	user.Passwd = CstrToString(userecRaw.PasswdHash[:])
 	user.Pad1 = userecRaw.Pad1
 
 	user.Uflag = userecRaw.UFlag
@@ -81,7 +81,7 @@ func NewUserecFromRaw(userecRaw *UserecRaw) *Userec {
 	user.Numposts = userecRaw.NumPosts
 	user.Firstlogin = uint32(userecRaw.FirstLogin)
 	user.Lastlogin = uint32(userecRaw.LastLogin)
-	user.Lasthost = FixedBytesToString(userecRaw.LastHost[:])
+	user.Lasthost = CstrToString(userecRaw.LastHost[:])
 
 	return user
 }

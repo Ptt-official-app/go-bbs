@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func TestFixedBytesToBytes(t *testing.T) {
+func TestCstrToBytes(t *testing.T) {
 	setupTest()
 	defer teardownTest()
 
@@ -18,7 +18,7 @@ func TestFixedBytesToBytes(t *testing.T) {
 	copy(str4[:], []byte("01234\x006789"))
 
 	type args struct {
-		bytes []byte
+		cstr Cstr
 	}
 	tests := []struct {
 		name string
@@ -48,14 +48,14 @@ func TestFixedBytesToBytes(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := FixedBytesToBytes(tt.args.bytes); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("FixedBytesToBytes() = %v, want %v", got, tt.want)
+			if got := CstrToBytes(tt.args.cstr); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("CstrToBytes() = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-func TestFixedBytesToString(t *testing.T) {
+func TestCstrToString(t *testing.T) {
 	setupTest()
 	defer teardownTest()
 
@@ -68,7 +68,7 @@ func TestFixedBytesToString(t *testing.T) {
 	copy(str4[:], []byte("01234\x006789"))
 
 	type args struct {
-		bytes []byte
+		cstr Cstr
 	}
 	tests := []struct {
 		name string
@@ -99,8 +99,8 @@ func TestFixedBytesToString(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := FixedBytesToString(tt.args.bytes); got != tt.want {
-				t.Errorf("FixedBytesToString() = %v, want %v", got, tt.want)
+			if got := CstrToString(tt.args.cstr); got != tt.want {
+				t.Errorf("CstrToString() = %v, want %v", got, tt.want)
 			}
 		})
 	}

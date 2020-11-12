@@ -18,7 +18,7 @@ func TestUtf8ToBig5(t *testing.T) {
 		{
 			name: "test0",
 			args: args{input: "新的目錄"},
-			want: []byte{183, 115, 170, 186, 165, 216, 191, 253},
+			want: []byte{0xb7, 0x73, 0xaa, 0xba, 0xa5, 0xd8, 0xbf, 0xfd},
 		},
 	}
 	for _, tt := range tests {
@@ -42,7 +42,7 @@ func TestBig5ToUtf8(t *testing.T) {
 		// TODO: Add test cases.
 		{
 			name: "test0",
-			args: args{input: []byte{183, 115, 170, 186, 165, 216, 191, 253}},
+			args: args{input: []byte{0xb7, 0x73, 0xaa, 0xba, 0xa5, 0xd8, 0xbf, 0xfd}},
 			want: "新的目錄",
 		},
 	}

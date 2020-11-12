@@ -15,7 +15,7 @@ func TestFixedBytesToBytes(t *testing.T) {
 	str3 := [10]byte{}
 	copy(str3[:], []byte("0123456789"))
 	str4 := [10]byte{}
-	copy(str4[:], []byte("01234\0006789"))
+	copy(str4[:], []byte("01234\x006789"))
 
 	type args struct {
 		bytes []byte
@@ -65,7 +65,7 @@ func TestFixedBytesToString(t *testing.T) {
 	str3 := [10]byte{}
 	copy(str3[:], []byte("0123456789"))
 	str4 := [10]byte{}
-	copy(str4[:], []byte("01234\0006789"))
+	copy(str4[:], []byte("01234\x006789"))
 
 	type args struct {
 		bytes []byte

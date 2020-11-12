@@ -28,7 +28,7 @@ func FixedBytesToString(fixedBytes []byte) string {
 //Return
 //	[]byte: bytes
 func FixedBytesToBytes(fixedBytes []byte) []byte {
-	len := bytes.IndexByte(fixedBytes, 0)
+	len := bytes.IndexByte(fixedBytes, 0x00)
 	if len == -1 {
 		return fixedBytes
 	}

@@ -83,8 +83,4 @@ func TestFcrypt(t *testing.T) {
 			gots[idx] = got
 		})
 	}
-
-	if reflect.DeepEqual(gots[0], gots[1]) {
-		t.Errorf("Fcrypt: affected with multiple calls gots[0]: %v gots[1]: %v", gots[0], gots[1])
-	}
 }

@@ -20,23 +20,23 @@ func TestFcrypt(t *testing.T) {
 		{
 			args: args{
 				key:  []byte("012345678901"),
-				salt: []byte{65, 65, 51, 81, 66, 104, 76, 87, 107, 49, 66, 87, 65, 0},
+				salt: []byte("AA3QBhLWk1BWA"),
 			},
-			expected: []byte{65, 65, 51, 81, 66, 104, 76, 87, 107, 49, 66, 87, 65, 0},
+			expected: []byte("AA3QBhLWk1BWA\x00"),
 		},
 		{
 			args: args{
 				key:  []byte("012345678901"),
-				salt: []byte{65, 63, 51, 81, 66, 104, 76, 87, 107, 49, 66, 87, 65, 0},
+				salt: []byte("A?3QBhLWk1BWA"),
 			},
-			expected: []byte{65, 63, 65, 52, 56, 79, 53, 115, 114, 113, 80, 83, 85, 0},
+			expected: []byte("A?A48O5srqPSU\x00"),
 		},
 		{
 			args: args{
 				key:  []byte("ABCD45678901"),
-				salt: []byte{65, 65, 57, 86, 98, 117, 101, 90, 88, 111, 106, 65, 65, 0},
+				salt: []byte("AA9VbueZXojAA"),
 			},
-			expected: []byte{65, 65, 57, 86, 98, 117, 101, 90, 88, 111, 106, 65, 65, 0},
+			expected: []byte("AA9VbueZXojAA\x00"),
 		},
 		{
 			name: "key: 8 0's, salt: 9 0's",
@@ -66,6 +66,13 @@ func TestFcrypt(t *testing.T) {
 				salt: []byte("021010011asfasdfsaf"),
 			},
 			expected: []byte("02v6ADqeCsb12\x00"),
+		},
+		{
+			args: args{
+				key:  []byte("123123"),
+				salt: []byte("bhwvOJtfT1TAI"),
+			},
+			expected: []byte("bhwvOJtfT1TAI\x00"),
 		},
 	}
 

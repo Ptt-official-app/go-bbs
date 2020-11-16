@@ -24,7 +24,6 @@ package shm
 // }
 import "C"
 import (
-	"time"
 	"unsafe"
 
 	"github.com/PichuChen/go-bbs/types"
@@ -85,9 +84,6 @@ func CloseShm(shmid int) (err error) {
 	if int(cerrno) < 0 {
 		return ErrUnableToCloseShm
 	}
-
-	// XXX sleep 10 msec to let the system clear the shm.
-	time.Sleep(10000000)
 
 	return nil
 }

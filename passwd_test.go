@@ -1,100 +1,184 @@
 package bbs
 
 import (
-	"log"
+	"reflect"
 	"testing"
 )
 
-func TestParseUserRecordHeader(t *testing.T) {
+func TestNewUserecFromRaw(t *testing.T) {
+	setupTest()
+	defer teardownTest()
 
-	headers, err := OpenUserecFile("testcase/passwd/01.PASSWDS")
-	if err != nil {
-		t.Error(err)
+	type args struct {
+		userecraw *UserecRaw
 	}
-
-	expected := []Userec{
+	tests := []struct {
+		name     string
+		args     args
+		expected *Userec
+	}{
+		// TODO: Add test cases.
 		{
-			Version: 4194,
-			Userid:  "SYSOP",
+			args:     args{testUserecRaw},
+			expected: testUserec1,
 		},
-		{
-			Version: 4194,
-			Userid:  "CodingMan",
-		},
-		{
-			Version: 4194,
-			Userid:  "pichu",
-		},
-		{
-			Version: 4194,
-			Userid:  "Kahou",
-		},
-		{
-			Version: 4194,
-			Userid:  "Kahou2",
-		},
-		{},
-		{},
-		{},
-		{},
-		{},
-		{},
-		{},
-		{},
-		{},
-		{},
-		{},
-		{},
-		{},
-		{},
 	}
-	log.Printf("records: %d", len(headers))
-	for index, header := range headers {
-		if len(expected) <= index {
-			return
-		}
-		// t.Logf("version: %d", header.Version)
-		if header.Version != expected[index].Version {
-			t.Logf("lena :%d %d", (header.Version), (expected[index].Version))
-			t.Errorf("Version not match in index %d, expected: %d, got: %d", index, expected[index].Version, header.Version)
-		}
-
-		if header.Userid != expected[index].Userid {
-			t.Errorf("Userid not match in index %d, expected: %s, got: %s", index, expected[index].Userid, header.Userid)
-		}
-
-		// if header.Modified.Sub(expected[index].Modified) != 0 {
-		// 	t.Errorf("Modified not match in index %d, expected: %s, got: %s", index, expected[index].Modified, header.Modified)
-		// }
-		// if header.Recommend != expected[index].Recommend {
-		// 	t.Errorf("Recommend not match in index %d, expected: %q, got: %q", index, expected[index].Recommend, header.Recommend)
-		// }
-		// if header.Owner != expected[index].Owner {
-		// 	t.Errorf("Owner not match in index %d, expected: %s, got: %s", index, expected[index].Owner, header.Owner)
-		// }
-		// if header.Date != expected[index].Date {
-		// 	t.Logf("Date :%d %d", len(header.Date), len(expected[index].Date))
-		// 	t.Errorf("Date not match in index %d, expected: %q, got: %q", index, expected[index].Date, header.Date)
-		// }
-		// if header.Title != expected[index].Title {
-		// 	t.Errorf("Title not match in index %d, expected: %q, got: %q", index, expected[index].Title, header.Title)
-		// }
-		// if header.Money != expected[index].Money {
-		// 	t.Errorf("Money not match in index %d, expected: %q, got: %q", index, expected[index].Money, header.Money)
-		// }
-		// if header.AnnoUid != expected[index].AnnoUid {
-		// 	t.Errorf("AnnoUid not match in index %d, expected: %q, got: %q", index, expected[index].AnnoUid, header.AnnoUid)
-		// }
-		// if header.VoteLimits != expected[index].VoteLimits {
-		// 	t.Errorf("VoteLimits not match in index %d, expected: %q, got: %q", index, expected[index].VoteLimits, header.VoteLimits)
-		// }
-		// if header.ReferRef != expected[index].ReferRef {
-		// 	t.Errorf("ReferRef not match in index %d, expected: %q, got: %q", index, expected[index].ReferRef, header.ReferRef)
-		// }
-		// if header.Filemode != expected[index].Filemode {
-		// 	t.Errorf("Filemode not match in index %d, expected: %q, got: %q", index, expected[index].Filemode, header.Filemode)
-		// }
-
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := NewUserecFromRaw(tt.args.userecraw); !reflect.DeepEqual(got, tt.expected) {
+				t.Errorf("NewUserecFromRaw() = %v, expected %v", got, tt.expected)
+			}
+		})
 	}
+}
 
+func TestOpenUserecFile(t *testing.T) {
+	setupTest()
+	defer teardownTest()
+
+	type args struct {
+		filename string
+	}
+	tests := []struct {
+		name     string
+		args     args
+		expected []*Userec
+		wantErr  bool
+	}{
+		// TODO: Add test cases.
+		{
+			args:     args{"testcase/passwd/01.PASSWDS"},
+			expected: testOpenUserecFile1,
+		},
+		{
+			args:     args{"testcase/passwd/01.PASSWDS.corrupt"},
+			expected: testOpenUserecFile1[:TEST_N_OPEN_USER_FILE_1-1],
+			wantErr:  true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := OpenUserecFile(tt.args.filename)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("OpenUserecFile() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+
+			for idx, eachGot := range got {
+				each := eachGot.Version
+				expected := tt.expected[idx].Version
+				if !reflect.DeepEqual(each, expected) {
+					t.Errorf("(%v/%v) Version: OpenUserecFile() = %v, expected %v", idx, len(got), each, expected)
+				}
+			}
+
+			for idx, eachGot := range got {
+				each := eachGot.Userid
+				expected := tt.expected[idx].Userid
+				if !reflect.DeepEqual(each, expected) {
+					t.Errorf("(%v/%v) Userid: OpenUserecFile() = %v, expected %v", idx, len(got), each, expected)
+				}
+			}
+
+			for idx, eachGot := range got {
+				each := eachGot.Realname
+				expected := tt.expected[idx].Realname
+				if !reflect.DeepEqual(each, expected) {
+					t.Errorf("(%v/%v) Realname: OpenUserecFile() = %v, expected %v", idx, len(got), each, expected)
+				}
+			}
+
+			for idx, eachGot := range got {
+				each := eachGot.Nickname
+				expected := tt.expected[idx].Nickname
+				if !reflect.DeepEqual(each, expected) {
+					t.Errorf("(%v/%v) Nickname: OpenUserecFile() = %v, expected %v", idx, len(got), each, expected)
+				}
+			}
+
+			for idx, eachGot := range got {
+				each := eachGot.Passwd
+				expected := tt.expected[idx].Passwd
+				if !reflect.DeepEqual(each, expected) {
+					t.Errorf("(%v/%v) Passwd: OpenUserecFile() = %v, expected %v", idx, len(got), each, expected)
+				}
+			}
+
+			for idx, eachGot := range got {
+				each := eachGot.Pad1
+				expected := tt.expected[idx].Pad1
+				if !reflect.DeepEqual(each, expected) {
+					t.Errorf("(%v/%v) Pad1: OpenUserecFile() = %v, expected %v", idx, len(got), each, expected)
+				}
+			}
+
+			for idx, eachGot := range got {
+				each := eachGot.Uflag
+				expected := tt.expected[idx].Uflag
+				if !reflect.DeepEqual(each, expected) {
+					t.Errorf("(%v/%v) Uflag: OpenUserecFile() = %v, expected %v", idx, len(got), each, expected)
+				}
+			}
+
+			for idx, eachGot := range got {
+				each := eachGot._unused1
+				expected := tt.expected[idx]._unused1
+				if !reflect.DeepEqual(each, expected) {
+					t.Errorf("(%v/%v) _unused1: OpenUserecFile() = %v, expected %v", idx, len(got), each, expected)
+				}
+			}
+
+			for idx, eachGot := range got {
+				each := eachGot.Userlevel
+				expected := tt.expected[idx].Userlevel
+				if !reflect.DeepEqual(each, expected) {
+					t.Errorf("(%v/%v) Userlevel: OpenUserecFile() = %v, expected %v", idx, len(got), each, expected)
+				}
+			}
+
+			for idx, eachGot := range got {
+				each := eachGot.Numlogindays
+				expected := tt.expected[idx].Numlogindays
+				if !reflect.DeepEqual(each, expected) {
+					t.Errorf("(%v/%v) Numlogindays: OpenUserecFile() = %v, expected %v", idx, len(got), each, expected)
+				}
+			}
+
+			for idx, eachGot := range got {
+				each := eachGot.Numposts
+				expected := tt.expected[idx].Numposts
+				if !reflect.DeepEqual(each, expected) {
+					t.Errorf("(%v/%v) Numposts: OpenUserecFile() = %v, expected %v", idx, len(got), each, expected)
+				}
+			}
+
+			for idx, eachGot := range got {
+				each := eachGot.Firstlogin
+				expected := tt.expected[idx].Firstlogin
+				if !reflect.DeepEqual(each, expected) {
+					t.Errorf("(%v/%v) Firstlogin: OpenUserecFile() = %v, expected %v", idx, len(got), each, expected)
+				}
+			}
+
+			for idx, eachGot := range got {
+				each := eachGot.Lastlogin
+				expected := tt.expected[idx].Lastlogin
+				if !reflect.DeepEqual(each, expected) {
+					t.Errorf("(%v/%v) Lastlogin: OpenUserecFile() = %v, expected %v", idx, len(got), each, expected)
+				}
+			}
+
+			for idx, eachGot := range got {
+				each := eachGot.Lasthost
+				expected := tt.expected[idx].Lasthost
+				if !reflect.DeepEqual(each, expected) {
+					t.Errorf("(%v/%v) Lasthost: OpenUserecFile() = %v, expected %v", idx, len(got), each, expected)
+				}
+			}
+
+			if !reflect.DeepEqual(got, tt.expected) {
+				t.Errorf("OpenUserecFile() = %v, expected %v", got, tt.expected)
+			}
+		})
+	}
 }

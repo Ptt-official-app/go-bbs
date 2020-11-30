@@ -20,28 +20,6 @@ import (
 )
 
 const (
-	PTT_FILE_LOCAL     = 0x01 /* local saved,  non-mail */
-	PTT_FILE_READ      = 0x01 /* already read, mail only */
-	PTT_FILE_MARKED    = 0x02 /* non-mail + mail */
-	PTT_FILE_DIGEST    = 0x04 /* digest,       non-mail */
-	PTT_FILE_REPLIED   = 0x04 /* replied,      mail only */
-	PTT_FILE_BOTTOM    = 0x08 /* push_bottom,  non-mail */
-	PTT_FILE_MULTI     = 0x08 /* multi send,   mail only */
-	PTT_FILE_SOLVED    = 0x10 /* problem solved, sysop/BM non-mail only */
-	PTT_FILE_HIDE      = 0x20 /* hide,	in announce */
-	PTT_FILE_BID       = 0x20 /* bid,		in non-announce */
-	PTT_FILE_BM        = 0x40 /* BM only,	in announce */
-	PTT_FILE_VOTE      = 0x40 /* for vote,	in non-announce */
-	PTT_FILE_ANONYMOUS = 0x80 /* anonymous file */
-
-)
-const (
-	PTT_IDLEN = 12
-	PTT_TTLEN = 64
-	PTT_FNLEN = 28
-)
-
-const (
 	PosOfPTTFilename  = 0
 	PosOfPTTModified  = PosOfPTTFilename + PTT_FNLEN
 	PosOfPTTRecommend = 1 + PosOfPTTModified + 4

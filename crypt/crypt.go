@@ -13,7 +13,9 @@ package crypt
 //	salt: salt
 //	buff: output-buffer (encrypted)
 func cFcrypt(buf []uint8, salt []uint8, buff *[PASSLEN]uint8) {
-	buf = buf[:8]
+	if len(buf) > 8 {
+		buf = buf[:8]
+	}
 
 	// crypt.c: line 554
 	x := uint8('A')
@@ -23,7 +25,7 @@ func cFcrypt(buf []uint8, salt []uint8, buff *[PASSLEN]uint8) {
 	buff[0] = x
 
 	// crypt.c: line 555
-	Eswap0 := con_salt[x]
+	Eswap0 := uint32(con_salt[x])
 
 	// crypt.c: line 556
 	x = uint8('A')
@@ -33,7 +35,7 @@ func cFcrypt(buf []uint8, salt []uint8, buff *[PASSLEN]uint8) {
 	buff[1] = x
 
 	// crypt: line 557
-	Eswap1 := con_salt[x] << 4
+	Eswap1 := uint32(con_salt[x]) << 4
 
 	// crypt: line 559
 	key := desCBlock{}
@@ -178,7 +180,7 @@ func dEncrypt(L uint32, R uint32, S uint32, E0 uint32, E1 uint32, s []uint32, t 
 	t = (R ^ (R >> 16))
 	//log.Infof("dEncrypt (1): after t: R: %v t: %v", R, t)
 	u = t & E0
-	// /log.Infof("dEncrypt (2): after u: t: %v E0: %v u: %v E1: %v", t, E0, u, E1)
+	//log.Infof("dEncrypt (2): after u: t: %v E0: %v u: %v E1: %v", t, E0, u, E1)
 	t = t & E1
 	//log.Infof("dEncrypt (4): to u: t: %v u: %v R: %v S: %v s[S]: %v", t, u, R, S, s[S])
 	u = (u ^ (u << 16)) ^ R ^ s[S]
@@ -204,7 +206,7 @@ func dEncrypt(L uint32, R uint32, S uint32, E0 uint32, E1 uint32, s []uint32, t 
 	return L, t, u
 }
 
-func body(ks *desKeySchedule, Eswap0 uint8, Eswap1 uint8) (uint32, uint32) {
+func body(ks *desKeySchedule, Eswap0 uint32, Eswap1 uint32) (uint32, uint32) {
 	// crypt.c line: 618
 
 	E0 := uint32(Eswap0)

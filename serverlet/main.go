@@ -3,13 +3,19 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/PichuChen/go-bbs"
 	"log"
 	"net/http"
 	"strings"
 )
 
+var userRecs []*bbs.Userec
+
 func main() {
 	fmt.Println("server start")
+
+	loadPasswdsFile()
+
 	r := http.NewServeMux()
 	r.HandleFunc("/v1/token", routeToken)  // http://127.0.0.1/hello
 	r.HandleFunc("/v1/class/", routeClass) // http://127.0.0.1/hello
@@ -17,24 +23,20 @@ func main() {
 	http.ListenAndServe(":8080", r)
 }
 
-func routeToken(w http.ResponseWriter, r *http.Request) {
-	if r.Method == "GET" {
-		getToken(w, r)
+func loadPasswdsFile() {
+	path, err := bbs.GetPasswdsPath("../home/bbs")
+	if err != nil {
+		log.Println("open file error:", err)
 		return
 	}
+	log.Println("path:", path)
 
-}
-
-func getToken(w http.ResponseWriter, r *http.Request) {
-
-	m := map[string]string{
-		"access_token": "this-is-mocking-access-token",
-		"token_type":   "bearer",
+	userRecs, err = bbs.OpenUserecFile(path)
+	if err != nil {
+		log.Println("get user rec error:", err)
+		return
 	}
-	b, _ := json.MarshalIndent(m, "", "  ")
-
-	w.Write(b)
-
+	log.Println(userRecs)
 }
 
 func routeClass(w http.ResponseWriter, r *http.Request) {

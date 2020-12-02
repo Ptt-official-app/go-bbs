@@ -7,7 +7,7 @@ import (
 	"github.com/PichuChen/go-bbs/crypt"
 	"log"
 	"net/http"
-	// "strings"
+	"strings"
 )
 
 func routeToken(w http.ResponseWriter, r *http.Request) {
@@ -78,8 +78,9 @@ func findUserecById(userid string) (*bbs.Userec, error) {
 func verifyPassword(userec *bbs.Userec, password string) error {
 	log.Println("password", userec.Passwd)
 	res, err := crypt.Fcrypt([]byte(password), []byte(userec.Passwd[:2]))
-	str := string(res)
-	log.Println("res", str, err)
+	str := strings.Trim(string(res), "\x00")
+	log.Println("res", str, err, []byte(str), []byte(userec.Passwd))
+
 	if str != userec.Passwd {
 		return fmt.Errorf("password incorrect")
 	}

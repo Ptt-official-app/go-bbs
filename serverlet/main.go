@@ -24,6 +24,8 @@ func main() {
 }
 
 func loadPasswdsFile() {
+	// TODO: read config form config file
+
 	path, err := bbs.GetPasswdsPath("../home/bbs")
 	if err != nil {
 		log.Println("open file error:", err)

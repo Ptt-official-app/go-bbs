@@ -12,18 +12,23 @@ func TestUtf8ToBig5(t *testing.T) {
 	tests := []struct {
 		name     string
 		args     args
-		expected []byte
+		expected string
 	}{
 		// TODO: Add test cases.
 		{
 			name:     "test0",
 			args:     args{input: "新的目錄"},
-			expected: []byte{0xb7, 0x73, 0xaa, 0xba, 0xa5, 0xd8, 0xbf, 0xfd},
+			expected: "\xb7\x73\xaa\xba\xa5\xd8\xbf\xfd",
+		},
+		{
+			name:     "test1",
+			args:     args{input: "ピリカピリララ"},
+			expected: "\xc7\xd0\xc7\xe6\xc7\xa7\xc7\xd0\xc7\xe6\xc7\xe5\xc7\xe5",
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := Utf8ToBig5(tt.args.input); !reflect.DeepEqual(got, tt.expected) {
+			if got := Utf8ToBig5(tt.args.input); !reflect.DeepEqual(got, []byte(tt.expected)) {
 				t.Errorf("Utf8ToBig5() = %v, expected %v", got, tt.expected)
 			}
 		})
@@ -32,7 +37,7 @@ func TestUtf8ToBig5(t *testing.T) {
 
 func TestBig5ToUtf8(t *testing.T) {
 	type args struct {
-		input []byte
+		input string
 	}
 	tests := []struct {
 		name     string
@@ -42,13 +47,18 @@ func TestBig5ToUtf8(t *testing.T) {
 		// TODO: Add test cases.
 		{
 			name:     "test0",
-			args:     args{input: []byte{0xb7, 0x73, 0xaa, 0xba, 0xa5, 0xd8, 0xbf, 0xfd}},
+			args:     args{input: "\xb7\x73\xaa\xba\xa5\xd8\xbf\xfd"},
 			expected: "新的目錄",
+		},
+		{
+			name:     "test1",
+			args:     args{input: "\xc7\xd0\xc7\xe6\xc7\xa7\xc7\xd0\xc7\xe6\xc7\xe5\xc7\xe5"},
+			expected: "ピリカピリララ",
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := Big5ToUtf8(tt.args.input); !reflect.DeepEqual(got, tt.expected) {
+			if got := Big5ToUtf8([]byte(tt.args.input)); !reflect.DeepEqual(got, tt.expected) {
 				t.Errorf("Big5ToUtf8() = %v, expected %v", got, tt.expected)
 			}
 		})

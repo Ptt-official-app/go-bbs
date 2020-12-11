@@ -10,15 +10,18 @@ import (
 )
 
 var userRecs []*bbs.Userec
+var boardHeader []*bbs.BoardHeader
 
 func main() {
 	fmt.Println("server start")
 
 	loadPasswdsFile()
+	loadBoardFile()
 
 	r := http.NewServeMux()
-	r.HandleFunc("/v1/token", routeToken)  // http://127.0.0.1/hello
-	r.HandleFunc("/v1/class/", routeClass) // http://127.0.0.1/hello
+	r.HandleFunc("/v1/token", routeToken)
+	r.HandleFunc("/v1/boards", routeBoards)
+	r.HandleFunc("/v1/class/", routeClass)
 
 	http.ListenAndServe(":8080", r)
 }
@@ -36,6 +39,24 @@ func loadPasswdsFile() {
 	userRecs, err = bbs.OpenUserecFile(path)
 	if err != nil {
 		log.Println("get user rec error:", err)
+		return
+	}
+	log.Println(userRecs)
+}
+
+func loadBoardFile() {
+	// TODO: read config form config file
+
+	path, err := bbs.GetBoardPath("../home/bbs")
+	if err != nil {
+		log.Println("open file error:", err)
+		return
+	}
+	log.Println("path:", path)
+
+	boardHeader, err = bbs.OpenBoardHeaderFile(path)
+	if err != nil {
+		log.Println("get board header error:", err)
 		return
 	}
 	log.Println(userRecs)

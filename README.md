@@ -124,6 +124,30 @@ P. BBSADM               Ｘ              5. 警察                 Ｘ
 * BM: Board Moderator 版主的意思
 
 
+## PosOf的命名慣例以及解析方式
+
+雖然 `binary.Read` 確實是方便好用，但實際上各站的 BBS 維護者可能不小心在該站的檔案結構中因為增加欄位長度沒考慮到 Padding 問題，
+舉例來說 Ptt 的程式碼大多數沒有另外宣告 `__attribute__((__packed__))` 因此在不同架構的環境下編譯出的 struct 長度可能會不同。
+
+因此為了方便其他人維護，專案目前採用PosOf手動算出欄位記憶體相對位置的方式，效率上可能較低，但是有可能被編譯器最佳化因此未來也不確定低多少。
+未來如果需要加速同時很確定貴站的資料結構時，推薦在testing以及benchmark都確定過之後切換成以 `binary.Read` 實作的版本。
+
+目前因為為了要支援多套BBS版本的緣故，因此命名結構會是以下形式：
+
+`PosOfPttFileHeaderFilename`
+
+* `PosOf` 開頭
+* `Ptt` 站點本身的 Code Name
+* `FileHeader` 哪個結構體名稱
+* `Filename` 欄位名稱
+
+預設省略版本號，如果需要新增版本號的範例如下
+
+
+`PosOfPttR5939FileHeaderFilename`
+
+* `R5939` 就是版本號
+
 ## 授權
 
 Apache 2.0 (TBD)

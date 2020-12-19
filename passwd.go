@@ -128,9 +128,8 @@ type Userec struct {
 	MyAngel           string
 	ChessEloRating    uint16
 	WithMe            uint32
-	TimeRemoveBadPost time4
-	TimeViolateLaw    time4
-	// TODO
+	TimeRemoveBadPost time.Time
+	TimeViolateLaw    time.Time
 }
 
 func OpenUserecFile(filename string) ([]*Userec, error) {
@@ -180,5 +179,53 @@ func NewUserecWithByte(data []byte) (*Userec, error) {
 	user.LastLogin = binary.LittleEndian.Uint32(data[PosOfPttPasswdLastLogin : PosOfPttPasswdLastLogin+4])
 	user.LastHost = CstrToString(data[PosOfPttPasswdLastHost : PosOfPttPasswdLastHost+PTT_IPV4LEN+1])
 
+	// Money        int32
+
+	// Email   string
+	// Address string
+
+	// Justify string
+
+	// Over18      bool
+	// PagerUIType uint8
+	// Pager       uint8
+	// Invisible   bool
+
+	// ExMailBox uint32
+
+	// Career        string
+	// Role          uint32
+	// LastSeen      time.Time
+	// TimeSetAngel  time.Time
+	// TimePlayAngel time.Time
+
+	// LastSong  time.Time
+	// LoginView uint32
+
+	// ViolateLaw uint16
+	// FiveWin    uint16
+	// FiveLose   uint16
+	// FiveTie    uint16
+	// ChcWin     uint16
+	// ChcLose    uint16
+	// ChcTie     uint16
+	// Conn6Win   uint16
+	// Conn6Lose  uint16
+	// Conn6Tie   uint16
+	// GoWin      uint16
+	// GoLose     uint16
+	// GoTie      uint16
+	// DarkWin    uint16
+	// DarkLose   uint16
+	// UaVersion  uint8
+
+	// Signature         uint8
+	// BadPost           uint8
+	// DarkTie           uint16
+	// MyAngel           string
+	// ChessEloRating    uint16
+	// WithMe            uint32
+	// TimeRemoveBadPost time.Time
+	// TimeViolateLaw    time.Time
 	return user, nil
 }

@@ -15,73 +15,73 @@ func TestOpenUserecFile(t *testing.T) {
 	expected := []Userec{
 		Userec{
 			Version:      4194,
-			Userid:       "SYSOP",
-			Realname:     "CodingMan",
+			UserId:       "SYSOP",
+			RealName:     "CodingMan",
 			Nickname:     "神",
-			Passwd:       "bhwvOJtfT1TAI",
-			Uflag:        0x02000A60,
-			Userlevel:    0x20000407,
-			Numlogindays: 2,
-			Numposts:     0,
-			Firstlogin:   1600681288,
-			Lastlogin:    1600756094,
-			Lasthost:     "59.124.167.226",
+			Password:     "bhwvOJtfT1TAI",
+			UserFlag:     0x02000A60,
+			UserLevel:    0x20000407,
+			NumLoginDays: 2,
+			NumPosts:     0,
+			FirstLogin:   1600681288,
+			LastLogin:    1600756094,
+			LastHost:     "59.124.167.226",
 		},
 		Userec{
 			Version:      4194,
-			Userid:       "CodingMan",
-			Realname:     "朱元璋",
+			UserId:       "CodingMan",
+			RealName:     "朱元璋",
 			Nickname:     "程式俠",
-			Passwd:       "u8mLG.ktfOk3w",
-			Uflag:        0x02000AE0,
-			Userlevel:    0x0000001F,
-			Numlogindays: 1,
-			Numposts:     0,
-			Firstlogin:   1600737659,
-			Lastlogin:    1600737960,
-			Lasthost:     "59.124.167.226",
+			Password:     "u8mLG.ktfOk3w",
+			UserFlag:     0x02000AE0,
+			UserLevel:    0x0000001F,
+			NumLoginDays: 1,
+			NumPosts:     0,
+			FirstLogin:   1600737659,
+			LastLogin:    1600737960,
+			LastHost:     "59.124.167.226",
 		},
 		Userec{
 			Version:      4194,
-			Userid:       "pichu",
-			Realname:     "Pichu",
+			UserId:       "pichu",
+			RealName:     "Pichu",
 			Nickname:     "Pichu",
-			Passwd:       "KO27TyME.3/tw",
-			Uflag:        0x02000AE0,
-			Userlevel:    0x00000007,
-			Numlogindays: 1,
-			Numposts:     0,
-			Firstlogin:   1600755675,
-			Lastlogin:    1600766204,
-			Lasthost:     "103.246.218.43",
+			Password:     "KO27TyME.3/tw",
+			UserFlag:     0x02000AE0,
+			UserLevel:    0x00000007,
+			NumLoginDays: 1,
+			NumPosts:     0,
+			FirstLogin:   1600755675,
+			LastLogin:    1600766204,
+			LastHost:     "103.246.218.43",
 		},
 		Userec{
 			Version:      4194,
-			Userid:       "Kahou",
-			Realname:     "林嘉豪",
+			UserId:       "Kahou",
+			RealName:     "林嘉豪",
 			Nickname:     "Kahou",
-			Passwd:       "V3nkaYTLnDPUA",
-			Uflag:        0x02000AE0,
-			Userlevel:    0x00000007,
-			Numlogindays: 1,
-			Numposts:     0,
-			Firstlogin:   1600758266,
-			Lastlogin:    1600758266,
-			Lasthost:     "180.217.174.18",
+			Password:     "V3nkaYTLnDPUA",
+			UserFlag:     0x02000AE0,
+			UserLevel:    0x00000007,
+			NumLoginDays: 1,
+			NumPosts:     0,
+			FirstLogin:   1600758266,
+			LastLogin:    1600758266,
+			LastHost:     "180.217.174.18",
 		},
 		Userec{
 			Version:      4194,
-			Userid:       "Kahou2",
-			Realname:     "Kahou",
+			UserId:       "Kahou2",
+			RealName:     "Kahou",
 			Nickname:     "kahou",
-			Passwd:       "R7shIAOZgQCKs",
-			Uflag:        0x02000AE0,
-			Userlevel:    0x0000001F,
-			Numlogindays: 1,
-			Numposts:     0,
-			Firstlogin:   1600758939,
-			Lastlogin:    1600760401,
-			Lasthost:     "180.217.174.18",
+			Password:     "R7shIAOZgQCKs",
+			UserFlag:     0x02000AE0,
+			UserLevel:    0x0000001F,
+			NumLoginDays: 1,
+			NumPosts:     0,
+			FirstLogin:   1600758939,
+			LastLogin:    1600760401,
+			LastHost:     "180.217.174.18",
 		},
 	}
 
@@ -98,48 +98,48 @@ func TestOpenUserecFile(t *testing.T) {
 			t.Errorf("Version not match with index %d, expected: %v, got: %v", index, expected.Version, actual.Version)
 		}
 
-		if actual.Userid != expected.Userid {
-			t.Errorf("Userid not match with index %d, expected: %v, got: %v", index, expected.Userid, actual.Userid)
+		if actual.UserId != expected.UserId {
+			t.Errorf("UserId not match with index %d, expected: %v, got: %v", index, expected.UserId, actual.UserId)
 		}
 
-		if actual.Realname != expected.Realname {
-			t.Errorf("Realname not match with index %d, expected: %v, got: %v", index, expected.Realname, actual.Realname)
+		if actual.RealName != expected.RealName {
+			t.Errorf("RealName not match with index %d, expected: %v, got: %v", index, expected.RealName, actual.RealName)
 		}
 
 		if actual.Nickname != expected.Nickname {
 			t.Errorf("Nickname not match with index %d, expected: %v, got: %v", index, expected.Nickname, actual.Nickname)
 		}
 
-		if actual.Passwd != expected.Passwd {
-			t.Errorf("Passwd not match with index %d, expected: %v, got: %v", index, expected.Passwd, actual.Passwd)
+		if actual.Password != expected.Password {
+			t.Errorf("Password not match with index %d, expected: %v, got: %v", index, expected.Password, actual.Password)
 		}
 
-		if actual.Uflag != expected.Uflag {
-			t.Errorf("Uflag not match with index %d, expected: 0x%08X, got: 0x%08X", index, expected.Uflag, actual.Uflag)
+		if actual.UserFlag != expected.UserFlag {
+			t.Errorf("UserFlag not match with index %d, expected: 0x%08X, got: 0x%08X", index, expected.UserFlag, actual.UserFlag)
 		}
 
-		if actual.Userlevel != expected.Userlevel {
-			t.Errorf("Userlevel not match with index %d, expected: 0x%08X, got: 0x%08X", index, expected.Userlevel, actual.Userlevel)
+		if actual.UserLevel != expected.UserLevel {
+			t.Errorf("UserLevel not match with index %d, expected: 0x%08X, got: 0x%08X", index, expected.UserLevel, actual.UserLevel)
 		}
 
-		if actual.Numlogindays != expected.Numlogindays {
-			t.Errorf("Numlogindays not match with index %d, expected: %v, got: %v", index, expected.Numlogindays, actual.Numlogindays)
+		if actual.NumLoginDays != expected.NumLoginDays {
+			t.Errorf("NumLoginDays not match with index %d, expected: %v, got: %v", index, expected.NumLoginDays, actual.NumLoginDays)
 		}
 
-		if actual.Numposts != expected.Numposts {
-			t.Errorf("Numposts not match with index %d, expected: %v, got: %v", index, expected.Numposts, actual.Numposts)
+		if actual.NumPosts != expected.NumPosts {
+			t.Errorf("NumPosts not match with index %d, expected: %v, got: %v", index, expected.NumPosts, actual.NumPosts)
 		}
 
-		if actual.Firstlogin != expected.Firstlogin {
-			t.Errorf("Firstlogin not match with index %d, expected: %v, got: %v", index, expected.Firstlogin, actual.Firstlogin)
+		if actual.FirstLogin != expected.FirstLogin {
+			t.Errorf("FirstLogin not match with index %d, expected: %v, got: %v", index, expected.FirstLogin, actual.FirstLogin)
 		}
 
-		if actual.Lastlogin != expected.Lastlogin {
-			t.Errorf("Lastlogin not match with index %d, expected: %v, got: %v", index, expected.Lastlogin, actual.Lastlogin)
+		if actual.LastLogin != expected.LastLogin {
+			t.Errorf("LastLogin not match with index %d, expected: %v, got: %v", index, expected.LastLogin, actual.LastLogin)
 		}
 
-		if actual.Lasthost != expected.Lasthost {
-			t.Errorf("Lasthost not match with index %d, expected: %v, got: %v", index, expected.Lasthost, actual.Lasthost)
+		if actual.LastHost != expected.LastHost {
+			t.Errorf("LastHost not match with index %d, expected: %v, got: %v", index, expected.LastHost, actual.LastHost)
 		}
 	}
 

@@ -14,10 +14,8 @@ type Userec struct {
 	Realname string
 	Nickname string
 	Passwd   string
-	Pad1     uint8
 
 	Uflag        uint32
-	_unused1     uint32
 	Userlevel    uint32
 	Numlogindays uint32
 	Numposts     uint32
@@ -74,10 +72,9 @@ func NewUserecFromUserecRaw(userecRaw *UserecRaw) *Userec {
 	user.Realname = Big5ToUtf8(CstrToBytes(userecRaw.RealName[:]))
 	user.Nickname = Big5ToUtf8(CstrToBytes(userecRaw.Nickname[:]))
 	user.Passwd = CstrToString(userecRaw.PasswdHash[:])
-	user.Pad1 = userecRaw.Pad1
 
 	user.Uflag = userecRaw.UFlag
-	user._unused1 = userecRaw.Unused1
+
 	user.Userlevel = userecRaw.UserLevel
 	user.Numlogindays = userecRaw.NumLoginDays
 	user.Numposts = userecRaw.NumPosts

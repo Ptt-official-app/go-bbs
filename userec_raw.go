@@ -1,7 +1,5 @@
 package bbs
 
-import "unsafe"
-
 type UserecRaw struct {
 	Version uint32
 
@@ -84,7 +82,7 @@ type UserecRaw struct {
 	PadTail [28]byte
 }
 
-const USERECRAWSZ = int64(unsafe.Sizeof(UserecRaw{}))
+// const USERECRAWSZ = int64(unsafe.Sizeof(UserecRaw{}))
 
 func NewUserecRaw() *UserecRaw {
 	return &UserecRaw{}

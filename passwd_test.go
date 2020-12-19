@@ -1,7 +1,9 @@
 package bbs
 
 import (
+	"encoding/hex"
 	"testing"
+	"time"
 )
 
 func TestOpenUserecFile(t *testing.T) {
@@ -14,75 +16,139 @@ func TestOpenUserecFile(t *testing.T) {
 
 	expected := []Userec{
 		Userec{
-			Version:      4194,
-			UserId:       "SYSOP",
-			RealName:     "CodingMan",
-			Nickname:     "神",
-			Password:     "bhwvOJtfT1TAI",
-			UserFlag:     0x02000A60,
-			UserLevel:    0x20000407,
-			NumLoginDays: 2,
-			NumPosts:     0,
-			FirstLogin:   1600681288,
-			LastLogin:    1600756094,
-			LastHost:     "59.124.167.226",
-			Money:        0,
+			Version:       4194,
+			UserId:        "SYSOP",
+			RealName:      "CodingMan",
+			Nickname:      "神",
+			Password:      "bhwvOJtfT1TAI",
+			UserFlag:      0x02000A60,
+			UserLevel:     0x20000407,
+			NumLoginDays:  2,
+			NumPosts:      0,
+			FirstLogin:    time.Date(2020, 9, 21, 9, 41, 28, 0, time.UTC),
+			LastLogin:     time.Date(2020, 9, 22, 6, 28, 14, 0, time.UTC),
+			LastHost:      "59.124.167.226",
+			Money:         0,
+			Address:       "新竹縣子虛鄉烏有村543號",
+			Over18:        true,
+			Pager:         1,
+			Invisible:     false,
+			Career:        "全景軟體",
+			LastSeen:      time.Date(2020, 9, 21, 9, 41, 28, 0, time.UTC),
+			TimeSetAngel:  time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
+			TimePlayAngel: time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
+			LastSong:      time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
+
+			TimeRemoveBadPost: time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
+			TimeViolateLaw:    time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
 		},
 		Userec{
-			Version:      4194,
-			UserId:       "CodingMan",
-			RealName:     "朱元璋",
-			Nickname:     "程式俠",
-			Password:     "u8mLG.ktfOk3w",
-			UserFlag:     0x02000AE0,
-			UserLevel:    0x0000001F,
-			NumLoginDays: 1,
-			NumPosts:     0,
-			FirstLogin:   1600737659,
-			LastLogin:    1600737960,
-			LastHost:     "59.124.167.226",
+			Version:       4194,
+			UserId:        "CodingMan",
+			RealName:      "朱元璋",
+			Nickname:      "程式俠",
+			Password:      "u8mLG.ktfOk3w",
+			UserFlag:      0x02000AE0,
+			UserLevel:     0x0000001F,
+			NumLoginDays:  1,
+			NumPosts:      0,
+			FirstLogin:    time.Date(2020, 9, 22, 1, 20, 59, 0, time.UTC),
+			LastLogin:     time.Date(2020, 9, 22, 1, 26, 00, 0, time.UTC),
+			LastHost:      "59.124.167.226",
+			Email:         "x",
+			Address:       "新竹縣子虛鄉烏有村543號",
+			Justify:       "[SYSOP] 09/22/2020 01:25:53 Tue",
+			Over18:        true,
+			Pager:         1,
+			Career:        "全景軟體",
+			LastSeen:      time.Date(2020, 9, 22, 1, 26, 00, 0, time.UTC),
+			TimeSetAngel:  time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
+			TimePlayAngel: time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
+			LastSong:      time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
+
+			TimeRemoveBadPost: time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
+			TimeViolateLaw:    time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
 		},
 		Userec{
-			Version:      4194,
-			UserId:       "pichu",
-			RealName:     "Pichu",
-			Nickname:     "Pichu",
-			Password:     "KO27TyME.3/tw",
-			UserFlag:     0x02000AE0,
-			UserLevel:    0x00000007,
-			NumLoginDays: 1,
-			NumPosts:     0,
-			FirstLogin:   1600755675,
-			LastLogin:    1600766204,
-			LastHost:     "103.246.218.43",
+			Version:       4194,
+			UserId:        "pichu",
+			RealName:      "Pichu",
+			Nickname:      "Pichu",
+			Password:      "KO27TyME.3/tw",
+			UserFlag:      0x02000AE0,
+			UserLevel:     0x00000007,
+			NumLoginDays:  1,
+			NumPosts:      0,
+			FirstLogin:    time.Date(2020, 9, 22, 6, 21, 15, 0, time.UTC),
+			LastLogin:     time.Date(2020, 9, 22, 9, 16, 44, 0, time.UTC),
+			LastHost:      "103.246.218.43",
+			Career:        "台灣智慧家庭",
+			LastSeen:      time.Date(2020, 9, 22, 9, 16, 44, 0, time.UTC),
+			TimeSetAngel:  time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
+			TimePlayAngel: time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
+			LastSong:      time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
+			Email:         "pichu@tih.tw",
+			Address:       "北市蘆洲區123路3號",
+			Justify:       "<Email>",
+			Over18:        true,
+			Pager:         1,
+
+			TimeRemoveBadPost: time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
+			TimeViolateLaw:    time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
 		},
 		Userec{
-			Version:      4194,
-			UserId:       "Kahou",
-			RealName:     "林嘉豪",
-			Nickname:     "Kahou",
-			Password:     "V3nkaYTLnDPUA",
-			UserFlag:     0x02000AE0,
-			UserLevel:    0x00000007,
-			NumLoginDays: 1,
-			NumPosts:     0,
-			FirstLogin:   1600758266,
-			LastLogin:    1600758266,
-			LastHost:     "180.217.174.18",
+			Version:       4194,
+			UserId:        "Kahou",
+			RealName:      "林嘉豪",
+			Nickname:      "Kahou",
+			Password:      "V3nkaYTLnDPUA",
+			UserFlag:      0x02000AE0,
+			UserLevel:     0x00000007,
+			NumLoginDays:  1,
+			NumPosts:      0,
+			FirstLogin:    time.Date(2020, 9, 22, 7, 4, 26, 0, time.UTC),
+			LastLogin:     time.Date(2020, 9, 22, 7, 4, 26, 0, time.UTC),
+			LastHost:      "180.217.174.18",
+			Career:        "我的服務單位",
+			LastSeen:      time.Date(2020, 9, 22, 7, 4, 26, 0, time.UTC),
+			TimeSetAngel:  time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
+			TimePlayAngel: time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
+			LastSong:      time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
+			Email:         "creator.kahou@gmail.com",
+			Address:       "新北市板橋信義路111號",
+			Justify:       "<Email>",
+			Over18:        true,
+			Pager:         1,
+
+			TimeRemoveBadPost: time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
+			TimeViolateLaw:    time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
 		},
 		Userec{
-			Version:      4194,
-			UserId:       "Kahou2",
-			RealName:     "Kahou",
-			Nickname:     "kahou",
-			Password:     "R7shIAOZgQCKs",
-			UserFlag:     0x02000AE0,
-			UserLevel:    0x0000001F,
-			NumLoginDays: 1,
-			NumPosts:     0,
-			FirstLogin:   1600758939,
-			LastLogin:    1600760401,
-			LastHost:     "180.217.174.18",
+			Version:       4194,
+			UserId:        "Kahou2",
+			RealName:      "Kahou",
+			Nickname:      "kahou",
+			Password:      "R7shIAOZgQCKs",
+			UserFlag:      0x02000AE0,
+			UserLevel:     0x0000001F,
+			NumLoginDays:  1,
+			NumPosts:      0,
+			FirstLogin:    time.Date(2020, 9, 22, 7, 15, 39, 0, time.UTC),
+			LastLogin:     time.Date(2020, 9, 22, 7, 40, 1, 0, time.UTC),
+			LastHost:      "180.217.174.18",
+			Career:        "我的服務單位",
+			LastSeen:      time.Date(2020, 9, 22, 7, 40, 01, 0, time.UTC),
+			TimeSetAngel:  time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
+			TimePlayAngel: time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
+			LastSong:      time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
+			Email:         "x",
+			Address:       "新北市板橋區信義路111號",
+			Justify:       "[SYSOP] 09/22/2020 07:51:12 Tue",
+			Over18:        true,
+			Pager:         1,
+
+			TimeRemoveBadPost: time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
+			TimeViolateLaw:    time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
 		},
 	}
 
@@ -131,11 +197,11 @@ func TestOpenUserecFile(t *testing.T) {
 			t.Errorf("NumPosts not match with index %d, expected: %v, got: %v", index, expected.NumPosts, actual.NumPosts)
 		}
 
-		if actual.FirstLogin != expected.FirstLogin {
+		if actual.FirstLogin.Sub(expected.FirstLogin) != 0 {
 			t.Errorf("FirstLogin not match with index %d, expected: %v, got: %v", index, expected.FirstLogin, actual.FirstLogin)
 		}
 
-		if actual.LastLogin != expected.LastLogin {
+		if actual.LastLogin.Sub(expected.LastLogin) != 0 {
 			t.Errorf("LastLogin not match with index %d, expected: %v, got: %v", index, expected.LastLogin, actual.LastLogin)
 		}
 
@@ -187,19 +253,19 @@ func TestOpenUserecFile(t *testing.T) {
 			t.Errorf("Role not match with index %d, expected: %v, got: %v", index, expected.Role, actual.Role)
 		}
 
-		if actual.LastSeen != expected.LastSeen {
+		if actual.LastSeen.Sub(expected.LastSeen) != 0 {
 			t.Errorf("LastSeen not match with index %d, expected: %v, got: %v", index, expected.LastSeen, actual.LastSeen)
 		}
 
-		if actual.TimeSetAngel != expected.TimeSetAngel {
+		if actual.TimeSetAngel.Sub(expected.TimeSetAngel) != 0 {
 			t.Errorf("TimeSetAngel not match with index %d, expected: %v, got: %v", index, expected.TimeSetAngel, actual.TimeSetAngel)
 		}
 
-		if actual.TimePlayAngel != expected.TimePlayAngel {
+		if actual.TimePlayAngel.Sub(expected.TimePlayAngel) != 0 {
 			t.Errorf("TimePlayAngel not match with index %d, expected: %v, got: %v", index, expected.TimePlayAngel, actual.TimePlayAngel)
 		}
 
-		if actual.LastSong != expected.LastSong {
+		if actual.LastSong.Sub(expected.LastSong) != 0 {
 			t.Errorf("LastSong not match with index %d, expected: %v, got: %v", index, expected.LastSong, actual.LastSong)
 		}
 
@@ -211,60 +277,60 @@ func TestOpenUserecFile(t *testing.T) {
 			t.Errorf("ViolateLaw not match with index %d, expected: %v, got: %v", index, expected.ViolateLaw, actual.ViolateLaw)
 		}
 
-		if actual.FiveWin != expected.FiveWin {
-			t.Errorf("FiveWin not match with index %d, expected: %v, got: %v", index, expected.FiveWin, actual.FiveWin)
+		if actual.Five.Win != expected.Five.Win {
+			t.Errorf("Five.Win not match with index %d, expected: %v, got: %v", index, expected.Five.Win, actual.Five.Win)
 		}
 
-		if actual.FiveLose != expected.FiveLose {
-			t.Errorf("FiveLose not match with index %d, expected: %v, got: %v", index, expected.FiveLose, actual.FiveLose)
+		if actual.Five.Lose != expected.Five.Lose {
+			t.Errorf("Five.Lose not match with index %d, expected: %v, got: %v", index, expected.Five.Lose, actual.Five.Lose)
 		}
 
-		if actual.FiveTie != expected.FiveTie {
-			t.Errorf("FiveTie not match with index %d, expected: %v, got: %v", index, expected.FiveTie, actual.FiveTie)
+		if actual.Five.Tie != expected.Five.Tie {
+			t.Errorf("Five.Tie not match with index %d, expected: %v, got: %v", index, expected.Five.Tie, actual.Five.Tie)
 		}
 
-		if actual.ChcWin != expected.ChcWin {
-			t.Errorf("ChcWin not match with index %d, expected: %v, got: %v", index, expected.ChcWin, actual.ChcWin)
+		if actual.ChineseChess.Win != expected.ChineseChess.Win {
+			t.Errorf("ChineseChess.Win not match with index %d, expected: %v, got: %v", index, expected.ChineseChess.Win, actual.ChineseChess.Win)
 		}
 
-		if actual.ChcLose != expected.ChcLose {
-			t.Errorf("ChcLose not match with index %d, expected: %v, got: %v", index, expected.ChcLose, actual.ChcLose)
+		if actual.ChineseChess.Lose != expected.ChineseChess.Lose {
+			t.Errorf("ChineseChess.Lose not match with index %d, expected: %v, got: %v", index, expected.ChineseChess.Lose, actual.ChineseChess.Lose)
 		}
 
-		if actual.ChcTie != expected.ChcTie {
-			t.Errorf("ChcTie not match with index %d, expected: %v, got: %v", index, expected.ChcTie, actual.ChcTie)
+		if actual.ChineseChess.Tie != expected.ChineseChess.Tie {
+			t.Errorf("ChineseChess.Tie not match with index %d, expected: %v, got: %v", index, expected.ChineseChess.Tie, actual.ChineseChess.Tie)
 		}
 
-		if actual.Conn6Win != expected.Conn6Win {
-			t.Errorf("Conn6Win not match with index %d, expected: %v, got: %v", index, expected.Conn6Win, actual.Conn6Win)
+		if actual.Conn6.Win != expected.Conn6.Win {
+			t.Errorf("Conn6.Win not match with index %d, expected: %v, got: %v", index, expected.Conn6.Win, actual.Conn6.Win)
 		}
 
-		if actual.Conn6Lose != expected.Conn6Lose {
-			t.Errorf("Conn6Lose not match with index %d, expected: %v, got: %v", index, expected.Conn6Lose, actual.Conn6Lose)
+		if actual.Conn6.Lose != expected.Conn6.Lose {
+			t.Errorf("Conn6.Lose not match with index %d, expected: %v, got: %v", index, expected.Conn6.Lose, actual.Conn6.Lose)
 		}
 
-		if actual.Conn6Tie != expected.Conn6Tie {
-			t.Errorf("Conn6Tie not match with index %d, expected: %v, got: %v", index, expected.Conn6Tie, actual.Conn6Tie)
+		if actual.Conn6.Tie != expected.Conn6.Tie {
+			t.Errorf("Conn6.Tie not match with index %d, expected: %v, got: %v", index, expected.Conn6.Tie, actual.Conn6.Tie)
 		}
 
-		if actual.GoWin != expected.GoWin {
-			t.Errorf("GoWin not match with index %d, expected: %v, got: %v", index, expected.GoWin, actual.GoWin)
+		if actual.GoChess.Win != expected.GoChess.Win {
+			t.Errorf("GoChess.Win not match with index %d, expected: %v, got: %v", index, expected.GoChess.Win, actual.GoChess.Win)
 		}
 
-		if actual.GoLose != expected.GoLose {
-			t.Errorf("GoLose not match with index %d, expected: %v, got: %v", index, expected.GoLose, actual.GoLose)
+		if actual.GoChess.Lose != expected.GoChess.Lose {
+			t.Errorf("GoChess.Lose not match with index %d, expected: %v, got: %v", index, expected.GoChess.Lose, actual.GoChess.Lose)
 		}
 
-		if actual.GoTie != expected.GoTie {
-			t.Errorf("GoTie not match with index %d, expected: %v, got: %v", index, expected.GoTie, actual.GoTie)
+		if actual.GoChess.Tie != expected.GoChess.Tie {
+			t.Errorf("GoChess.Tie not match with index %d, expected: %v, got: %v", index, expected.GoChess.Tie, actual.GoChess.Tie)
 		}
 
-		if actual.DarkWin != expected.DarkWin {
-			t.Errorf("DarkWin not match with index %d, expected: %v, got: %v", index, expected.DarkWin, actual.DarkWin)
+		if actual.DarkChess.Win != expected.DarkChess.Win {
+			t.Errorf("DarkChess.Win not match with index %d, expected: %v, got: %v", index, expected.DarkChess.Win, actual.DarkChess.Win)
 		}
 
-		if actual.DarkLose != expected.DarkLose {
-			t.Errorf("DarkLose not match with index %d, expected: %v, got: %v", index, expected.DarkLose, actual.DarkLose)
+		if actual.DarkChess.Lose != expected.DarkChess.Lose {
+			t.Errorf("DarkChess.Lose not match with index %d, expected: %v, got: %v", index, expected.DarkChess.Lose, actual.DarkChess.Lose)
 		}
 
 		if actual.UaVersion != expected.UaVersion {
@@ -279,8 +345,8 @@ func TestOpenUserecFile(t *testing.T) {
 			t.Errorf("BadPost not match with index %d, expected: %v, got: %v", index, expected.BadPost, actual.BadPost)
 		}
 
-		if actual.DarkTie != expected.DarkTie {
-			t.Errorf("DarkTie not match with index %d, expected: %v, got: %v", index, expected.DarkTie, actual.DarkTie)
+		if actual.DarkChess.Tie != expected.DarkChess.Tie {
+			t.Errorf("DarkChess.Tie not match with index %d, expected: %v, got: %v", index, expected.DarkChess.Tie, actual.DarkChess.Tie)
 		}
 
 		if actual.MyAngel != expected.MyAngel {
@@ -295,12 +361,95 @@ func TestOpenUserecFile(t *testing.T) {
 			t.Errorf("WithMe not match with index %d, expected: %v, got: %v", index, expected.WithMe, actual.WithMe)
 		}
 
-		if actual.TimeRemoveBadPost != expected.TimeRemoveBadPost {
+		if actual.TimeRemoveBadPost.Sub(expected.TimeRemoveBadPost) != 0 {
 			t.Errorf("TimeRemoveBadPost not match with index %d, expected: %v, got: %v", index, expected.TimeRemoveBadPost, actual.TimeRemoveBadPost)
 		}
 
-		if actual.TimeViolateLaw != expected.TimeViolateLaw {
+		if actual.TimeViolateLaw.Sub(expected.TimeViolateLaw) != 0 {
 			t.Errorf("TimeViolateLaw not match with index %d, expected: %v, got: %v", index, expected.TimeViolateLaw, actual.TimeViolateLaw)
+		}
+
+	}
+
+}
+
+func TestEncodingUserec(t *testing.T) {
+	type TestCase struct {
+		Input    Userec
+		Expected []byte
+	}
+
+	testcase := []TestCase{
+		{
+			Input: Userec{
+				Version:       4194,
+				UserId:        "SYSOP",
+				RealName:      "CodingMan",
+				Nickname:      "神",
+				Password:      "bhwvOJtfT1TAI",
+				UserFlag:      0x02000A60,
+				UserLevel:     0x20000407,
+				NumLoginDays:  2,
+				NumPosts:      0,
+				FirstLogin:    time.Date(2020, 9, 21, 9, 41, 28, 0, time.UTC),
+				LastLogin:     time.Date(2020, 9, 22, 6, 28, 14, 0, time.UTC),
+				LastHost:      "59.124.167.226",
+				Money:         0,
+				Address:       "新竹縣子虛鄉烏有村543號",
+				Over18:        true,
+				Pager:         1,
+				Invisible:     false,
+				Career:        "全景軟體",
+				LastSeen:      time.Date(2020, 9, 21, 9, 41, 28, 0, time.UTC),
+				TimeSetAngel:  time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
+				TimePlayAngel: time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
+				LastSong:      time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
+
+				TimeRemoveBadPost: time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
+				TimeViolateLaw:    time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
+			},
+			Expected: hexToByte(`
+			6210 0000 5359 534f 5000 0000 0000 0000
+0043 6f64 696e 674d 616e 0000 0000 0000
+0000 0000 00af ab00 0000 0000 0000 0000
+0000 0000 0000 0000 0000 0000 0062 6877
+764f 4a74 6654 3154 4149 0000 600a 0002
+0000 0000 0704 0020 0200 0000 0000 0000
+4875 685f 7e99 695f 3539 2e31 3234 2e31
+3637 2e32 3236 0000 0000 0000 0000 0000
+0000 0000 0000 0000 0000 0000 0000 0000
+0000 0000 0000 0000 0000 0000 0000 0000
+0000 0000 0000 0000 0000 0000 0000 0000
+0000 b773 a6cb bfa4 a46c b5ea b66d af51
+a6b3 a7f8 3534 33b8 b900 0000 0000 0000
+0000 0000 0000 0000 0000 0000 0000 0000
+0000 0000 0000 0000 0000 0000 0000 0000
+0000 0000 0000 0000 0000 0000 0000 0000
+0000 0000 0000 0000 0000 0000 0000 0100
+0100 0000 0000 0000 0000 0000 a5fe b4ba
+b36e c5e9 0000 0000 0000 0000 0000 0000
+0000 0000 0000 0000 0000 0000 0000 0000
+0000 0000 0000 0000 0000 0000 0000 0000
+0000 0000 0000 0000 0000 0000 0000 0000
+0000 0000 0000 0000 0000 0000 0000 0000
+0000 0000 0000 0000 0000 0000 0000 0000
+0000 0000 0000 0000 0000 0000 4875 685f
+0000 0000 0000 0000 0000 0000 0000 0000
+0000 0000 0000 0000 0000 0000 0000 0000
+0000 0000 0000 0000 0000 0000 0000 0000
+0000 0000 0000 0000 0000 0000 0000 0000
+0000 0000 0000 0000 0000 0000 0000 0000
+0000 0000 0000 0000 0000 0000 0000 0000
+0000 0000 0000 0000 0000 0000 0000 0000
+			`),
+		},
+	}
+
+	for index, c := range testcase {
+		b, err := c.Input.MarshalToByte()
+		t.Logf("log: %q, %q", b, err)
+		if hex.Dump(b) != hex.Dump(c.Expected) {
+			t.Errorf("Expected byte not match in index %d, expected: \n%s\n, got: \n%s", index, hex.Dump(c.Expected), hex.Dump(b))
 		}
 
 	}

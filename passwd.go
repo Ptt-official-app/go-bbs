@@ -62,12 +62,12 @@ func NewUserecWithFile(file *os.File) (*Userec, error) {
 		return nil, err
 	}
 
-	user := NewUserecFromRaw(userecRaw)
+	user := NewUserecFromUserecRaw(userecRaw)
 
 	return user, nil
 }
 
-func NewUserecFromRaw(userecRaw *UserecRaw) *Userec {
+func NewUserecFromUserecRaw(userecRaw *UserecRaw) *Userec {
 	user := &Userec{}
 	user.Version = userecRaw.Version
 	user.Userid = CstrToString(userecRaw.UserID[:])

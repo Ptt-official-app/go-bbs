@@ -6,8 +6,6 @@ import (
 )
 
 func TestCstrToBytes(t *testing.T) {
-	setupTest()
-	defer teardownTest()
 
 	str1 := [13]byte{}
 	str2 := [13]byte{}
@@ -56,8 +54,6 @@ func TestCstrToBytes(t *testing.T) {
 }
 
 func TestCstrToString(t *testing.T) {
-	setupTest()
-	defer teardownTest()
 
 	str1 := [13]byte{}
 	str2 := [13]byte{}

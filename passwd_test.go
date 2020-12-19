@@ -1,184 +1,296 @@
 package bbs
 
 import (
-	"reflect"
 	"testing"
 )
 
-func TestNewUserecFromRaw(t *testing.T) {
-	setupTest()
-	defer teardownTest()
+// func TestNewUserecFromRaw(t *testing.T) {
 
-	type args struct {
-		userecraw *UserecRaw
-	}
-	tests := []struct {
-		name     string
-		args     args
-		expected *Userec
-	}{
-		// TODO: Add test cases.
-		{
-			args:     args{testUserecRaw},
-			expected: testUserec1,
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got := NewUserecFromRaw(tt.args.userecraw); !reflect.DeepEqual(got, tt.expected) {
-				t.Errorf("NewUserecFromRaw() = %v, expected %v", got, tt.expected)
-			}
-		})
-	}
-}
+// 	tests := []struct {
+// 		name     string
+// 		input    UserecRaw
+// 		expected Userec
+// 	}{
+// 		// TODO: Add test cases.
+// 		{
+// 			input: UserecRaw{
+// 				Version:    PTT_PASSWD_VERSION,
+// 				UserID:     [PTT_IDLEN + 1]byte{0x53, 0x59, 0x53, 0x4f, 0x50},                          // SYSOP
+// 				RealName:   [PTT_REALNAMESZ]byte{0x43, 0x6f, 0x64, 0x69, 0x6e, 0x67, 0x4d, 0x61, 0x6e}, // CodingMan
+// 				Nickname:   [PTT_NICKNAMESZ]byte{0xaf, 0xab},                                           // 神
+// 				PasswdHash: [PTT_PASSLEN]byte{0x62, 0x68, 0x77, 0x76, 0x4f, 0x4a, 0x74, 0x66, 0x54, 0x31, 0x54, 0x41, 0x49, 0x00},
+
+// 				UFlag:        33557088,
+// 				UserLevel:    536871943,
+// 				NumLoginDays: 2,
+// 				NumPosts:     0,
+// 				FirstLogin:   1600681288,
+// 				LastLogin:    1600756094,
+// 				LastHost:     [PTT_IPV4LEN + 1]byte{0x35, 0x39, 0x2e, 0x31, 0x32, 0x34, 0x2e, 0x31, 0x36, 0x37, 0x2e, 0x32, 0x32, 0x36},                                                     //59.124.167.226
+// 				Address:      [PTT_ADDRESSSZ]byte{0xb7, 0x73, 0xa6, 0xcb, 0xbf, 0xa4, 0xa4, 0x6c, 0xb5, 0xea, 0xb6, 0x6d, 0xaf, 0x51, 0xa6, 0xb3, 0xa7, 0xf8, 0x35, 0x34, 0x31, 0xb8, 0xb9}, //新竹縣子虛鄉烏有村543號
+// 				Over18:       1,
+// 				Pager:        1,
+// 				Career:       [PTT_CAREERSZ]byte{0xa5, 0xfe, 0xb4, 0xba, 0xb3, 0x6e, 0xc5, 0xe9}, //全景軟體
+// 				LastSeen:     1600681288,
+// 			},
+// 			expected: Userec{
+// 				Version:      PTT_PASSWD_VERSION,
+// 				Userid:       "SYSOP",
+// 				Realname:     "CodingMan",
+// 				Nickname:     "神",
+// 				Passwd:       "bhwvOJtfT1TAI",
+// 				Uflag:        33557088,
+// 				Userlevel:    536871943,
+// 				Numlogindays: 2,
+// 				Numposts:     0,
+// 				Firstlogin:   1600681288,
+// 				Lastlogin:    1600756094,
+// 				Lasthost:     "59.124.167.226",
+// 			},
+// 		},
+// 	}
+// 	for _, tt := range tests {
+// 		// t.Run(tt.name, func(t *testing.T) {
+// 		if got := NewUserecFromRaw(tt.args.userecraw); !reflect.DeepEqual(got, tt.expected) {
+// 			t.Errorf("NewUserecFromRaw() = %v, expected %v", got, tt.expected)
+// 		}
+// 		// })
+// 	}
+// }
 
 func TestOpenUserecFile(t *testing.T) {
-	setupTest()
-	defer teardownTest()
 
 	type args struct {
 		filename string
 	}
-	tests := []struct {
+	testcases := []struct {
 		name     string
 		args     args
-		expected []*Userec
+		expected []Userec
 		wantErr  bool
 	}{
 		// TODO: Add test cases.
 		{
-			args:     args{"testcase/passwd/01.PASSWDS"},
-			expected: testOpenUserecFile1,
+			args: args{"testcase/passwd/01.PASSWDS"},
+			expected: []Userec{
+				Userec{
+					Version:      PTT_PASSWD_VERSION,
+					Userid:       "SYSOP",
+					Realname:     "CodingMan",
+					Nickname:     "神",
+					Passwd:       "bhwvOJtfT1TAI",
+					Uflag:        33557088,
+					Userlevel:    536871943,
+					Numlogindays: 2,
+					Numposts:     0,
+					Firstlogin:   1600681288,
+					Lastlogin:    1600756094,
+					Lasthost:     "59.124.167.226",
+				},
+				Userec{
+					Version:      PTT_PASSWD_VERSION,
+					Userid:       "CodingMan",
+					Realname:     "朱元璋",
+					Nickname:     "程式俠",
+					Passwd:       "u8mLG.ktfOk3w",
+					Uflag:        33557216,
+					Userlevel:    31,
+					Numlogindays: 1,
+					Numposts:     0,
+					Firstlogin:   1600737659,
+					Lastlogin:    1600737960,
+					Lasthost:     "59.124.167.226",
+				},
+				Userec{
+					Version:      PTT_PASSWD_VERSION,
+					Userid:       "pichu",
+					Realname:     "Pichu",
+					Nickname:     "Pichu",
+					Passwd:       "KO27TyME.3/tw",
+					Uflag:        33557216,
+					Userlevel:    7,
+					Numlogindays: 1,
+					Numposts:     0,
+					Firstlogin:   1600755675,
+					Lastlogin:    1600766204,
+					Lasthost:     "103.246.218.43",
+				},
+				Userec{
+					Version:      PTT_PASSWD_VERSION,
+					Userid:       "Kahou",
+					Realname:     "林嘉豪",
+					Nickname:     "Kahou",
+					Passwd:       "V3nkaYTLnDPUA",
+					Uflag:        33557216,
+					Userlevel:    7,
+					Numlogindays: 1,
+					Numposts:     0,
+					Firstlogin:   1600758266,
+					Lastlogin:    1600758266,
+					Lasthost:     "180.217.174.18",
+				},
+				Userec{
+					Version:      PTT_PASSWD_VERSION,
+					Userid:       "Kahou2",
+					Realname:     "Kahou",
+					Nickname:     "kahou",
+					Passwd:       "R7shIAOZgQCKs",
+					Uflag:        33557216,
+					Userlevel:    31,
+					Numlogindays: 1,
+					Numposts:     0,
+					Firstlogin:   1600758939,
+					Lastlogin:    1600760401,
+					Lasthost:     "180.217.174.18",
+				},
+			},
 		},
 		{
-			args:     args{"testcase/passwd/01.PASSWDS.corrupt"},
-			expected: testOpenUserecFile1[:TEST_N_OPEN_USER_FILE_1-1],
-			wantErr:  true,
+			args: args{"testcase/passwd/01.PASSWDS.corrupt"},
+			expected: []Userec{
+				Userec{
+					Version:      PTT_PASSWD_VERSION,
+					Userid:       "SYSOP",
+					Realname:     "CodingMan",
+					Nickname:     "神",
+					Passwd:       "bhwvOJtfT1TAI",
+					Uflag:        33557088,
+					Userlevel:    536871943,
+					Numlogindays: 2,
+					Numposts:     0,
+					Firstlogin:   1600681288,
+					Lastlogin:    1600756094,
+					Lasthost:     "59.124.167.226",
+				},
+				Userec{
+					Version:      PTT_PASSWD_VERSION,
+					Userid:       "CodingMan",
+					Realname:     "朱元璋",
+					Nickname:     "程式俠",
+					Passwd:       "u8mLG.ktfOk3w",
+					Uflag:        33557216,
+					Userlevel:    31,
+					Numlogindays: 1,
+					Numposts:     0,
+					Firstlogin:   1600737659,
+					Lastlogin:    1600737960,
+					Lasthost:     "59.124.167.226",
+				},
+				Userec{
+					Version:      PTT_PASSWD_VERSION,
+					Userid:       "pichu",
+					Realname:     "Pichu",
+					Nickname:     "Pichu",
+					Passwd:       "KO27TyME.3/tw",
+					Uflag:        33557216,
+					Userlevel:    7,
+					Numlogindays: 1,
+					Numposts:     0,
+					Firstlogin:   1600755675,
+					Lastlogin:    1600766204,
+					Lasthost:     "103.246.218.43",
+				},
+				Userec{
+					Version:      PTT_PASSWD_VERSION,
+					Userid:       "Kahou",
+					Realname:     "林嘉豪",
+					Nickname:     "Kahou",
+					Passwd:       "V3nkaYTLnDPUA",
+					Uflag:        33557216,
+					Userlevel:    7,
+					Numlogindays: 1,
+					Numposts:     0,
+					Firstlogin:   1600758266,
+					Lastlogin:    1600758266,
+					Lasthost:     "180.217.174.18",
+				},
+				Userec{
+					Version:      PTT_PASSWD_VERSION,
+					Userid:       "Kahou2",
+					Realname:     "Kahou",
+					Nickname:     "kahou",
+					Passwd:       "R7shIAOZgQCKs",
+					Uflag:        33557216,
+					Userlevel:    31,
+					Numlogindays: 1,
+					Numposts:     0,
+					Firstlogin:   1600758939,
+					Lastlogin:    1600760401,
+					Lasthost:     "180.217.174.18",
+				},
+			},
+			wantErr: true,
 		},
 	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			got, err := OpenUserecFile(tt.args.filename)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("OpenUserecFile() error = %v, wantErr %v", err, tt.wantErr)
+	for _, c := range testcases {
+		t.Run(c.name, func(t *testing.T) {
+			actualUserecs, err := OpenUserecFile(c.args.filename)
+			if (err != nil) != c.wantErr {
+				t.Errorf("OpenUserecFile() error = %v, wantErr %v", err, c.wantErr)
 				return
 			}
 
-			for idx, eachGot := range got {
-				each := eachGot.Version
-				expected := tt.expected[idx].Version
-				if !reflect.DeepEqual(each, expected) {
-					t.Errorf("(%v/%v) Version: OpenUserecFile() = %v, expected %v", idx, len(got), each, expected)
+			for index, actual := range actualUserecs {
+
+				ok := index < len(c.expected)
+				if !ok {
+					t.Logf("expected case %d not exist, assume all 0", index)
+					continue
+				}
+				expected := c.expected[index]
+
+				if actual.Version != expected.Version {
+					t.Errorf("Version not match with index %d, expected: %v, got: %v", index, expected.Version, actual.Version)
+				}
+
+				if actual.Userid != expected.Userid {
+					t.Errorf("Userid not match with index %d, expected: %v, got: %v", index, expected.Userid, actual.Userid)
+				}
+
+				if actual.Realname != expected.Realname {
+					t.Errorf("Realname not match with index %d, expected: %v, got: %v", index, expected.Realname, actual.Realname)
+				}
+
+				if actual.Nickname != expected.Nickname {
+					t.Errorf("Nickname not match with index %d, expected: %v, got: %v", index, expected.Nickname, actual.Nickname)
+				}
+
+				if actual.Passwd != expected.Passwd {
+					t.Errorf("Passwd not match with index %d, expected: %v, got: %v", index, expected.Passwd, actual.Passwd)
+				}
+
+				if actual.Uflag != expected.Uflag {
+					t.Errorf("Uflag not match with index %d, expected: %v, got: %v", index, expected.Uflag, actual.Uflag)
+				}
+
+				if actual.Userlevel != expected.Userlevel {
+					t.Errorf("Userlevel not match with index %d, expected: %v, got: %v", index, expected.Userlevel, actual.Userlevel)
+				}
+
+				if actual.Numlogindays != expected.Numlogindays {
+					t.Errorf("Numlogindays not match with index %d, expected: %v, got: %v", index, expected.Numlogindays, actual.Numlogindays)
+				}
+
+				if actual.Numposts != expected.Numposts {
+					t.Errorf("Numposts not match with index %d, expected: %v, got: %v", index, expected.Numposts, actual.Numposts)
+				}
+
+				if actual.Firstlogin != expected.Firstlogin {
+					t.Errorf("Firstlogin not match with index %d, expected: %v, got: %v", index, expected.Firstlogin, actual.Firstlogin)
+				}
+
+				if actual.Lastlogin != expected.Lastlogin {
+					t.Errorf("Lastlogin not match with index %d, expected: %v, got: %v", index, expected.Lastlogin, actual.Lastlogin)
+				}
+
+				if actual.Lasthost != expected.Lasthost {
+					t.Errorf("Lasthost not match with index %d, expected: %v, got: %v", index, expected.Lasthost, actual.Lasthost)
 				}
 			}
 
-			for idx, eachGot := range got {
-				each := eachGot.Userid
-				expected := tt.expected[idx].Userid
-				if !reflect.DeepEqual(each, expected) {
-					t.Errorf("(%v/%v) Userid: OpenUserecFile() = %v, expected %v", idx, len(got), each, expected)
-				}
-			}
-
-			for idx, eachGot := range got {
-				each := eachGot.Realname
-				expected := tt.expected[idx].Realname
-				if !reflect.DeepEqual(each, expected) {
-					t.Errorf("(%v/%v) Realname: OpenUserecFile() = %v, expected %v", idx, len(got), each, expected)
-				}
-			}
-
-			for idx, eachGot := range got {
-				each := eachGot.Nickname
-				expected := tt.expected[idx].Nickname
-				if !reflect.DeepEqual(each, expected) {
-					t.Errorf("(%v/%v) Nickname: OpenUserecFile() = %v, expected %v", idx, len(got), each, expected)
-				}
-			}
-
-			for idx, eachGot := range got {
-				each := eachGot.Passwd
-				expected := tt.expected[idx].Passwd
-				if !reflect.DeepEqual(each, expected) {
-					t.Errorf("(%v/%v) Passwd: OpenUserecFile() = %v, expected %v", idx, len(got), each, expected)
-				}
-			}
-
-			for idx, eachGot := range got {
-				each := eachGot.Pad1
-				expected := tt.expected[idx].Pad1
-				if !reflect.DeepEqual(each, expected) {
-					t.Errorf("(%v/%v) Pad1: OpenUserecFile() = %v, expected %v", idx, len(got), each, expected)
-				}
-			}
-
-			for idx, eachGot := range got {
-				each := eachGot.Uflag
-				expected := tt.expected[idx].Uflag
-				if !reflect.DeepEqual(each, expected) {
-					t.Errorf("(%v/%v) Uflag: OpenUserecFile() = %v, expected %v", idx, len(got), each, expected)
-				}
-			}
-
-			for idx, eachGot := range got {
-				each := eachGot._unused1
-				expected := tt.expected[idx]._unused1
-				if !reflect.DeepEqual(each, expected) {
-					t.Errorf("(%v/%v) _unused1: OpenUserecFile() = %v, expected %v", idx, len(got), each, expected)
-				}
-			}
-
-			for idx, eachGot := range got {
-				each := eachGot.Userlevel
-				expected := tt.expected[idx].Userlevel
-				if !reflect.DeepEqual(each, expected) {
-					t.Errorf("(%v/%v) Userlevel: OpenUserecFile() = %v, expected %v", idx, len(got), each, expected)
-				}
-			}
-
-			for idx, eachGot := range got {
-				each := eachGot.Numlogindays
-				expected := tt.expected[idx].Numlogindays
-				if !reflect.DeepEqual(each, expected) {
-					t.Errorf("(%v/%v) Numlogindays: OpenUserecFile() = %v, expected %v", idx, len(got), each, expected)
-				}
-			}
-
-			for idx, eachGot := range got {
-				each := eachGot.Numposts
-				expected := tt.expected[idx].Numposts
-				if !reflect.DeepEqual(each, expected) {
-					t.Errorf("(%v/%v) Numposts: OpenUserecFile() = %v, expected %v", idx, len(got), each, expected)
-				}
-			}
-
-			for idx, eachGot := range got {
-				each := eachGot.Firstlogin
-				expected := tt.expected[idx].Firstlogin
-				if !reflect.DeepEqual(each, expected) {
-					t.Errorf("(%v/%v) Firstlogin: OpenUserecFile() = %v, expected %v", idx, len(got), each, expected)
-				}
-			}
-
-			for idx, eachGot := range got {
-				each := eachGot.Lastlogin
-				expected := tt.expected[idx].Lastlogin
-				if !reflect.DeepEqual(each, expected) {
-					t.Errorf("(%v/%v) Lastlogin: OpenUserecFile() = %v, expected %v", idx, len(got), each, expected)
-				}
-			}
-
-			for idx, eachGot := range got {
-				each := eachGot.Lasthost
-				expected := tt.expected[idx].Lasthost
-				if !reflect.DeepEqual(each, expected) {
-					t.Errorf("(%v/%v) Lasthost: OpenUserecFile() = %v, expected %v", idx, len(got), each, expected)
-				}
-			}
-
-			if !reflect.DeepEqual(got, tt.expected) {
-				t.Errorf("OpenUserecFile() = %v, expected %v", got, tt.expected)
-			}
+			// if !reflect.DeepEqual(got, c.expected) {
+			// 	t.Errorf("OpenUserecFile() = %v, expected %v", got, c.expected)
+			// }
 		})
 	}
 }

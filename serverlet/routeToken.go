@@ -69,7 +69,7 @@ func postToken(w http.ResponseWriter, r *http.Request) {
 func findUserecById(userid string) (*bbs.Userec, error) {
 
 	for _, it := range userRecs {
-		if userid == it.Userid {
+		if userid == it.UserId {
 			return it, nil
 		}
 	}
@@ -78,12 +78,12 @@ func findUserecById(userid string) (*bbs.Userec, error) {
 }
 
 func verifyPassword(userec *bbs.Userec, password string) error {
-	log.Println("password", userec.Passwd)
-	res, err := crypt.Fcrypt([]byte(password), []byte(userec.Passwd[:2]))
+	log.Println("password", userec.Password)
+	res, err := crypt.Fcrypt([]byte(password), []byte(userec.Password[:2]))
 	str := strings.Trim(string(res), "\x00")
-	log.Println("res", str, err, []byte(str), []byte(userec.Passwd))
+	log.Println("res", str, err, []byte(str), []byte(userec.Password))
 
-	if str != userec.Passwd {
+	if str != userec.Password {
 		return fmt.Errorf("password incorrect")
 	}
 	return nil

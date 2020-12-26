@@ -21,7 +21,8 @@ func main() {
 	r := http.NewServeMux()
 	r.HandleFunc("/v1/token", routeToken)
 	r.HandleFunc("/v1/boards", routeBoards)
-	r.HandleFunc("/v1/class/", routeClass)
+	r.HandleFunc("/v1/classes/", routeClasses)
+	r.HandleFunc("/v1/users/", routeUsers)
 
 	http.ListenAndServe(":8080", r)
 }

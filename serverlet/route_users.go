@@ -3,7 +3,7 @@ package main
 import (
 	// "github.com/PichuChen/go-bbs"
 	// "github.com/PichuChen/go-bbs/crypt"
-	// "log"
+	"log"
 	"net/http"
 	"strings"
 )
@@ -17,6 +17,26 @@ func routeUsers(w http.ResponseWriter, r *http.Request) {
 }
 
 func getUsers(w http.ResponseWriter, r *http.Request) {
+	userId, item, err := parseUserPath(r.URL.Path)
+
+	if item == "information" {
+		getUserInformation(w, r, userId)
+		return
+	} else if item == "favorites" {
+		getUserFavorites(w, r, userId)
+		return
+	}
+	// else
+
+	log.Println(userId, item, err)
+
+	w.WriteHeader(http.StatusNotFound)
+}
+
+func getUserInformation(w http.ResponseWriter, r *http.Request, userId string) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+func getUserFavorites(w http.ResponseWriter, r *http.Request, userId string) {
 	w.WriteHeader(http.StatusNotImplemented)
 }
 

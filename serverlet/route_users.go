@@ -3,9 +3,12 @@ package main
 import (
 	// "github.com/PichuChen/go-bbs"
 	// "github.com/PichuChen/go-bbs/crypt"
+	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 	"strings"
+	"time"
 )
 
 func routeUsers(w http.ResponseWriter, r *http.Request) {
@@ -34,7 +37,58 @@ func getUsers(w http.ResponseWriter, r *http.Request) {
 }
 
 func getUserInformation(w http.ResponseWriter, r *http.Request, userId string) {
-	w.WriteHeader(http.StatusNotImplemented)
+	token := getTokenFromRequest(r)
+	err := checkTokenPermission(token,
+		[]permission{PermissionReadUserInformation},
+		map[string]string{
+			"user_id": userId,
+		})
+
+	if err != nil {
+		// TODO: record unauthorized access
+		w.WriteHeader(http.StatusUnauthorized)
+		return
+	}
+
+	userrec, err := findUserecById(userId)
+	if err != nil {
+		// TODO: record error
+
+		w.WriteHeader(http.StatusInternalServerError)
+		m := map[string]string{
+			"error":             "find_userrec_error",
+			"error_description": "get userrec for " + userId + " failed",
+		}
+		b, _ := json.MarshalIndent(m, "", "  ")
+		w.Write(b)
+		return
+	}
+
+	// TODO: Check Etag or Not-Modified for cache
+
+	dataMap := map[string]interface{}{
+		"user_id":              userrec.UserId,
+		"nickname":             userrec.Nickname,
+		"realname":             userrec.RealName,
+		"number_of_login_days": fmt.Sprintf("%d", userrec.NumLoginDays),
+		"number_of_posts":      fmt.Sprintf("%d", userrec.NumPosts),
+		// "number_of_badposts":   fmt.Sprintf("%d", userrec.NumLoginDays),
+		"money":           fmt.Sprintf("%d", userrec.Money),
+		"last_login_time": userrec.LastLogin.Format(time.RFC3339),
+		"last_login_ipv4": userrec.LastHost,
+		"last_login_ip":   userrec.LastHost,
+		// "last_login_country": fmt.Sprintf("%d", userrec.NumLoginDays),
+		"chess_status": map[string]interface{}{},
+		"plan":         map[string]interface{}{},
+	}
+
+	responseMap := map[string]interface{}{
+		"data": dataMap,
+	}
+
+	responseByte, _ := json.MarshalIndent(responseMap, "", "  ")
+
+	w.Write(responseByte)
 }
 func getUserFavorites(w http.ResponseWriter, r *http.Request, userId string) {
 	w.WriteHeader(http.StatusNotImplemented)

@@ -24,7 +24,7 @@ func main() {
 	r.HandleFunc("/v1/classes/", routeClasses)
 	r.HandleFunc("/v1/users/", routeUsers)
 
-	http.ListenAndServe(":8080", r)
+	http.ListenAndServe(":8083", r)
 }
 
 func loadPasswdsFile() {

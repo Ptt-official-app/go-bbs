@@ -90,6 +90,16 @@ func verifyPassword(userec *bbs.Userec, password string) error {
 
 }
 
+func getTokenFromRequest(r *http.Request) string {
+	a := r.Header.Get("Authorization")
+	s := strings.Split(a, " ")
+	if len(s) < 2 {
+		log.Println("getTokenFromRequest error: len(s) < 2, got", len(s))
+		return ""
+	}
+	return s[1]
+}
+
 func newAccessTokenWithUsername(username string) string {
 	claims := &jwt.StandardClaims{
 		ExpiresAt: 30 * 60, // TODO: Setting me in config

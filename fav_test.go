@@ -1,8 +1,10 @@
 package bbs
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"strings"
 	"testing"
 	"time"
@@ -25,6 +27,11 @@ func TestNewFavLineItem(t *testing.T) {
 	}
 	if line.LineId != 2 {
 		t.Errorf("Line should have ID 2 but was %d", line.LineId)
+	}
+
+	encoded, err := item.MarshalBinary()
+	if bytes.Compare(data, encoded) != 0 {
+		t.Errorf("Encoded FavLineItem should be equal to the input")
 	}
 }
 
@@ -243,7 +250,8 @@ func TestOpenFavFile(t *testing.T) {
 	}
 
 	for _, c := range testCases {
-		fav, err := OpenFavFile(fmt.Sprintf("testcase/fav/%s", c.filename))
+		filePath := fmt.Sprintf("testcase/fav/%s", c.filename)
+		fav, err := OpenFavFile(filePath)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -269,6 +277,15 @@ func TestOpenFavFile(t *testing.T) {
 			default:
 				t.Error("invalid fav type")
 			}
+		}
+
+		expectedBytes, err := ioutil.ReadFile(filePath)
+		if err != nil {
+			t.Fatal(err)
+		}
+		encoded, err := fav.MarshalBinary()
+		if bytes.Compare(expectedBytes, encoded) != 0 {
+			t.Errorf("Encoded FavFile should be equal to the input. Expected: \n%v\nEncoded: \n%v\n ", expectedBytes, encoded)
 		}
 	}
 

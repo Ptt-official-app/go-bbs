@@ -2,8 +2,10 @@ package bbs
 
 import (
 	"bytes"
+	"encoding"
 	"encoding/binary"
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"time"
@@ -315,4 +317,101 @@ func NewFavLineItem(data []byte, startIndex int) (*FavLineItem, int, error) {
 	ret.LineId = data[c]
 	c++
 	return ret, c, nil
+}
+
+func (favf *FavFile) MarshalBinary() ([]byte, error) {
+	ret := make([]byte, 2)
+
+	binary.LittleEndian.PutUint16(ret[0:2], favf.Version)
+	folderInBytes, err := favf.Folder.MarshalBinary()
+	if err != nil {
+		return nil, err
+	}
+	ret = append(ret, folderInBytes...)
+
+	return ret, nil
+}
+
+func (favf *FavFolder) MarshalBinary() ([]byte, error) {
+	ret := make([]byte, 4)
+	c := 0
+
+	size := 2
+	binary.LittleEndian.PutUint16(ret[c:c+size], favf.NBoards)
+	c += size
+
+	ret[c] = favf.NLines
+	c += 1
+
+	ret[c] = favf.NFolders
+
+	for _, item := range favf.FavItems {
+		encoded, err := item.MarshalBinary()
+		if err != nil {
+			return nil, err
+		}
+		ret = append(ret, encoded...)
+	}
+
+	for _, item := range favf.FavItems {
+		if f, ok := item.Item.(*FavFolderItem); ok {
+			encoded, err := f.ThisFolder.MarshalBinary()
+			if err != nil {
+				return nil, err
+			}
+			ret = append(ret, encoded...)
+		}
+	}
+
+	return ret, nil
+}
+
+func (favi *FavItem) MarshalBinary() ([]byte, error) {
+	ret := make([]byte, 2)
+
+	ret[0] = uint8(favi.FavType)
+	ret[1] = favi.FavAttr
+	favim, ok := favi.Item.(encoding.BinaryMarshaler)
+	if !ok {
+		return nil, fmt.Errorf("FavItem.Item must implement encoding.BinaryMarshaler")
+	}
+	encoded, err := favim.MarshalBinary()
+	if err != nil {
+		return nil, err
+	}
+	ret = append(ret, encoded...)
+
+	return ret, nil
+}
+
+func (favbi *FavBoardItem) MarshalBinary() ([]byte, error) {
+	ret := make([]byte, sizeOfPttFavBoardBytes)
+	c := 0
+
+	size := 4
+	binary.LittleEndian.PutUint32(ret[c:c+size], favbi.BoardId)
+	c += size
+
+	binary.LittleEndian.PutUint32(ret[c:c+size], uint32(favbi.LastVisit.Unix()))
+	c += size
+
+	binary.LittleEndian.PutUint32(ret[c:c+size], favbi.Attr)
+
+	return ret, nil
+}
+
+func (favfi *FavFolderItem) MarshalBinary() ([]byte, error) {
+	ret := make([]byte, sizeOfPttFavFolderBytes)
+	ret[0] = favfi.FolderId
+
+	size := PTT_BTLEN + 1
+	copy(ret[1:1+size], Utf8ToBig5(favfi.Title))
+
+	return ret, nil
+}
+
+func (favli *FavLineItem) MarshalBinary() ([]byte, error) {
+	ret := make([]byte, sizeOfPttFavLineBytes)
+	ret[0] = favli.LineId
+	return ret, nil
 }

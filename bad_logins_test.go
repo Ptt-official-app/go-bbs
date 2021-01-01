@@ -2,6 +2,7 @@ package bbs
 
 import (
 	"testing"
+	"time"
 )
 
 func TestOpenBadLoginFile(t *testing.T) {
@@ -12,28 +13,152 @@ func TestOpenBadLoginFile(t *testing.T) {
 	testCases := []*testCase{
 		{
 			filename: "testcase/bad_logins/logins.bad",
-			expected: nil,
+			expected: []*LoginAttempt{
+				{
+					Success:        true,
+					UserId:         "SYSOP",
+					LoginStartTime: time.Date(2021, 01, 01, 10, 8, 56, 0, time.UTC),
+					FromHost:       "172.22.0.1",
+				},
+				{
+					Success:        true,
+					UserId:         "SYSOP",
+					LoginStartTime: time.Date(2021, 01, 01, 10, 10, 50, 0, time.UTC),
+					FromHost:       "172.22.0.1",
+				},
+				{
+					Success:        true,
+					UserId:         "abc123456789",
+					LoginStartTime: time.Date(2021, 01, 01, 10, 11, 9, 0, time.UTC),
+					FromHost:       "172.22.0.1",
+				},
+				{
+					Success:        true,
+					UserId:         "test01",
+					LoginStartTime: time.Date(2021, 01, 01, 10, 11, 23, 0, time.UTC),
+					FromHost:       "172.22.0.1",
+				},
+				{
+					Success:        true,
+					UserId:         "test02",
+					LoginStartTime: time.Date(2021, 01, 01, 10, 11, 35, 0, time.UTC),
+					FromHost:       "172.22.0.1",
+				},
+
+				{
+					Success:        true,
+					UserId:         "test03",
+					LoginStartTime: time.Date(2021, 01, 01, 10, 11, 45, 0, time.UTC),
+					FromHost:       "172.22.0.1",
+				},
+				{
+					Success:        true,
+					UserId:         "test04",
+					LoginStartTime: time.Date(2021, 01, 01, 10, 13, 35, 0, time.UTC),
+					FromHost:       "172.22.0.1",
+				},
+				{
+					Success:        true,
+					UserId:         "test05",
+					LoginStartTime: time.Date(2021, 01, 01, 10, 13, 45, 0, time.UTC),
+					FromHost:       "172.22.0.1",
+				},
+				{
+					Success:        true,
+					UserId:         "SYSOP",
+					LoginStartTime: time.Date(2021, 01, 01, 10, 13, 53, 0, time.UTC),
+					FromHost:       "172.22.0.1",
+				},
+				{
+					Success:        true,
+					UserId:         "test06",
+					LoginStartTime: time.Date(2021, 01, 01, 10, 14, 38, 0, time.UTC),
+					FromHost:       "172.22.0.1",
+				},
+
+				{
+					Success:        true,
+					UserId:         "SYSOP",
+					LoginStartTime: time.Date(2021, 01, 01, 10, 14, 46, 0, time.UTC),
+					FromHost:       "172.22.0.1",
+				},
+				{
+					Success:        false,
+					UserId:         "test01",
+					LoginStartTime: time.Date(2021, 01, 01, 10, 15, 16, 0, time.UTC),
+					FromHost:       "172.22.0.1",
+				},
+				{
+					Success:        false,
+					UserId:         "test02",
+					LoginStartTime: time.Date(2021, 01, 01, 10, 15, 19, 0, time.UTC),
+					FromHost:       "172.22.0.1",
+				},
+				{
+					Success:        false,
+					UserId:         "test03",
+					LoginStartTime: time.Date(2021, 01, 01, 10, 15, 22, 0, time.UTC),
+					FromHost:       "172.22.0.1",
+				},
+				{
+					Success:        true,
+					UserId:         "test04",
+					LoginStartTime: time.Date(2021, 01, 01, 10, 15, 38, 0, time.UTC),
+					FromHost:       "172.22.0.1",
+				},
+			},
 		},
 		{
 			filename: "testcase/bad_logins/test01/logins.bad",
-			expected: nil,
+			expected: []*LoginAttempt{
+				{
+					Success:        false,
+					UserId:         "",
+					LoginStartTime: time.Date(2021, 01, 01, 10, 15, 16, 0, time.UTC),
+					FromHost:       "172.22.0.1",
+				},
+			},
 		},
 	}
 
-	for _, c := range testCases {
-		attemps, err := OpenBadLoginFile(c.filename)
+	for i, c := range testCases {
+		actual, err := OpenBadLoginFile(c.filename)
 		if err != nil {
 			t.Errorf("Failed to open logins.bad. Err %v", err)
 		}
-		for _, l := range attemps {
-			if l.FromHost == "" {
+		if len(c.expected) != len(actual) {
+			t.Errorf("expceted result length (=%d) not match actual (=%d) on case %d", len(c.expected), len(actual), i)
+		}
+
+		for itemIndex, l := range actual {
+			actualItem := l
+			expectedItem := c.expected[itemIndex]
+			if actualItem.FromHost == "" {
 				t.Error("FromHost should never be empty")
 			}
-			if l.LoginStartTime.IsZero() {
+			if actualItem.LoginStartTime.IsZero() {
 				t.Error("LoginStartTime should not be zero")
 			}
-			if l.UserId == "" && l.Success {
+			if actualItem.UserId == "" && actualItem.Success {
 				t.Error("If UserId is empty, Success must be false")
+			}
+
+			// Testing for matching field
+			if actualItem.Success != expectedItem.Success {
+				t.Errorf("Success not match with index %d:%d, expected: %v, got: %v",
+					i, itemIndex, expectedItem.Success, actualItem.Success)
+			}
+			if actualItem.UserId != expectedItem.UserId {
+				t.Errorf("UserId not match with index %d:%d, expected: %v, got: %v",
+					i, itemIndex, expectedItem.UserId, actualItem.UserId)
+			}
+			if actualItem.LoginStartTime.Sub(expectedItem.LoginStartTime) != 0 {
+				t.Errorf("LoginStartTime not match with index %d:%d, expected: %v, got: %v",
+					i, itemIndex, expectedItem.LoginStartTime, actualItem.LoginStartTime)
+			}
+			if actualItem.FromHost != expectedItem.FromHost {
+				t.Errorf("FromHost not match with index %d:%d, expected: %v, got: %v",
+					i, itemIndex, expectedItem.FromHost, actualItem.FromHost)
 			}
 		}
 	}

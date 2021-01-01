@@ -11,3 +11,7 @@ func GetPasswdsPath(workDirectory string) (string, error) {
 func GetBoardPath(workDirectory string) (string, error) {
 	return fmt.Sprintf("%s/.BRD", workDirectory), nil
 }
+
+func GetUserFavoritePath(workDirectory string, userid string) (string, error) {
+	return fmt.Sprintf("%s/.BRD", workDirectory), nil
+}

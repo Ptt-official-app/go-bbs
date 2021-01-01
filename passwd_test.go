@@ -15,7 +15,7 @@ func TestOpenUserecFile(t *testing.T) {
 	}
 
 	expected := []Userec{
-		Userec{
+		{
 			Version:       4194,
 			UserId:        "SYSOP",
 			RealName:      "CodingMan",
@@ -42,7 +42,7 @@ func TestOpenUserecFile(t *testing.T) {
 			TimeRemoveBadPost: time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
 			TimeViolateLaw:    time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
 		},
-		Userec{
+		{
 			Version:       4194,
 			UserId:        "CodingMan",
 			RealName:      "朱元璋",
@@ -69,7 +69,7 @@ func TestOpenUserecFile(t *testing.T) {
 			TimeRemoveBadPost: time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
 			TimeViolateLaw:    time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
 		},
-		Userec{
+		{
 			Version:       4194,
 			UserId:        "pichu",
 			RealName:      "Pichu",
@@ -96,7 +96,7 @@ func TestOpenUserecFile(t *testing.T) {
 			TimeRemoveBadPost: time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
 			TimeViolateLaw:    time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
 		},
-		Userec{
+		{
 			Version:       4194,
 			UserId:        "Kahou",
 			RealName:      "林嘉豪",
@@ -123,7 +123,7 @@ func TestOpenUserecFile(t *testing.T) {
 			TimeRemoveBadPost: time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
 			TimeViolateLaw:    time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
 		},
-		Userec{
+		{
 			Version:       4194,
 			UserId:        "Kahou2",
 			RealName:      "Kahou",

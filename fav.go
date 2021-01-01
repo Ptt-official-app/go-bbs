@@ -7,7 +7,6 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"time"
 )
 
@@ -133,7 +132,6 @@ type FavLineItem struct {
 
 // OpenFavFile reads a fav file
 func OpenFavFile(filename string) (*FavFile, error) {
-	log.Println(filename)
 	data, err := ioutil.ReadFile(filename)
 	if err != nil {
 		return nil, err

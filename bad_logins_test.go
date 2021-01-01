@@ -5,6 +5,7 @@ import (
 	"time"
 )
 
+// The format of bad login equal recent login, you can also see testfile of recent login
 func TestOpenBadLoginFile(t *testing.T) {
 	type testCase struct {
 		filename string

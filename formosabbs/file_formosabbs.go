@@ -1,6 +1,8 @@
 package bbs
 
 import (
+	"github.com/PichuChen/go-bbs"
+
 	"bytes"
 	"encoding/binary"
 	"io"
@@ -19,14 +21,14 @@ const (
 	PosOfFormosaBBSFileHeaderTitle    = PosOfFormosaBBSFileHeaderOwner + FORMOSABBS_STRLEN
 )
 
-func OpenFormosaBBSFileHeaderFile(filename string) ([]*FileHeader, error) {
+func OpenFormosaBBSFileHeaderFile(filename string) ([]*bbs.FileHeader, error) {
 	file, err := os.Open(filename)
 	if err != nil {
 		log.Println(err)
 		return nil, err
 	}
 
-	ret := []*FileHeader{}
+	ret := []*bbs.FileHeader{}
 
 	for {
 		hdr := make([]byte, 248)
@@ -49,9 +51,9 @@ func OpenFormosaBBSFileHeaderFile(filename string) ([]*FileHeader, error) {
 
 }
 
-func NewFomosaBBSFileHeaderWithByte(data []byte) (*FileHeader, error) {
+func NewFomosaBBSFileHeaderWithByte(data []byte) (*bbs.FileHeader, error) {
 
-	ret := FileHeader{}
+	ret := bbs.FileHeader{}
 	ret.Filename = string(bytes.Trim(data[PosOfFormosaBBSFileHeaderFilename:+PosOfFormosaBBSFileHeaderFilename+44], "\x00"))
 
 	modifiedInt := binary.LittleEndian.Uint32(data[PosOfFormosaBBSFileHeaderModified : PosOfFormosaBBSFileHeaderModified+4])
@@ -61,7 +63,7 @@ func NewFomosaBBSFileHeaderWithByte(data []byte) (*FileHeader, error) {
 	// ret.Recommend = int8(data[PosOfRecommend])
 	ret.Owner = string(bytes.Trim(data[PosOfFormosaBBSFileHeaderOwner:PosOfFormosaBBSFileHeaderOwner+72], "\x00"))
 	// ret.Date = string(bytes.Trim(data[PosOfDate:PosOfDate+6], "\x00"))
-	ret.Title = Big5ToUtf8(bytes.Trim(data[PosOfFormosaBBSFileHeaderTitle:PosOfFormosaBBSFileHeaderTitle+67], "\x00"))
+	ret.Title = bbs.Big5ToUtf8(bytes.Trim(data[PosOfFormosaBBSFileHeaderTitle:PosOfFormosaBBSFileHeaderTitle+67], "\x00"))
 	// // log.Println("PosOfUnionMulti:", PosOfUnionMulti, data[PosOfUnionMulti])
 
 	// ret.Money = int(binary.LittleEndian.Uint32(data[PosOfUnionMulti : PosOfUnionMulti+4]))

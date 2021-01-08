@@ -1,3 +1,5 @@
+[![GoDoc](https://godoc.org/github.com/PichuChen/go-bbs?status.svg)](https://godoc.org/github.com/PichuChen/go-bbs)
+
 # BBS Parser
 
 

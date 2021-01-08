@@ -1,5 +1,19 @@
-package bbs
+// Copyright 2020 Pichu Chen, The PTT APP Authors
 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+
+//     http://www.apache.org/licenses/LICENSE-2.0
+
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+// File header is in the board directory, it indicates the article's metainfo
+// such as filename, author, title... usually without content.
 //
 // For Current PTT
 // Please see https://github.com/ptt/pttbbs/blob/master/include/pttstruct.h
@@ -7,6 +21,10 @@ package bbs
 //
 // Refer data:
 // [Re: [問題] FileHeader 的結構???](https://www.ptt.cc/bbs/PttCurrent/M.1219675989.A.F85.html)
+//
+// The `PosOf...` variables will be unexported soon.
+
+package bbs
 
 import (
 	"bytes"
@@ -38,6 +56,7 @@ type VoteLimits struct {
 	Badpost uint8
 }
 
+// FileHeader records article's metainfo
 type FileHeader struct {
 	Filename  string
 	Modified  time.Time
@@ -57,6 +76,8 @@ type FileHeader struct {
 	Postno int32 // FormosaBBS only
 }
 
+// OpenFileHeaderFile function open a .DIR file in board directory.
+// It returns slice of FileHeader.
 func OpenFileHeaderFile(filename string) ([]*FileHeader, error) {
 	file, err := os.Open(filename)
 	if err != nil {

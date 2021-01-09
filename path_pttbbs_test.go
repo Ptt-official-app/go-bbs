@@ -381,6 +381,124 @@ func TestGetBoardArticlePath(t *testing.T) {
 
 }
 
+func TestGetBoardTreasuresDirectoryPath(t *testing.T) {
+
+	type Input struct {
+		wd      string
+		boardId string
+		path    []string
+	}
+	type TestCase struct {
+		input    Input
+		expected string
+	}
+	cases := []TestCase{
+
+		{
+			input: Input{
+				wd:      "/root",
+				boardId: "SYSOP",
+				path:    []string{},
+			},
+			expected: "/root/man/boards/S/SYSOP/.DIR",
+		},
+		{
+			input: Input{
+				wd:      "/root",
+				boardId: "SYSOP",
+				path: []string{
+					"D3D1",
+				},
+			},
+			expected: "/root/man/boards/S/SYSOP/D3D1/.DIR",
+		},
+		{
+			input: Input{
+				wd:      "/root",
+				boardId: "SYSOP",
+				path: []string{
+					"D3D1",
+					"D3D2",
+				},
+			},
+			expected: "/root/man/boards/S/SYSOP/D3D1/D3D2/.DIR",
+		},
+	}
+
+	for i, c := range cases {
+		actual, err := GetBoardTreasuresDirectoryPath(c.input.wd, c.input.boardId, c.input.path)
+		if err != nil {
+			t.Errorf("GetBoardTreasuresDirectoryPath err != nil on index %d", i)
+		}
+		if actual != c.expected {
+			t.Errorf("GetBoardTreasuresDirectoryPath result not match on index %d with input:%v , expected: %v, got: %v",
+				i, c.input, c.expected, actual)
+		}
+	}
+
+}
+
+func TestGetBoardTreasuresFilePath(t *testing.T) {
+
+	type Input struct {
+		wd       string
+		boardId  string
+		path     []string
+		filename string
+	}
+	type TestCase struct {
+		input    Input
+		expected string
+	}
+	cases := []TestCase{
+
+		{
+			input: Input{
+				wd:       "/root",
+				boardId:  "SYSOP",
+				path:     []string{},
+				filename: "M.16007514073.A.BC9",
+			},
+			expected: "/root/man/boards/S/SYSOP/M.16007514073.A.BC9",
+		},
+		{
+			input: Input{
+				wd:      "/root",
+				boardId: "sysop",
+				path: []string{
+					"D3D1",
+				},
+				filename: "M.16007514073.A.BC9",
+			},
+			expected: "/root/man/boards/s/sysop/D3D1/M.16007514073.A.BC9",
+		},
+		{
+			input: Input{
+				wd:      "/root",
+				boardId: "sysop",
+				path: []string{
+					"D3D1",
+					"D3D2",
+				},
+				filename: "M.16007514073.A.BC9",
+			},
+			expected: "/root/man/boards/s/sysop/D3D1/D3D2/M.16007514073.A.BC9",
+		},
+	}
+
+	for i, c := range cases {
+		actual, err := GetBoardTreasuresFilePath(c.input.wd, c.input.boardId, c.input.path, c.input.filename)
+		if err != nil {
+			t.Errorf("GetBoardTreasuresFilePath err != nil on index %d", i)
+		}
+		if actual != c.expected {
+			t.Errorf("GetBoardTreasuresFilePath result not match on index %d with input:%v , expected: %v, got: %v",
+				i, c.input, c.expected, actual)
+		}
+	}
+
+}
+
 func TestGetBoardNameFilePath(t *testing.T) {
 
 	type Input struct {

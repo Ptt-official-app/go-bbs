@@ -13,11 +13,15 @@
 // limitations under the License.
 
 // This file manages the path rules of files in BBS system.
+// We introduce global files at first, and path of users, path of
+// normal article, path of treasure (man in maple system), path of
+// digest.
 
 package bbs
 
 import (
 	"fmt"
+	"strings"
 )
 
 // Get Passwd file path of system
@@ -53,15 +57,31 @@ func GetBoardArticleDirectoryPath(workDirectory string, boardId string) (string,
 	return fmt.Sprintf("%s/boards/%c/%s/.DIR", workDirectory, boardId[0], boardId), nil
 }
 
-// Get Directory digest file path of board
-func GetBoardNameFilePath(workDirectory string, boardId string) (string, error) {
-	return fmt.Sprintf("%s/boards/%c/%s/.Name", workDirectory, boardId[0], boardId), nil
-}
-
 // Get Directory digest file path of board, `workDirectory` is BBSHome usually, `boardId` means
 // which board, and filename is actual file in board, notice that, we will check is file exist or
 // user has permission for open this file. eg, .DIR file, so please check filename before call
 // this function.
 func GetBoardArticlePath(workDirectory string, boardId string, filename string) (string, error) {
 	return fmt.Sprintf("%s/boards/%c/%s/%s", workDirectory, boardId[0], boardId, filename), nil
+}
+
+// GetBoardTreasuresDirectoryPath return dir file path of specific board and path,
+// `workDirectory` is BBSHome usually, `boardId` means which board and `path` is a slice
+// figure out each directory, eg: `["M.971228479.A", "M.1035338027.A"]` in formosa BBS or
+// `["D690", "D6C2", "D6D1"]` in pttbbs.
+func GetBoardTreasuresDirectoryPath(workDirectory string, boardId string, path []string) (string, error) {
+	path = append(path, "")
+	subPath := strings.Join(path, "/")
+	return fmt.Sprintf("%s/man/boards/%c/%s/%s.DIR", workDirectory, boardId[0], boardId, subPath), nil
+}
+
+func GetBoardTreasuresFilePath(workDirectory string, boardId string, path []string, filename string) (string, error) {
+	path = append(path, "")
+	subPath := strings.Join(path, "/")
+	return fmt.Sprintf("%s/man/boards/%c/%s/%s%s", workDirectory, boardId[0], boardId, subPath, filename), nil
+}
+
+// Get Directory digest file path of board
+func GetBoardNameFilePath(workDirectory string, boardId string) (string, error) {
+	return fmt.Sprintf("%s/boards/%c/%s/.Name", workDirectory, boardId[0], boardId), nil
 }

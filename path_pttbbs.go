@@ -39,3 +39,13 @@ func GetUserFavoritePath(workDirectory string, userid string) (string, error) {
 func GetLoginRecentPath(workDirectory string, userid string) (string, error) {
 	return fmt.Sprintf("%s/home/%c/%s/logins.recent", workDirectory, userid[0], userid), nil
 }
+
+// Get Directory normal file path of board
+func GetBoardArticleDirectoryath(workDirectory string, boardId string) (string, error) {
+	return fmt.Sprintf("%s/boards/%c/%s/.DIR", workDirectory, boardId[0], boardId), nil
+}
+
+// Get Directory digest file path of board
+func GetBoardNameFilePath(workDirectory string, boardId string) (string, error) {
+	return fmt.Sprintf("%s/boards/%c/%s/.Name", workDirectory, boardId[0], boardId), nil
+}

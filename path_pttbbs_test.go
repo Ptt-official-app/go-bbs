@@ -205,3 +205,113 @@ func TestGetLoginRecentPath(t *testing.T) {
 	}
 
 }
+
+func TestGetBoardArticleDirectoryath(t *testing.T) {
+
+	type Input struct {
+		wd      string
+		boardId string
+	}
+	type TestCase struct {
+		input    Input
+		expected string
+	}
+	cases := []TestCase{
+
+		{
+			input: Input{
+				wd:      "/root",
+				boardId: "SYSOP",
+			},
+			expected: "/root/boards/S/SYSOP/.DIR",
+		},
+		{
+			input: Input{
+				wd:      "/root/",
+				boardId: "SYSOP",
+			},
+			expected: "/root//boards/S/SYSOP/.DIR",
+		},
+		{
+			input: Input{
+				wd:      "/root//",
+				boardId: "SYSOP",
+			},
+			expected: "/root///boards/S/SYSOP/.DIR",
+		},
+		{
+			input: Input{
+				wd:      "/root",
+				boardId: "sysop",
+			},
+			expected: "/root/boards/s/sysop/.DIR",
+		},
+	}
+
+	for i, c := range cases {
+		actual, err := GetBoardArticleDirectoryath(c.input.wd, c.input.boardId)
+		if err != nil {
+			t.Errorf("GetBoardArticleDirectoryath err != nil on index %d", i)
+		}
+		if actual != c.expected {
+			t.Errorf("GetBoardArticleDirectoryath result not match on index %d with input:%v , expected: %v, got: %v",
+				i, c.input, c.expected, actual)
+		}
+	}
+
+}
+
+func TestGetBoardNameFilePath(t *testing.T) {
+
+	type Input struct {
+		wd      string
+		boardId string
+	}
+	type TestCase struct {
+		input    Input
+		expected string
+	}
+	cases := []TestCase{
+
+		{
+			input: Input{
+				wd:      "/root",
+				boardId: "SYSOP",
+			},
+			expected: "/root/boards/S/SYSOP/.Name",
+		},
+		{
+			input: Input{
+				wd:      "/root/",
+				boardId: "SYSOP",
+			},
+			expected: "/root//boards/S/SYSOP/.Name",
+		},
+		{
+			input: Input{
+				wd:      "/root//",
+				boardId: "SYSOP",
+			},
+			expected: "/root///boards/S/SYSOP/.Name",
+		},
+		{
+			input: Input{
+				wd:      "/root",
+				boardId: "sysop",
+			},
+			expected: "/root/boards/s/sysop/.Name",
+		},
+	}
+
+	for i, c := range cases {
+		actual, err := GetBoardNameFilePath(c.input.wd, c.input.boardId)
+		if err != nil {
+			t.Errorf("GetBoardNameFilePath err != nil on index %d", i)
+		}
+		if actual != c.expected {
+			t.Errorf("GetBoardNameFilePath result not match on index %d with input:%v , expected: %v, got: %v",
+				i, c.input, c.expected, actual)
+		}
+	}
+
+}

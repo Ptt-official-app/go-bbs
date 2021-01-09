@@ -266,7 +266,7 @@ func TestGetLoginRecentPath(t *testing.T) {
 
 }
 
-func TestGetBoardArticleDirectoryath(t *testing.T) {
+func TestGetBoardArticleDirectoryPath(t *testing.T) {
 
 	type Input struct {
 		wd      string
@@ -309,12 +309,12 @@ func TestGetBoardArticleDirectoryath(t *testing.T) {
 	}
 
 	for i, c := range cases {
-		actual, err := GetBoardArticleDirectoryath(c.input.wd, c.input.boardId)
+		actual, err := GetBoardArticleDirectoryPath(c.input.wd, c.input.boardId)
 		if err != nil {
-			t.Errorf("GetBoardArticleDirectoryath err != nil on index %d", i)
+			t.Errorf("GetBoardArticleDirectoryPath err != nil on index %d", i)
 		}
 		if actual != c.expected {
-			t.Errorf("GetBoardArticleDirectoryath result not match on index %d with input:%v , expected: %v, got: %v",
+			t.Errorf("GetBoardArticleDirectoryPath result not match on index %d with input:%v , expected: %v, got: %v",
 				i, c.input, c.expected, actual)
 		}
 	}

@@ -49,7 +49,7 @@ func GetLoginRecentPath(workDirectory string, userid string) (string, error) {
 }
 
 // Get Directory normal file path of board
-func GetBoardArticleDirectoryath(workDirectory string, boardId string) (string, error) {
+func GetBoardArticleDirectoryPath(workDirectory string, boardId string) (string, error) {
 	return fmt.Sprintf("%s/boards/%c/%s/.DIR", workDirectory, boardId[0], boardId), nil
 }
 

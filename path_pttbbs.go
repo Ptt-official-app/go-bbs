@@ -35,6 +35,14 @@ func GetUserFavoritePath(workDirectory string, userid string) (string, error) {
 	return fmt.Sprintf("%s/home/%c/%s/.fav", workDirectory, userid[0], userid), nil
 }
 
+// Get Directory digest file path of board, `workDirectory` is BBSHome usually, `userId` means
+// which user, and filename is actual file in user, notice that, we will check is file exist or
+// user has permission for open this file. eg, .DIR file, so please check filename before call
+// this function.
+func GetUserMailPath(workDirectory string, userId string, filename string) (string, error) {
+	return fmt.Sprintf("%s/home/%c/%s/%s", workDirectory, userId[0], userId, filename), nil
+}
+
 // Get Login Recent file path of user
 func GetLoginRecentPath(workDirectory string, userid string) (string, error) {
 	return fmt.Sprintf("%s/home/%c/%s/logins.recent", workDirectory, userid[0], userid), nil
@@ -48,4 +56,12 @@ func GetBoardArticleDirectoryath(workDirectory string, boardId string) (string, 
 // Get Directory digest file path of board
 func GetBoardNameFilePath(workDirectory string, boardId string) (string, error) {
 	return fmt.Sprintf("%s/boards/%c/%s/.Name", workDirectory, boardId[0], boardId), nil
+}
+
+// Get Directory digest file path of board, `workDirectory` is BBSHome usually, `boardId` means
+// which board, and filename is actual file in board, notice that, we will check is file exist or
+// user has permission for open this file. eg, .DIR file, so please check filename before call
+// this function.
+func GetBoardArticlePath(workDirectory string, boardId string, filename string) (string, error) {
+	return fmt.Sprintf("%s/boards/%c/%s/%s", workDirectory, boardId[0], boardId, filename), nil
 }

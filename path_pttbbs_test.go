@@ -151,6 +151,66 @@ func TestGetUserFavoritePath(t *testing.T) {
 
 }
 
+func TestGetUserMailPath(t *testing.T) {
+
+	type Input struct {
+		wd       string
+		userId   string
+		filename string
+	}
+	type TestCase struct {
+		input    Input
+		expected string
+	}
+	cases := []TestCase{
+
+		{
+			input: Input{
+				wd:       "/root",
+				userId:   "SYSOP",
+				filename: "M.1600751073.A.BC9",
+			},
+			expected: "/root/home/S/SYSOP/M.1600751073.A.BC9",
+		},
+		{
+			input: Input{
+				wd:       "/root/",
+				userId:   "SYSOP",
+				filename: "M.16007514073.A.BC9",
+			},
+			expected: "/root//home/S/SYSOP/M.16007514073.A.BC9",
+		},
+		{
+			input: Input{
+				wd:       "/root//",
+				userId:   "SYSOP",
+				filename: "M.2600751073.A.BC9",
+			},
+			expected: "/root///home/S/SYSOP/M.2600751073.A.BC9",
+		},
+		{
+			input: Input{
+				wd:       "/root",
+				userId:   "sysop",
+				filename: "M.1600751073.B.BC9",
+			},
+			expected: "/root/home/s/sysop/M.1600751073.B.BC9",
+		},
+	}
+
+	for i, c := range cases {
+		actual, err := GetUserMailPath(c.input.wd, c.input.userId, c.input.filename)
+		if err != nil {
+			t.Errorf("GetUserMailPath err != nil on index %d", i)
+		}
+		if actual != c.expected {
+			t.Errorf("GetUserMailPath result not match on index %d with input:%v , expected: %v, got: %v",
+				i, c.input, c.expected, actual)
+		}
+	}
+
+}
+
 func TestGetLoginRecentPath(t *testing.T) {
 
 	type Input struct {
@@ -310,6 +370,66 @@ func TestGetBoardNameFilePath(t *testing.T) {
 		}
 		if actual != c.expected {
 			t.Errorf("GetBoardNameFilePath result not match on index %d with input:%v , expected: %v, got: %v",
+				i, c.input, c.expected, actual)
+		}
+	}
+
+}
+
+func TestGetBoardArticlePath(t *testing.T) {
+
+	type Input struct {
+		wd       string
+		boardId  string
+		filename string
+	}
+	type TestCase struct {
+		input    Input
+		expected string
+	}
+	cases := []TestCase{
+
+		{
+			input: Input{
+				wd:       "/root",
+				boardId:  "SYSOP",
+				filename: "M.16007514073.A.BC9",
+			},
+			expected: "/root/boards/S/SYSOP/M.16007514073.A.BC9",
+		},
+		{
+			input: Input{
+				wd:       "/root/",
+				boardId:  "SYSOP",
+				filename: "M.16007514073.A.BC9",
+			},
+			expected: "/root//boards/S/SYSOP/M.16007514073.A.BC9",
+		},
+		{
+			input: Input{
+				wd:       "/root//",
+				boardId:  "SYSOP",
+				filename: "M.16007514073.A.BC9",
+			},
+			expected: "/root///boards/S/SYSOP/M.16007514073.A.BC9",
+		},
+		{
+			input: Input{
+				wd:       "/root",
+				boardId:  "sysop",
+				filename: "M.16007514073.A.BC9",
+			},
+			expected: "/root/boards/s/sysop/M.16007514073.A.BC9",
+		},
+	}
+
+	for i, c := range cases {
+		actual, err := GetBoardArticlePath(c.input.wd, c.input.boardId, c.input.filename)
+		if err != nil {
+			t.Errorf("GetBoardArticlePath err != nil on index %d", i)
+		}
+		if actual != c.expected {
+			t.Errorf("GetBoardArticlePath result not match on index %d with input:%v , expected: %v, got: %v",
 				i, c.input, c.expected, actual)
 		}
 	}

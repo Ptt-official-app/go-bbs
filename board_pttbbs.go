@@ -30,20 +30,22 @@ import (
 //
 
 type BoardHeader struct {
-	BrdName            string
-	Title              string
-	BM                 string
-	Brdattr            uint32 // uid[.]
-	ChessCountry       string
-	VoteLimitPosts     uint8
-	VoteLimitLogins    uint8
-	BUpdate            time.Time
-	PostLimitPosts     uint8
-	PostLimitLogins    uint8
-	BVote              uint8
-	VTime              time.Time
-	Level              uint32
-	PermReload         time.Time
+	BrdName         string
+	Title           string
+	BM              string
+	Brdattr         uint32 // uid[.]
+	ChessCountry    string
+	VoteLimitPosts  uint8
+	VoteLimitLogins uint8
+	BUpdate         time.Time
+	PostLimitPosts  uint8
+	PostLimitLogins uint8
+	BVote           uint8
+	VTime           time.Time
+	Level           uint32
+	PermReload      time.Time
+
+	// Parent class id, first item is start from 1.
 	Gid                int32
 	Next               []int32
 	FirstChild         []int32

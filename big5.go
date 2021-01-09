@@ -15,6 +15,7 @@
 // Encoding convertion for Big5 to UTF-8,
 // Actual BBS using "BIG5-UAO", so BBS in Taiwan supports Japanese
 // charset, and golang traditionalchinese supports BIG5-UAO already.
+// Please see "big5_test.go" for more infomation.
 
 package bbs
 

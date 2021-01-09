@@ -144,7 +144,6 @@ type Userec struct {
 }
 
 func OpenUserecFile(filename string) ([]*Userec, error) {
-	log.Println(filename)
 	file, err := os.Open(filename)
 	if err != nil {
 		log.Println(err)

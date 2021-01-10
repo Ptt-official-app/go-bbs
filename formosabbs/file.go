@@ -21,14 +21,33 @@ const (
 	PosOfFormosaBBSFileHeaderTitle    = PosOfFormosaBBSFileHeaderOwner + FORMOSABBS_STRLEN
 )
 
-func OpenFormosaBBSFileHeaderFile(filename string) ([]*bbs.FileHeader, error) {
+type FileHeader struct {
+	Filename  string
+	Modified  time.Time
+	Recommend int8   // Important Level
+	Owner     string // uid[.]
+	Date      string
+	Title     string
+
+	Money   int
+	AnnoUid int
+	// VoteLimits
+	ReferRef  uint // 至底公告？
+	ReferFlag bool // 至底公告？
+
+	Filemode uint8
+
+	Postno int32 // FormosaBBS only
+}
+
+func OpenFormosaBBSFileHeaderFile(filename string) ([]*FileHeader, error) {
 	file, err := os.Open(filename)
 	if err != nil {
 		log.Println(err)
 		return nil, err
 	}
 
-	ret := []*bbs.FileHeader{}
+	ret := []*FileHeader{}
 
 	for {
 		hdr := make([]byte, 248)
@@ -51,9 +70,9 @@ func OpenFormosaBBSFileHeaderFile(filename string) ([]*bbs.FileHeader, error) {
 
 }
 
-func NewFomosaBBSFileHeaderWithByte(data []byte) (*bbs.FileHeader, error) {
+func NewFomosaBBSFileHeaderWithByte(data []byte) (*FileHeader, error) {
 
-	ret := bbs.FileHeader{}
+	ret := FileHeader{}
 	ret.Filename = string(bytes.Trim(data[PosOfFormosaBBSFileHeaderFilename:+PosOfFormosaBBSFileHeaderFilename+44], "\x00"))
 
 	modifiedInt := binary.LittleEndian.Uint32(data[PosOfFormosaBBSFileHeaderModified : PosOfFormosaBBSFileHeaderModified+4])

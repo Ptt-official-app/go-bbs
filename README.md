@@ -1,10 +1,10 @@
-# BBS Parser
+# BBS Libirary
 [![GoDoc](https://godoc.org/github.com/PichuChen/go-bbs?status.svg)](https://godoc.org/github.com/PichuChen/go-bbs)
 
 
 這個專案是提供 Golang 開發者存取現有在台灣的 BBS 資料結構的函式庫。
 
-目前主要支援的 BBS 結構以 CurrentPTT 為主
+目前主要支援的 BBS 結構以 pttbbs(CurrentPTT/OpenPTT) 為主
 
 未來可能會支援 FormosaBBS
 

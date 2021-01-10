@@ -1,8 +1,6 @@
 package bbs
 
 import (
-	"github.com/PichuChen/go-bbs"
-
 	"testing"
 )
 
@@ -13,7 +11,7 @@ func TestParseFormosaBBSFileHeader(t *testing.T) {
 		t.Error(err)
 	}
 
-	expected := []bbs.FileHeader{
+	expected := []FileHeader{
 		{
 			Filename: "M.1444066232.A",
 			Owner:    "programchen",
@@ -148,9 +146,6 @@ func TestParseFormosaBBSFileHeader(t *testing.T) {
 		}
 		if header.AnnoUid != expected[index].AnnoUid {
 			t.Errorf("AnnoUid not match in index %d, expected: %q, got: %q", index, expected[index].AnnoUid, header.AnnoUid)
-		}
-		if header.VoteLimits != expected[index].VoteLimits {
-			t.Errorf("VoteLimits not match in index %d, expected: %q, got: %q", index, expected[index].VoteLimits, header.VoteLimits)
 		}
 		if header.ReferRef != expected[index].ReferRef {
 			t.Errorf("ReferRef not match in index %d, expected: %q, got: %q", index, expected[index].ReferRef, header.ReferRef)

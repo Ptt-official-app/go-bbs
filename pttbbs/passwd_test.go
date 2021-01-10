@@ -31,18 +31,18 @@ func TestOpenUserecFile(t *testing.T) {
 	expected := []Userec{
 		{
 			Version:       4194,
-			UserId:        "SYSOP",
-			RealName:      "CodingMan",
-			Nickname:      "神",
-			Password:      "bhwvOJtfT1TAI",
+			userId:        "SYSOP",
+			realName:      "CodingMan",
+			nickname:      "神",
+			password:      "bhwvOJtfT1TAI",
 			UserFlag:      0x02000A60,
 			UserLevel:     0x20000407,
-			NumLoginDays:  2,
-			NumPosts:      0,
-			FirstLogin:    time.Date(2020, 9, 21, 9, 41, 28, 0, time.UTC),
-			LastLogin:     time.Date(2020, 9, 22, 6, 28, 14, 0, time.UTC),
-			LastHost:      "59.124.167.226",
-			Money:         0,
+			numLoginDays:  2,
+			numPosts:      0,
+			firstLogin:    time.Date(2020, 9, 21, 9, 41, 28, 0, time.UTC),
+			lastLogin:     time.Date(2020, 9, 22, 6, 28, 14, 0, time.UTC),
+			lastHost:      "59.124.167.226",
+			money:         0,
 			Address:       "新竹縣子虛鄉烏有村543號",
 			Over18:        true,
 			Pager:         1,
@@ -58,17 +58,17 @@ func TestOpenUserecFile(t *testing.T) {
 		},
 		{
 			Version:       4194,
-			UserId:        "CodingMan",
-			RealName:      "朱元璋",
-			Nickname:      "程式俠",
-			Password:      "u8mLG.ktfOk3w",
+			userId:        "CodingMan",
+			realName:      "朱元璋",
+			nickname:      "程式俠",
+			password:      "u8mLG.ktfOk3w",
 			UserFlag:      0x02000AE0,
 			UserLevel:     0x0000001F,
-			NumLoginDays:  1,
-			NumPosts:      0,
-			FirstLogin:    time.Date(2020, 9, 22, 1, 20, 59, 0, time.UTC),
-			LastLogin:     time.Date(2020, 9, 22, 1, 26, 00, 0, time.UTC),
-			LastHost:      "59.124.167.226",
+			numLoginDays:  1,
+			numPosts:      0,
+			firstLogin:    time.Date(2020, 9, 22, 1, 20, 59, 0, time.UTC),
+			lastLogin:     time.Date(2020, 9, 22, 1, 26, 00, 0, time.UTC),
+			lastHost:      "59.124.167.226",
 			Email:         "x",
 			Address:       "新竹縣子虛鄉烏有村543號",
 			Justify:       "[SYSOP] 09/22/2020 01:25:53 Tue",
@@ -85,17 +85,17 @@ func TestOpenUserecFile(t *testing.T) {
 		},
 		{
 			Version:       4194,
-			UserId:        "pichu",
-			RealName:      "Pichu",
-			Nickname:      "Pichu",
-			Password:      "KO27TyME.3/tw",
+			userId:        "pichu",
+			realName:      "Pichu",
+			nickname:      "Pichu",
+			password:      "KO27TyME.3/tw",
 			UserFlag:      0x02000AE0,
 			UserLevel:     0x00000007,
-			NumLoginDays:  1,
-			NumPosts:      0,
-			FirstLogin:    time.Date(2020, 9, 22, 6, 21, 15, 0, time.UTC),
-			LastLogin:     time.Date(2020, 9, 22, 9, 16, 44, 0, time.UTC),
-			LastHost:      "103.246.218.43",
+			numLoginDays:  1,
+			numPosts:      0,
+			firstLogin:    time.Date(2020, 9, 22, 6, 21, 15, 0, time.UTC),
+			lastLogin:     time.Date(2020, 9, 22, 9, 16, 44, 0, time.UTC),
+			lastHost:      "103.246.218.43",
 			Career:        "台灣智慧家庭",
 			LastSeen:      time.Date(2020, 9, 22, 9, 16, 44, 0, time.UTC),
 			TimeSetAngel:  time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
@@ -112,17 +112,17 @@ func TestOpenUserecFile(t *testing.T) {
 		},
 		{
 			Version:       4194,
-			UserId:        "Kahou",
-			RealName:      "林嘉豪",
-			Nickname:      "Kahou",
-			Password:      "V3nkaYTLnDPUA",
+			userId:        "Kahou",
+			realName:      "林嘉豪",
+			nickname:      "Kahou",
+			password:      "V3nkaYTLnDPUA",
 			UserFlag:      0x02000AE0,
 			UserLevel:     0x00000007,
-			NumLoginDays:  1,
-			NumPosts:      0,
-			FirstLogin:    time.Date(2020, 9, 22, 7, 4, 26, 0, time.UTC),
-			LastLogin:     time.Date(2020, 9, 22, 7, 4, 26, 0, time.UTC),
-			LastHost:      "180.217.174.18",
+			numLoginDays:  1,
+			numPosts:      0,
+			firstLogin:    time.Date(2020, 9, 22, 7, 4, 26, 0, time.UTC),
+			lastLogin:     time.Date(2020, 9, 22, 7, 4, 26, 0, time.UTC),
+			lastHost:      "180.217.174.18",
 			Career:        "我的服務單位",
 			LastSeen:      time.Date(2020, 9, 22, 7, 4, 26, 0, time.UTC),
 			TimeSetAngel:  time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
@@ -139,17 +139,17 @@ func TestOpenUserecFile(t *testing.T) {
 		},
 		{
 			Version:       4194,
-			UserId:        "Kahou2",
-			RealName:      "Kahou",
-			Nickname:      "kahou",
-			Password:      "R7shIAOZgQCKs",
+			userId:        "Kahou2",
+			realName:      "Kahou",
+			nickname:      "kahou",
+			password:      "R7shIAOZgQCKs",
 			UserFlag:      0x02000AE0,
 			UserLevel:     0x0000001F,
-			NumLoginDays:  1,
-			NumPosts:      0,
-			FirstLogin:    time.Date(2020, 9, 22, 7, 15, 39, 0, time.UTC),
-			LastLogin:     time.Date(2020, 9, 22, 7, 40, 1, 0, time.UTC),
-			LastHost:      "180.217.174.18",
+			numLoginDays:  1,
+			numPosts:      0,
+			firstLogin:    time.Date(2020, 9, 22, 7, 15, 39, 0, time.UTC),
+			lastLogin:     time.Date(2020, 9, 22, 7, 40, 1, 0, time.UTC),
+			lastHost:      "180.217.174.18",
 			Career:        "我的服務單位",
 			LastSeen:      time.Date(2020, 9, 22, 7, 40, 01, 0, time.UTC),
 			TimeSetAngel:  time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
@@ -179,20 +179,20 @@ func TestOpenUserecFile(t *testing.T) {
 			t.Errorf("Version not match with index %d, expected: %v, got: %v", index, expected.Version, actual.Version)
 		}
 
-		if actual.UserId != expected.UserId {
-			t.Errorf("UserId not match with index %d, expected: %v, got: %v", index, expected.UserId, actual.UserId)
+		if actual.userId != expected.userId {
+			t.Errorf("UserId not match with index %d, expected: %v, got: %v", index, expected.userId, actual.userId)
 		}
 
-		if actual.RealName != expected.RealName {
-			t.Errorf("RealName not match with index %d, expected: %v, got: %v", index, expected.RealName, actual.RealName)
+		if actual.realName != expected.realName {
+			t.Errorf("RealName not match with index %d, expected: %v, got: %v", index, expected.realName, actual.realName)
 		}
 
-		if actual.Nickname != expected.Nickname {
-			t.Errorf("Nickname not match with index %d, expected: %v, got: %v", index, expected.Nickname, actual.Nickname)
+		if actual.nickname != expected.nickname {
+			t.Errorf("Nickname not match with index %d, expected: %v, got: %v", index, expected.nickname, actual.nickname)
 		}
 
-		if actual.Password != expected.Password {
-			t.Errorf("Password not match with index %d, expected: %v, got: %v", index, expected.Password, actual.Password)
+		if actual.password != expected.password {
+			t.Errorf("Password not match with index %d, expected: %v, got: %v", index, expected.password, actual.password)
 		}
 
 		if actual.UserFlag != expected.UserFlag {
@@ -203,28 +203,28 @@ func TestOpenUserecFile(t *testing.T) {
 			t.Errorf("UserLevel not match with index %d, expected: 0x%08X, got: 0x%08X", index, expected.UserLevel, actual.UserLevel)
 		}
 
-		if actual.NumLoginDays != expected.NumLoginDays {
-			t.Errorf("NumLoginDays not match with index %d, expected: %v, got: %v", index, expected.NumLoginDays, actual.NumLoginDays)
+		if actual.numLoginDays != expected.numLoginDays {
+			t.Errorf("NumLoginDays not match with index %d, expected: %v, got: %v", index, expected.numLoginDays, actual.numLoginDays)
 		}
 
-		if actual.NumPosts != expected.NumPosts {
-			t.Errorf("NumPosts not match with index %d, expected: %v, got: %v", index, expected.NumPosts, actual.NumPosts)
+		if actual.numPosts != expected.numPosts {
+			t.Errorf("NumPosts not match with index %d, expected: %v, got: %v", index, expected.numPosts, actual.numPosts)
 		}
 
-		if actual.FirstLogin.Sub(expected.FirstLogin) != 0 {
-			t.Errorf("FirstLogin not match with index %d, expected: %v, got: %v", index, expected.FirstLogin, actual.FirstLogin)
+		if actual.firstLogin.Sub(expected.firstLogin) != 0 {
+			t.Errorf("FirstLogin not match with index %d, expected: %v, got: %v", index, expected.firstLogin, actual.firstLogin)
 		}
 
-		if actual.LastLogin.Sub(expected.LastLogin) != 0 {
-			t.Errorf("LastLogin not match with index %d, expected: %v, got: %v", index, expected.LastLogin, actual.LastLogin)
+		if actual.lastLogin.Sub(expected.lastLogin) != 0 {
+			t.Errorf("LastLogin not match with index %d, expected: %v, got: %v", index, expected.lastLogin, actual.lastLogin)
 		}
 
-		if actual.LastHost != expected.LastHost {
-			t.Errorf("LastHost not match with index %d, expected: %v, got: %v", index, expected.LastHost, actual.LastHost)
+		if actual.lastHost != expected.lastHost {
+			t.Errorf("LastHost not match with index %d, expected: %v, got: %v", index, expected.lastHost, actual.lastHost)
 		}
 
-		if actual.Money != expected.Money {
-			t.Errorf("Money not match with index %d, expected: %v, got: %v", index, expected.Money, actual.Money)
+		if actual.money != expected.money {
+			t.Errorf("Money not match with index %d, expected: %v, got: %v", index, expected.money, actual.money)
 		}
 
 		if actual.Email != expected.Email {
@@ -397,18 +397,18 @@ func TestEncodingUserec(t *testing.T) {
 		{
 			Input: Userec{
 				Version:       4194,
-				UserId:        "SYSOP",
-				RealName:      "CodingMan",
-				Nickname:      "神",
-				Password:      "bhwvOJtfT1TAI",
+				userId:        "SYSOP",
+				realName:      "CodingMan",
+				nickname:      "神",
+				password:      "bhwvOJtfT1TAI",
 				UserFlag:      0x02000A60,
 				UserLevel:     0x20000407,
-				NumLoginDays:  2,
-				NumPosts:      0,
-				FirstLogin:    time.Date(2020, 9, 21, 9, 41, 28, 0, time.UTC),
-				LastLogin:     time.Date(2020, 9, 22, 6, 28, 14, 0, time.UTC),
-				LastHost:      "59.124.167.226",
-				Money:         0,
+				numLoginDays:  2,
+				numPosts:      0,
+				firstLogin:    time.Date(2020, 9, 21, 9, 41, 28, 0, time.UTC),
+				lastLogin:     time.Date(2020, 9, 22, 6, 28, 14, 0, time.UTC),
+				lastHost:      "59.124.167.226",
+				money:         0,
 				Address:       "新竹縣子虛鄉烏有村543號",
 				Over18:        true,
 				Pager:         1,

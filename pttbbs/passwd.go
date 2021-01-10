@@ -15,10 +15,14 @@
 package pttbbs
 
 import (
+	"github.com/PichuChen/go-bbs/crypt"
+
 	"encoding/binary"
+	"fmt"
 	"io"
 	"log"
 	"os"
+	"strings"
 	"time"
 )
 
@@ -92,19 +96,19 @@ type UserecGameScore struct {
 
 type Userec struct {
 	Version  uint32 // Magic Number
-	UserId   string // 使用者帳號，或稱使用者 ID
-	RealName string // 真實姓名
-	Nickname string // 暱稱
-	Password string // 密碼，預設為 crypt, 不同版本實作可能不同
+	userId   string // 使用者帳號，或稱使用者 ID
+	realName string // 真實姓名
+	nickname string // 暱稱
+	password string // 密碼，預設為 crypt, 不同版本實作可能不同
 
 	UserFlag     uint32
 	UserLevel    uint32 // 權限
-	NumLoginDays uint32
-	NumPosts     uint32
-	FirstLogin   time.Time
-	LastLogin    time.Time
-	LastHost     string
-	Money        int32
+	numLoginDays uint32
+	numPosts     uint32
+	firstLogin   time.Time
+	lastLogin    time.Time
+	lastHost     string
+	money        int32
 
 	Email   string
 	Address string
@@ -143,6 +147,53 @@ type Userec struct {
 	TimeViolateLaw    time.Time
 }
 
+func (u *Userec) HashedPassword() string {
+	return u.password
+}
+
+// VerifyPassword will check user's password is OK. it will return null
+// when OK and error when there are something wrong
+func (u *Userec) VerifyPassword(password string) error {
+	res, err := crypt.Fcrypt([]byte(password), []byte(u.password[:2]))
+	if err != nil {
+		return err
+	}
+	str := strings.Trim(string(res), "\x00")
+	// log.Println("res", str, err, []byte(str), []byte(u.Password))
+
+	if str != u.password {
+		return fmt.Errorf("password incorrect")
+	}
+	return nil
+}
+
+func (u *Userec) UserId() string { return u.userId }
+
+// Nickname return a string for user's nickname, this string may change
+// depend on user's mood, return empty string if this bbs system do not support
+func (u *Userec) Nickname() string { return u.nickname }
+
+// RealName return a string for user's real name, this string may not be changed
+// return empty string if this bbs system do not support
+func (u *Userec) RealName() string { return u.realName }
+
+// NumLoginDays return how many days this have been login since account created.
+func (u *Userec) NumLoginDays() int { return int(u.numLoginDays) }
+
+// NumPosts return how many posts this user has posted.
+func (u *Userec) NumPosts() int { return int(u.numPosts) }
+
+// Money return the money this user have.
+func (u *Userec) Money() int { return int(u.money) }
+
+func (u *Userec) LastLogin() time.Time {
+	return u.lastLogin
+}
+
+func (u *Userec) LastHost() string {
+	return u.lastHost
+}
+
 func OpenUserecFile(filename string) ([]*Userec, error) {
 	file, err := os.Open(filename)
 	if err != nil {
@@ -176,20 +227,20 @@ func OpenUserecFile(filename string) ([]*Userec, error) {
 func NewUserecWithByte(data []byte) (*Userec, error) {
 	user := &Userec{}
 	user.Version = binary.LittleEndian.Uint32(data[PosOfPttPasswdVersion : PosOfPttPasswdVersion+4])
-	user.UserId = newStringFormCString(data[PosOfPttPasswdUserId : PosOfPttPasswdUserId+PTT_IDLEN+1])
-	user.RealName = newStringFormBig5UAOCString(data[PosOfPttPasswdRealName : PosOfPttPasswdRealName+20])
-	user.Nickname = newStringFormBig5UAOCString(data[PosOfPttPasswdNickname : PosOfPttPasswdNickname+24])
-	user.Password = newStringFormCString(data[PosOfPttPasswdPassword : PosOfPttPasswdPassword+PTT_PASSLEN])
+	user.userId = newStringFormCString(data[PosOfPttPasswdUserId : PosOfPttPasswdUserId+PTT_IDLEN+1])
+	user.realName = newStringFormBig5UAOCString(data[PosOfPttPasswdRealName : PosOfPttPasswdRealName+20])
+	user.nickname = newStringFormBig5UAOCString(data[PosOfPttPasswdNickname : PosOfPttPasswdNickname+24])
+	user.password = newStringFormCString(data[PosOfPttPasswdPassword : PosOfPttPasswdPassword+PTT_PASSLEN])
 
 	user.UserFlag = binary.LittleEndian.Uint32(data[PosOfPttPasswdUserFlag : PosOfPttPasswdUserFlag+4])
 	user.UserLevel = binary.LittleEndian.Uint32(data[PosOfPttPasswdUserLevel : PosOfPttPasswdUserLevel+4])
-	user.NumLoginDays = binary.LittleEndian.Uint32(data[PosOfPttPasswdNumLoginDays : PosOfPttPasswdNumLoginDays+4])
-	user.NumPosts = binary.LittleEndian.Uint32(data[PosOfPttPasswdNumPosts : PosOfPttPasswdNumPosts+4])
-	user.FirstLogin = time.Unix(int64(binary.LittleEndian.Uint32(data[PosOfPttPasswdFirstLogin:PosOfPttPasswdFirstLogin+4])), 0)
-	user.LastLogin = time.Unix(int64(binary.LittleEndian.Uint32(data[PosOfPttPasswdLastLogin:PosOfPttPasswdLastLogin+4])), 0)
-	user.LastHost = newStringFormCString(data[PosOfPttPasswdLastHost : PosOfPttPasswdLastHost+PTT_IPV4LEN+1])
+	user.numLoginDays = binary.LittleEndian.Uint32(data[PosOfPttPasswdNumLoginDays : PosOfPttPasswdNumLoginDays+4])
+	user.numPosts = binary.LittleEndian.Uint32(data[PosOfPttPasswdNumPosts : PosOfPttPasswdNumPosts+4])
+	user.firstLogin = time.Unix(int64(binary.LittleEndian.Uint32(data[PosOfPttPasswdFirstLogin:PosOfPttPasswdFirstLogin+4])), 0)
+	user.lastLogin = time.Unix(int64(binary.LittleEndian.Uint32(data[PosOfPttPasswdLastLogin:PosOfPttPasswdLastLogin+4])), 0)
+	user.lastHost = newStringFormCString(data[PosOfPttPasswdLastHost : PosOfPttPasswdLastHost+PTT_IPV4LEN+1])
 
-	user.Money = int32(binary.LittleEndian.Uint32(data[PosOfPttPasswdMoney : PosOfPttPasswdMoney+4]))
+	user.money = int32(binary.LittleEndian.Uint32(data[PosOfPttPasswdMoney : PosOfPttPasswdMoney+4]))
 
 	user.Email = newStringFormBig5UAOCString(data[PosOfPttPasswdEmail : PosOfPttPasswdEmail+PTT_EMAILSZ])
 	user.Address = newStringFormBig5UAOCString(data[PosOfPttPasswdAddress : PosOfPttPasswdAddress+PTT_ADDRESSSZ])
@@ -247,19 +298,19 @@ func (r *Userec) MarshalToByte() ([]byte, error) {
 	ret := make([]byte, 512)
 
 	binary.LittleEndian.PutUint32(ret[PosOfPttPasswdVersion:PosOfPttPasswdVersion+4], r.Version)
-	copy(ret[PosOfPttPasswdUserId:PosOfPttPasswdUserId+PTT_IDLEN+1], utf8ToBig5UAOString(r.UserId))
-	copy(ret[PosOfPttPasswdRealName:PosOfPttPasswdRealName+PTT_IDLEN+1], utf8ToBig5UAOString(r.RealName))
-	copy(ret[PosOfPttPasswdNickname:PosOfPttPasswdNickname+20], utf8ToBig5UAOString(r.Nickname))
-	copy(ret[PosOfPttPasswdPassword:PosOfPttPasswdPassword+20], utf8ToBig5UAOString(r.Password))
+	copy(ret[PosOfPttPasswdUserId:PosOfPttPasswdUserId+PTT_IDLEN+1], utf8ToBig5UAOString(r.userId))
+	copy(ret[PosOfPttPasswdRealName:PosOfPttPasswdRealName+PTT_IDLEN+1], utf8ToBig5UAOString(r.realName))
+	copy(ret[PosOfPttPasswdNickname:PosOfPttPasswdNickname+20], utf8ToBig5UAOString(r.nickname))
+	copy(ret[PosOfPttPasswdPassword:PosOfPttPasswdPassword+20], utf8ToBig5UAOString(r.password))
 
 	binary.LittleEndian.PutUint32(ret[PosOfPttPasswdUserFlag:PosOfPttPasswdUserFlag+4], r.UserFlag)
 	binary.LittleEndian.PutUint32(ret[PosOfPttPasswdUserLevel:PosOfPttPasswdUserLevel+4], r.UserLevel)
-	binary.LittleEndian.PutUint32(ret[PosOfPttPasswdNumLoginDays:PosOfPttPasswdNumLoginDays+4], r.NumLoginDays)
-	binary.LittleEndian.PutUint32(ret[PosOfPttPasswdNumPosts:PosOfPttPasswdNumPosts+4], r.NumPosts)
-	binary.LittleEndian.PutUint32(ret[PosOfPttPasswdFirstLogin:PosOfPttPasswdFirstLogin+4], uint32(r.FirstLogin.Unix()))
-	binary.LittleEndian.PutUint32(ret[PosOfPttPasswdLastLogin:PosOfPttPasswdLastLogin+4], uint32(r.LastLogin.Unix()))
-	copy(ret[PosOfPttPasswdLastHost:PosOfPttPasswdLastHost+PTT_IPV4LEN+1], utf8ToBig5UAOString(r.LastHost))
-	binary.LittleEndian.PutUint32(ret[PosOfPttPasswdMoney:PosOfPttPasswdMoney+4], uint32(r.Money))
+	binary.LittleEndian.PutUint32(ret[PosOfPttPasswdNumLoginDays:PosOfPttPasswdNumLoginDays+4], r.numLoginDays)
+	binary.LittleEndian.PutUint32(ret[PosOfPttPasswdNumPosts:PosOfPttPasswdNumPosts+4], r.numPosts)
+	binary.LittleEndian.PutUint32(ret[PosOfPttPasswdFirstLogin:PosOfPttPasswdFirstLogin+4], uint32(r.firstLogin.Unix()))
+	binary.LittleEndian.PutUint32(ret[PosOfPttPasswdLastLogin:PosOfPttPasswdLastLogin+4], uint32(r.lastLogin.Unix()))
+	copy(ret[PosOfPttPasswdLastHost:PosOfPttPasswdLastHost+PTT_IPV4LEN+1], utf8ToBig5UAOString(r.lastHost))
+	binary.LittleEndian.PutUint32(ret[PosOfPttPasswdMoney:PosOfPttPasswdMoney+4], uint32(r.money))
 
 	copy(ret[PosOfPttPasswdEmail:PosOfPttPasswdEmail+PTT_EMAILSZ], utf8ToBig5UAOString(r.Email))
 	copy(ret[PosOfPttPasswdAddress:PosOfPttPasswdAddress+PTT_ADDRESSSZ], utf8ToBig5UAOString(r.Address))

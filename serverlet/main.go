@@ -1,19 +1,29 @@
 package main
 
 import (
+	"github.com/PichuChen/go-bbs"
+	_ "github.com/PichuChen/go-bbs/pttbbs"
+
 	"encoding/json"
 	"fmt"
-	"github.com/PichuChen/go-bbs"
 	"log"
 	"net/http"
 	"strings"
 )
 
-var userRecs []*bbs.Userec
-var boardHeader []*bbs.BoardHeader
+var userRecs []bbs.UserRecord
+var boardHeader []bbs.BoardRecord
+
+var bbsDB *bbs.DB
 
 func main() {
 	fmt.Println("server start")
+	var err error
+	bbsDB, err = bbs.Open("pttbbs", "../home/bbs")
+	if err != nil {
+		log.Printf("open bbs error: %v", err)
+		return
+	}
 
 	loadPasswdsFile()
 	loadBoardFile()
@@ -28,16 +38,8 @@ func main() {
 }
 
 func loadPasswdsFile() {
-	// TODO: read config form config file
-
-	path, err := bbs.GetPasswdsPath("../home/bbs")
-	if err != nil {
-		log.Println("open file error:", err)
-		return
-	}
-	log.Println("path:", path)
-
-	userRecs, err = bbs.OpenUserecFile(path)
+	var err error
+	userRecs, err = bbsDB.ReadUserRecords()
 	if err != nil {
 		log.Println("get user rec error:", err)
 		return
@@ -46,21 +48,13 @@ func loadPasswdsFile() {
 }
 
 func loadBoardFile() {
-	// TODO: read config form config file
-
-	path, err := bbs.GetBoardPath("../home/bbs")
-	if err != nil {
-		log.Println("open file error:", err)
-		return
-	}
-	log.Println("path:", path)
-
-	boardHeader, err = bbs.OpenBoardHeaderFile(path)
+	var err error
+	boardHeader, err = bbsDB.ReadBoardRecords()
 	if err != nil {
 		log.Println("get board header error:", err)
 		return
 	}
-	log.Println(userRecs)
+	log.Println(boardHeader)
 }
 
 func routeClass(w http.ResponseWriter, r *http.Request) {

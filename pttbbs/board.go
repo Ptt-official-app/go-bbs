@@ -15,6 +15,8 @@
 package bbs
 
 import (
+	"github.com/PichuChen/go-bbs"
+
 	"bytes"
 	"encoding/binary"
 	"io"
@@ -164,7 +166,7 @@ func OpenBoardHeaderFile(filename string) ([]*BoardHeader, error) {
 func NewBoardHeaderWithByte(data []byte) (*BoardHeader, error) {
 	ret := BoardHeader{}
 
-	ret.BrdName = Big5ToUtf8(bytes.Split(data[PosOfPTTBoardName:PosOfPTTBoardName+PTT_IDLEN+1], []byte("\x00"))[0])
+	ret.BrdName = bbs.Big5ToUtf8(bytes.Split(data[PosOfPTTBoardName:PosOfPTTBoardName+PTT_IDLEN+1], []byte("\x00"))[0])
 	ret.Title = Big5ToUtf8(bytes.Split(data[PosOfPTTBoardTitle:PosOfPTTBoardTitle+PTT_BTLEN+1], []byte("\x00"))[0]) // Be careful about C-string end char \0
 	ret.BM = string(bytes.Trim(data[PosOfPTTBM:PosOfPTTBM+PTT_IDLEN*3+3], "\x00"))
 	ret.Brdattr = binary.LittleEndian.Uint32(data[PosOfBrdAttr : PosOfBrdAttr+4])

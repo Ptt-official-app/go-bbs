@@ -17,7 +17,7 @@
 // normal article, path of treasure (man in maple system), path of
 // digest.
 
-package bbs
+package pttbbs
 
 import (
 	"fmt"

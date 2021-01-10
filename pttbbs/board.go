@@ -12,11 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package bbs
+package pttbbs
 
 import (
-	"github.com/PichuChen/go-bbs"
-
 	"bytes"
 	"encoding/binary"
 	"io"
@@ -166,8 +164,8 @@ func OpenBoardHeaderFile(filename string) ([]*BoardHeader, error) {
 func NewBoardHeaderWithByte(data []byte) (*BoardHeader, error) {
 	ret := BoardHeader{}
 
-	ret.BrdName = bbs.Big5ToUtf8(bytes.Split(data[PosOfPTTBoardName:PosOfPTTBoardName+PTT_IDLEN+1], []byte("\x00"))[0])
-	ret.Title = Big5ToUtf8(bytes.Split(data[PosOfPTTBoardTitle:PosOfPTTBoardTitle+PTT_BTLEN+1], []byte("\x00"))[0]) // Be careful about C-string end char \0
+	ret.BrdName = big5uaoToUTF8String(bytes.Split(data[PosOfPTTBoardName:PosOfPTTBoardName+PTT_IDLEN+1], []byte("\x00"))[0])
+	ret.Title = big5uaoToUTF8String(bytes.Split(data[PosOfPTTBoardTitle:PosOfPTTBoardTitle+PTT_BTLEN+1], []byte("\x00"))[0]) // Be careful about C-string end char \0
 	ret.BM = string(bytes.Trim(data[PosOfPTTBM:PosOfPTTBM+PTT_IDLEN*3+3], "\x00"))
 	ret.Brdattr = binary.LittleEndian.Uint32(data[PosOfBrdAttr : PosOfBrdAttr+4])
 	ret.VoteLimitPosts = uint8(data[PosOfVoteLimitPosts])
@@ -195,8 +193,8 @@ func NewBoardHeaderWithByte(data []byte) (*BoardHeader, error) {
 	ret.PostExpire = int32(binary.LittleEndian.Uint32(data[PosOfPostExpire : PosOfPostExpire+4]))
 	endGamble := binary.LittleEndian.Uint32(data[PosOfEndGamble : PosOfEndGamble+4])
 	ret.EndGamble = time.Unix(int64(endGamble), 0)
-	ret.PostType = Big5ToUtf8(bytes.Trim(data[PosOfPostType:PosOfPostType+33], "\x00"))
-	ret.PostTypeF = Big5ToUtf8(bytes.Trim(data[PosOfPostTypeF:PosOfPostTypeF+1], "\x00"))
+	ret.PostType = big5uaoToUTF8String(bytes.Trim(data[PosOfPostType:PosOfPostType+33], "\x00"))
+	ret.PostTypeF = big5uaoToUTF8String(bytes.Trim(data[PosOfPostTypeF:PosOfPostTypeF+1], "\x00"))
 
 	ret.FastRecommendPause = uint8(data[PosOfFastRecommendPause])
 	ret.VoteLimitBadPost = uint8(data[PosOfVoteLimitBadPost])

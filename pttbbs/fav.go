@@ -14,7 +14,7 @@
 
 // This file is for favorite function.
 
-package bbs
+package pttbbs
 
 import (
 	"bytes"
@@ -314,7 +314,7 @@ func NewFavFolderItem(data []byte, startIndex int) (*FavFolderItem, int, error) 
 	c += size
 
 	size = PTT_BTLEN + 1
-	ret.Title = Big5ToUtf8(bytes.Split(data[c:c+size], []byte("\x00"))[0])
+	ret.Title = big5uaoToUTF8String(bytes.Split(data[c:c+size], []byte("\x00"))[0])
 	c += size
 
 	return ret, c, nil
@@ -419,7 +419,7 @@ func (favfi *FavFolderItem) MarshalBinary() ([]byte, error) {
 	ret[0] = favfi.FolderId
 
 	size := PTT_BTLEN + 1
-	copy(ret[1:1+size], Utf8ToBig5(favfi.Title))
+	copy(ret[1:1+size], utf8ToBig5UAOString(favfi.Title))
 
 	return ret, nil
 }

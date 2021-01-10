@@ -24,13 +24,11 @@
 //
 // The `PosOf...` variables will be unexported soon.
 
-package bbs
+package pttbbs
 
 import (
 	"bytes"
 	"encoding/binary"
-
-	// "iconv"
 	"io"
 	"log"
 	"os"
@@ -49,6 +47,7 @@ const (
 	PosOfPttFileHeaderFilemode   = PosOfPttFileHeaderUnionMulti + 4
 )
 
+// VoteLimits shows the limitation of a vote post.
 type VoteLimits struct {
 	Posts   uint8
 	Logins  uint8
@@ -119,7 +118,7 @@ func NewFileHeaderWithByte(data []byte) (*FileHeader, error) {
 	ret.Recommend = int8(data[PosOfPttFileHeaderRecommend])
 	ret.Owner = string(bytes.Trim(data[PosOfPttFileHeaderOwner:PosOfPttFileHeaderOwner+PTT_IDLEN+2], "\x00"))
 	ret.Date = string(bytes.Trim(data[PosOfPttFileHeaderDate:PosOfPttFileHeaderDate+6], "\x00"))
-	ret.Title = Big5ToUtf8(bytes.Trim(data[PosOfPttFileHeaderTitle:PosOfPttFileHeaderTitle+PTT_TTLEN+1], "\x00"))
+	ret.Title = big5uaoToUTF8String(bytes.Trim(data[PosOfPttFileHeaderTitle:PosOfPttFileHeaderTitle+PTT_TTLEN+1], "\x00"))
 	// log.Println("PosOfUnionMulti:", PosOfUnionMulti, data[PosOfUnionMulti])
 
 	ret.Money = int(binary.LittleEndian.Uint32(data[PosOfPttFileHeaderUnionMulti : PosOfPttFileHeaderUnionMulti+4]))
@@ -148,7 +147,7 @@ func (h *FileHeader) MarshalToByte() ([]byte, error) {
 	ret[PosOfPttFileHeaderRecommend] = byte(h.Recommend)
 	copy(ret[PosOfPttFileHeaderOwner:PosOfPttFileHeaderOwner+PTT_IDLEN+2], h.Owner)
 	copy(ret[PosOfPttFileHeaderDate:PosOfPttFileHeaderDate+6], h.Date)
-	copy(ret[PosOfPttFileHeaderTitle:PosOfPttFileHeaderTitle+PTT_TTLEN+1], Utf8ToBig5(h.Title))
+	copy(ret[PosOfPttFileHeaderTitle:PosOfPttFileHeaderTitle+PTT_TTLEN+1], utf8ToBig5UAOString(h.Title))
 
 	// TODO: Check file mode for set Money or AnnoUid ... etc
 

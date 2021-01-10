@@ -14,7 +14,7 @@
 
 // Bad logins is for tracing error login records
 
-package bbs
+package pttbbs
 
 import (
 	"bufio"

@@ -14,7 +14,7 @@
 
 // Note: variable in there will be unexported or removed soon.
 
-package bbs
+package pttbbs
 
 const (
 	//////////

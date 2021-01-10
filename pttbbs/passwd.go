@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package bbs
+package pttbbs
 
 import (
 	"encoding/binary"
@@ -176,10 +176,10 @@ func OpenUserecFile(filename string) ([]*Userec, error) {
 func NewUserecWithByte(data []byte) (*Userec, error) {
 	user := &Userec{}
 	user.Version = binary.LittleEndian.Uint32(data[PosOfPttPasswdVersion : PosOfPttPasswdVersion+4])
-	user.UserId = CstrToString(data[PosOfPttPasswdUserId : PosOfPttPasswdUserId+PTT_IDLEN+1])
-	user.RealName = Big5ToUtf8(CstrToBytes(data[PosOfPttPasswdRealName : PosOfPttPasswdRealName+20]))
-	user.Nickname = Big5ToUtf8(CstrToBytes(data[PosOfPttPasswdNickname : PosOfPttPasswdNickname+24]))
-	user.Password = CstrToString(data[PosOfPttPasswdPassword : PosOfPttPasswdPassword+PTT_PASSLEN])
+	user.UserId = newStringFormCString(data[PosOfPttPasswdUserId : PosOfPttPasswdUserId+PTT_IDLEN+1])
+	user.RealName = newStringFormBig5UAOCString(data[PosOfPttPasswdRealName : PosOfPttPasswdRealName+20])
+	user.Nickname = newStringFormBig5UAOCString(data[PosOfPttPasswdNickname : PosOfPttPasswdNickname+24])
+	user.Password = newStringFormCString(data[PosOfPttPasswdPassword : PosOfPttPasswdPassword+PTT_PASSLEN])
 
 	user.UserFlag = binary.LittleEndian.Uint32(data[PosOfPttPasswdUserFlag : PosOfPttPasswdUserFlag+4])
 	user.UserLevel = binary.LittleEndian.Uint32(data[PosOfPttPasswdUserLevel : PosOfPttPasswdUserLevel+4])
@@ -187,13 +187,13 @@ func NewUserecWithByte(data []byte) (*Userec, error) {
 	user.NumPosts = binary.LittleEndian.Uint32(data[PosOfPttPasswdNumPosts : PosOfPttPasswdNumPosts+4])
 	user.FirstLogin = time.Unix(int64(binary.LittleEndian.Uint32(data[PosOfPttPasswdFirstLogin:PosOfPttPasswdFirstLogin+4])), 0)
 	user.LastLogin = time.Unix(int64(binary.LittleEndian.Uint32(data[PosOfPttPasswdLastLogin:PosOfPttPasswdLastLogin+4])), 0)
-	user.LastHost = CstrToString(data[PosOfPttPasswdLastHost : PosOfPttPasswdLastHost+PTT_IPV4LEN+1])
+	user.LastHost = newStringFormCString(data[PosOfPttPasswdLastHost : PosOfPttPasswdLastHost+PTT_IPV4LEN+1])
 
 	user.Money = int32(binary.LittleEndian.Uint32(data[PosOfPttPasswdMoney : PosOfPttPasswdMoney+4]))
 
-	user.Email = Big5ToUtf8(CstrToBytes(data[PosOfPttPasswdEmail : PosOfPttPasswdEmail+PTT_EMAILSZ]))
-	user.Address = Big5ToUtf8(CstrToBytes(data[PosOfPttPasswdAddress : PosOfPttPasswdAddress+PTT_ADDRESSSZ]))
-	user.Justify = Big5ToUtf8(CstrToBytes(data[PosOfPttPasswdJustify : PosOfPttPasswdJustify+PTT_REGLEN+1]))
+	user.Email = newStringFormBig5UAOCString(data[PosOfPttPasswdEmail : PosOfPttPasswdEmail+PTT_EMAILSZ])
+	user.Address = newStringFormBig5UAOCString(data[PosOfPttPasswdAddress : PosOfPttPasswdAddress+PTT_ADDRESSSZ])
+	user.Justify = newStringFormBig5UAOCString(data[PosOfPttPasswdJustify : PosOfPttPasswdJustify+PTT_REGLEN+1])
 
 	user.Over18 = data[PosOfPttPasswdOver18] != 0
 	user.PagerUIType = data[PosOfPttPasswdPagerUiType]
@@ -202,7 +202,7 @@ func NewUserecWithByte(data []byte) (*Userec, error) {
 
 	user.ExMailBox = binary.LittleEndian.Uint32(data[PosOfPttPasswdExMailBox : PosOfPttPasswdExMailBox+4])
 
-	user.Career = Big5ToUtf8(CstrToBytes(data[PosOfPttPasswdCareer : PosOfPttPasswdCareer+40]))
+	user.Career = newStringFormBig5UAOCString(data[PosOfPttPasswdCareer : PosOfPttPasswdCareer+40])
 	user.Role = binary.LittleEndian.Uint32(data[PosOfPttPasswdRole : PosOfPttPasswdRole+4])
 	user.LastSeen = time.Unix(int64(binary.LittleEndian.Uint32(data[PosOfPttPasswdLastSeen:PosOfPttPasswdLastSeen+4])), 0)
 	user.TimeSetAngel = time.Unix(int64(binary.LittleEndian.Uint32(data[PosOfPttPasswdTimeSetAngel:PosOfPttPasswdTimeSetAngel+4])), 0)
@@ -247,10 +247,10 @@ func (r *Userec) MarshalToByte() ([]byte, error) {
 	ret := make([]byte, 512)
 
 	binary.LittleEndian.PutUint32(ret[PosOfPttPasswdVersion:PosOfPttPasswdVersion+4], r.Version)
-	copy(ret[PosOfPttPasswdUserId:PosOfPttPasswdUserId+PTT_IDLEN+1], Utf8ToBig5(r.UserId))
-	copy(ret[PosOfPttPasswdRealName:PosOfPttPasswdRealName+PTT_IDLEN+1], Utf8ToBig5(r.RealName))
-	copy(ret[PosOfPttPasswdNickname:PosOfPttPasswdNickname+20], Utf8ToBig5(r.Nickname))
-	copy(ret[PosOfPttPasswdPassword:PosOfPttPasswdPassword+20], Utf8ToBig5(r.Password))
+	copy(ret[PosOfPttPasswdUserId:PosOfPttPasswdUserId+PTT_IDLEN+1], utf8ToBig5UAOString(r.UserId))
+	copy(ret[PosOfPttPasswdRealName:PosOfPttPasswdRealName+PTT_IDLEN+1], utf8ToBig5UAOString(r.RealName))
+	copy(ret[PosOfPttPasswdNickname:PosOfPttPasswdNickname+20], utf8ToBig5UAOString(r.Nickname))
+	copy(ret[PosOfPttPasswdPassword:PosOfPttPasswdPassword+20], utf8ToBig5UAOString(r.Password))
 
 	binary.LittleEndian.PutUint32(ret[PosOfPttPasswdUserFlag:PosOfPttPasswdUserFlag+4], r.UserFlag)
 	binary.LittleEndian.PutUint32(ret[PosOfPttPasswdUserLevel:PosOfPttPasswdUserLevel+4], r.UserLevel)
@@ -258,12 +258,12 @@ func (r *Userec) MarshalToByte() ([]byte, error) {
 	binary.LittleEndian.PutUint32(ret[PosOfPttPasswdNumPosts:PosOfPttPasswdNumPosts+4], r.NumPosts)
 	binary.LittleEndian.PutUint32(ret[PosOfPttPasswdFirstLogin:PosOfPttPasswdFirstLogin+4], uint32(r.FirstLogin.Unix()))
 	binary.LittleEndian.PutUint32(ret[PosOfPttPasswdLastLogin:PosOfPttPasswdLastLogin+4], uint32(r.LastLogin.Unix()))
-	copy(ret[PosOfPttPasswdLastHost:PosOfPttPasswdLastHost+PTT_IPV4LEN+1], Utf8ToBig5(r.LastHost))
+	copy(ret[PosOfPttPasswdLastHost:PosOfPttPasswdLastHost+PTT_IPV4LEN+1], utf8ToBig5UAOString(r.LastHost))
 	binary.LittleEndian.PutUint32(ret[PosOfPttPasswdMoney:PosOfPttPasswdMoney+4], uint32(r.Money))
 
-	copy(ret[PosOfPttPasswdEmail:PosOfPttPasswdEmail+PTT_EMAILSZ], Utf8ToBig5(r.Email))
-	copy(ret[PosOfPttPasswdAddress:PosOfPttPasswdAddress+PTT_ADDRESSSZ], Utf8ToBig5(r.Address))
-	copy(ret[PosOfPttPasswdJustify:PosOfPttPasswdJustify+PTT_REGLEN], Utf8ToBig5(r.Justify))
+	copy(ret[PosOfPttPasswdEmail:PosOfPttPasswdEmail+PTT_EMAILSZ], utf8ToBig5UAOString(r.Email))
+	copy(ret[PosOfPttPasswdAddress:PosOfPttPasswdAddress+PTT_ADDRESSSZ], utf8ToBig5UAOString(r.Address))
+	copy(ret[PosOfPttPasswdJustify:PosOfPttPasswdJustify+PTT_REGLEN], utf8ToBig5UAOString(r.Justify))
 
 	if r.Over18 {
 		ret[PosOfPttPasswdOver18] = 1
@@ -282,7 +282,7 @@ func (r *Userec) MarshalToByte() ([]byte, error) {
 
 	binary.LittleEndian.PutUint32(ret[PosOfPttPasswdExMailBox:PosOfPttPasswdExMailBox+4], r.ExMailBox)
 
-	copy(ret[PosOfPttPasswdCareer:PosOfPttPasswdCareer+44], Utf8ToBig5(r.Career))
+	copy(ret[PosOfPttPasswdCareer:PosOfPttPasswdCareer+44], utf8ToBig5UAOString(r.Career))
 
 	binary.LittleEndian.PutUint32(ret[PosOfPttPasswdLastSeen:PosOfPttPasswdLastSeen+4], uint32(r.LastSeen.Unix()))
 	binary.LittleEndian.PutUint32(ret[PosOfPttPasswdTimeSetAngel:PosOfPttPasswdTimeSetAngel+4], uint32(r.TimeSetAngel.Unix()))

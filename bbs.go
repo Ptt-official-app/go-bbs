@@ -38,7 +38,17 @@ type UserRecord interface {
 	LastHost() string
 }
 
-type BoardRecord interface{}
+type BoardRecord interface {
+	BoardId() string
+
+	Title() string
+
+	IsClass() bool
+
+	BM() []string
+}
+
+type ArticleRecord interface{}
 
 // DB is whole bbs filesystem, including where file store,
 // how to connect to local cache ( system V shared memory or etc.)
@@ -48,11 +58,19 @@ type DB struct {
 }
 
 type Connector interface {
+	Open(dataSourceName string) error
+
 	GetUserRecordsPath() (string, error)
 	ReadUserRecordsFile(name string) ([]UserRecord, error)
 
 	GetBoardRecordsPath() (string, error)
 	ReadBoardRecordsFile(name string) ([]BoardRecord, error)
+
+	GetBoardArticlesDirectoryPath(boardId string) (string, error)
+	ReadBoardArticlesFile(boardId string) ([]ArticleRecord, error)
+
+	GetBoardTreasuresDirectoryPath(boardId string, treasuresId []string) (string, error)
+	ReadBoardTreasuresFile(boardId string, treasuresId []string) ([]ArticleRecord, error)
 }
 
 var drivers = make(map[string]Connector)
@@ -61,11 +79,17 @@ func Register(drivername string, connector Connector) {
 	drivers[drivername] = connector
 }
 
+// Open opan a
 func Open(drivername string, dataSourceName string) (*DB, error) {
 
 	c, ok := drivers[drivername]
 	if !ok {
 		return nil, fmt.Errorf("bbs: drivername: %v not found", drivername)
+	}
+
+	err := c.Open(dataSourceName)
+	if err != nil {
+		return nil, fmt.Errorf("bbs: drivername: %v open error: %v", drivername, err)
 	}
 
 	return &DB{

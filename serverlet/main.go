@@ -19,7 +19,7 @@ var bbsDB *bbs.DB
 func main() {
 	fmt.Println("server start")
 	var err error
-	bbsDB, err = bbs.Open("pttbbs", "../home/bbs")
+	bbsDB, err = bbs.Open("pttbbs", "file://../home/bbs")
 	if err != nil {
 		log.Printf("open bbs error: %v", err)
 		return

@@ -20,6 +20,7 @@ import (
 	"io"
 	"log"
 	"os"
+	"strings"
 	"time"
 )
 
@@ -31,8 +32,8 @@ import (
 
 type BoardHeader struct {
 	BrdName         string
-	Title           string
-	BM              string
+	title           string
+	bm              string
 	Brdattr         uint32 // uid[.]
 	ChessCountry    string
 	VoteLimitPosts  uint8
@@ -62,8 +63,13 @@ type BoardHeader struct {
 	SRexpire           time.Time
 }
 
+func (b *BoardHeader) BoardId() string { return b.BrdName }
+func (b *BoardHeader) Title() string   { return b.title }
+
+func (b *BoardHeader) IsClass() bool { return b.IsGroupBoard() }
+
 func (b *BoardHeader) IsNoCount() bool          { return b.Brdattr&0x00000002 != 0 }
-func (b *BoardHeader) IsGroudBoard() bool       { return b.Brdattr&0x00000008 != 0 } // Class
+func (b *BoardHeader) IsGroupBoard() bool       { return b.Brdattr&0x00000008 != 0 } // Class
 func (b *BoardHeader) IsHide() bool             { return b.Brdattr&0x00000010 != 0 } // Hide board or friend only
 func (b *BoardHeader) IsPostMask() bool         { return b.Brdattr&0x00000020 != 0 } // Has Post or Reading Limition
 func (b *BoardHeader) IsAnonymous() bool        { return b.Brdattr&0x00000040 != 0 }
@@ -88,6 +94,8 @@ func (b *BoardHeader) IsNoReply() bool          { return b.Brdattr&0x02000000 !=
 func (b *BoardHeader) IsAlignedComment() bool   { return b.Brdattr&0x04000000 != 0 }
 func (b *BoardHeader) IsNoSelfDeletePost() bool { return b.Brdattr&0x08000000 != 0 }
 func (b *BoardHeader) IsBMMaskContent() bool    { return b.Brdattr&0x10000000 != 0 }
+
+func (b *BoardHeader) BM() []string { return strings.Split(b.bm, "/") }
 
 const (
 	PTT_BTLEN = 48
@@ -165,8 +173,8 @@ func NewBoardHeaderWithByte(data []byte) (*BoardHeader, error) {
 	ret := BoardHeader{}
 
 	ret.BrdName = big5uaoToUTF8String(bytes.Split(data[PosOfPTTBoardName:PosOfPTTBoardName+PTT_IDLEN+1], []byte("\x00"))[0])
-	ret.Title = big5uaoToUTF8String(bytes.Split(data[PosOfPTTBoardTitle:PosOfPTTBoardTitle+PTT_BTLEN+1], []byte("\x00"))[0]) // Be careful about C-string end char \0
-	ret.BM = string(bytes.Trim(data[PosOfPTTBM:PosOfPTTBM+PTT_IDLEN*3+3], "\x00"))
+	ret.title = big5uaoToUTF8String(bytes.Split(data[PosOfPTTBoardTitle:PosOfPTTBoardTitle+PTT_BTLEN+1], []byte("\x00"))[0]) // Be careful about C-string end char \0
+	ret.bm = string(bytes.Trim(data[PosOfPTTBM:PosOfPTTBM+PTT_IDLEN*3+3], "\x00"))
 	ret.Brdattr = binary.LittleEndian.Uint32(data[PosOfBrdAttr : PosOfBrdAttr+4])
 	ret.VoteLimitPosts = uint8(data[PosOfVoteLimitPosts])
 	ret.VoteLimitLogins = uint8(data[PosOfVoteLimitLogins])

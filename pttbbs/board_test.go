@@ -28,8 +28,8 @@ func TestBoardHeader(t *testing.T) {
 	expected := []BoardHeader{
 		{
 			BrdName:            "SYSOP",
-			Title:              "嘰哩 ◎站長好!",
-			BM:                 "",
+			title:              "嘰哩 ◎站長好!",
+			bm:                 "",
 			Brdattr:            PTT_BRD_POSTMASK,
 			VoteLimitPosts:     0,
 			VoteLimitLogins:    0,
@@ -58,8 +58,8 @@ func TestBoardHeader(t *testing.T) {
 		},
 		{
 			BrdName:            "1...........",
-			Title:              ".... Σ中央政府  《高壓危險,非人可敵》",
-			BM:                 "",
+			title:              ".... Σ中央政府  《高壓危險,非人可敵》",
+			bm:                 "",
 			Brdattr:            PTT_BRD_GROUPBOARD,
 			VoteLimitPosts:     0,
 			VoteLimitLogins:    0,
@@ -88,8 +88,8 @@ func TestBoardHeader(t *testing.T) {
 		},
 		{
 			BrdName:            "junk",
-			Title:              "發電 ◎雜七雜八的垃圾",
-			BM:                 "",
+			title:              "發電 ◎雜七雜八的垃圾",
+			bm:                 "",
 			Brdattr:            0,
 			VoteLimitPosts:     0,
 			VoteLimitLogins:    0,
@@ -118,8 +118,8 @@ func TestBoardHeader(t *testing.T) {
 		},
 		{
 			BrdName:            "Security",
-			Title:              "發電 ◎站內系統安全",
-			BM:                 "",
+			title:              "發電 ◎站內系統安全",
+			bm:                 "",
 			Brdattr:            0,
 			VoteLimitPosts:     0,
 			VoteLimitLogins:    0,
@@ -148,8 +148,8 @@ func TestBoardHeader(t *testing.T) {
 		},
 		{
 			BrdName:            "2...........",
-			Title:              ".... Σ市民廣場     報告  站長  ㄜ！",
-			BM:                 "",
+			title:              ".... Σ市民廣場     報告  站長  ㄜ！",
+			bm:                 "",
 			Brdattr:            PTT_BRD_GROUPBOARD,
 			VoteLimitPosts:     0,
 			VoteLimitLogins:    0,
@@ -178,8 +178,8 @@ func TestBoardHeader(t *testing.T) {
 		},
 		{
 			BrdName:            "ALLPOST",
-			Title:              "嘰哩 ◎跨板式LOCAL新文章",
-			BM:                 "",
+			title:              "嘰哩 ◎跨板式LOCAL新文章",
+			bm:                 "",
 			Brdattr:            PTT_BRD_POSTMASK,
 			VoteLimitPosts:     0,
 			VoteLimitLogins:    0,
@@ -208,8 +208,8 @@ func TestBoardHeader(t *testing.T) {
 		},
 		{
 			BrdName:            "deleted",
-			Title:              "嘰哩 ◎資源回收筒",
-			BM:                 "",
+			title:              "嘰哩 ◎資源回收筒",
+			bm:                 "",
 			Brdattr:            0,
 			VoteLimitPosts:     0,
 			VoteLimitLogins:    0,
@@ -238,8 +238,8 @@ func TestBoardHeader(t *testing.T) {
 		},
 		{
 			BrdName:            "Note",
-			Title:              "嘰哩 ◎動態看板及歌曲投稿",
-			BM:                 "",
+			title:              "嘰哩 ◎動態看板及歌曲投稿",
+			bm:                 "",
 			Brdattr:            0,
 			VoteLimitPosts:     0,
 			VoteLimitLogins:    0,
@@ -268,8 +268,8 @@ func TestBoardHeader(t *testing.T) {
 		},
 		{
 			BrdName:            "Record",
-			Title:              "嘰哩 ◎我們的成果",
-			BM:                 "",
+			title:              "嘰哩 ◎我們的成果",
+			bm:                 "",
 			Brdattr:            0 | PTT_BRD_POSTMASK,
 			VoteLimitPosts:     0,
 			VoteLimitLogins:    0,
@@ -298,8 +298,8 @@ func TestBoardHeader(t *testing.T) {
 		},
 		{
 			BrdName:            "WhoAmI",
-			Title:              "嘰哩 ◎呵呵，猜猜我是誰！",
-			BM:                 "",
+			title:              "嘰哩 ◎呵呵，猜猜我是誰！",
+			bm:                 "",
 			Brdattr:            0,
 			VoteLimitPosts:     0,
 			VoteLimitLogins:    0,
@@ -328,8 +328,8 @@ func TestBoardHeader(t *testing.T) {
 		},
 		{
 			BrdName:            "EditExp",
-			Title:              "嘰哩 ◎範本精靈投稿區",
-			BM:                 "",
+			title:              "嘰哩 ◎範本精靈投稿區",
+			bm:                 "",
 			Brdattr:            0,
 			VoteLimitPosts:     0,
 			VoteLimitLogins:    0,
@@ -358,8 +358,8 @@ func TestBoardHeader(t *testing.T) {
 		},
 		{
 			BrdName:            "ALLHIDPOST",
-			Title:              "嘰哩 ◎跨板式LOCAL新文章(隱板)",
-			BM:                 "",
+			title:              "嘰哩 ◎跨板式LOCAL新文章(隱板)",
+			bm:                 "",
 			Brdattr:            PTT_BRD_POSTMASK | PTT_BRD_HIDE,
 			VoteLimitPosts:     0,
 			VoteLimitLogins:    0,
@@ -393,11 +393,11 @@ func TestBoardHeader(t *testing.T) {
 		if header.BrdName != expected[index].BrdName {
 			t.Errorf("BoardName not match in index %d, expected: %s, got: %s", index, expected[index].BrdName, header.BrdName)
 		}
-		if header.Title != expected[index].Title {
-			t.Errorf("Title not match in index %d, expected: %s, got: %s", index, expected[index].Title, header.Title)
+		if header.title != expected[index].title {
+			t.Errorf("Title not match in index %d, expected: %s, got: %s", index, expected[index].title, header.title)
 		}
-		if header.BM != expected[index].BM {
-			t.Errorf("BM not match in index %d, expected: %s, got: %s", index, expected[index].BM, header.BM)
+		if header.bm != expected[index].bm {
+			t.Errorf("BM not match in index %d, expected: %s, got: %s", index, expected[index].bm, header.bm)
 		}
 		if header.VoteLimitPosts != expected[index].VoteLimitPosts {
 			t.Errorf("VoteLimitPosts not match in index %d, expected: %d, got: %d", index, expected[index].VoteLimitPosts, header.VoteLimitPosts)

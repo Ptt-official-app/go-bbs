@@ -2,6 +2,8 @@ package pttbbs
 
 import (
 	"github.com/PichuChen/go-bbs"
+
+	"strings"
 )
 
 type Connector struct {
@@ -10,6 +12,21 @@ type Connector struct {
 
 func init() {
 	bbs.Register("pttbbs", &Connector{})
+}
+
+// Open connect a file directory or SHMs, dataSourceName pointer to bbs home
+// And it can append argument for SHM
+// for example `file:///home/bbs/?UTMP=1993`
+func (c *Connector) Open(dataSourceName string) error {
+
+	if strings.HasPrefix(dataSourceName, "file://") {
+		s := dataSourceName[len("file://"):]
+		seg := strings.Split(s, "?")
+		c.home = seg[0]
+	} else {
+		c.home = dataSourceName
+	}
+	return nil
 }
 
 func (c *Connector) GetUserRecordsPath() (string, error) {
@@ -33,6 +50,44 @@ func (c *Connector) ReadBoardRecordsFile(path string) ([]bbs.BoardRecord, error)
 	rec, err := OpenBoardHeaderFile(path)
 	ret := make([]bbs.BoardRecord, len(rec))
 	for i, v := range rec {
+		ret[i] = v
+	}
+	return ret, err
+}
+
+func (c *Connector) GetBoardArticlesDirectoryPath(boardId string) (string, error) {
+	return GetBoardArticleDirectoryPath(c.home, boardId)
+}
+
+func (c *Connector) ReadBoardArticlesFile(boardId string) ([]bbs.ArticleRecord, error) {
+	filepath, err := GetBoardArticleDirectoryPath(c.home, boardId)
+
+	var fileHeaders []*FileHeader
+	fileHeaders, err = OpenFileHeaderFile(filepath)
+	if err != nil {
+		return nil, err
+	}
+	ret := make([]bbs.ArticleRecord, len(fileHeaders))
+	for i, v := range fileHeaders {
+		ret[i] = v
+	}
+	return ret, err
+}
+
+func (c *Connector) GetBoardTreasuresDirectoryPath(boardId string, treasureId []string) (string, error) {
+	return GetBoardTreasuresDirectoryPath(c.home, boardId, treasureId)
+}
+
+func (c *Connector) ReadBoardTreasuresFile(boardId string, treasureId []string) ([]bbs.ArticleRecord, error) {
+	filepath, err := GetBoardTreasuresDirectoryPath(c.home, boardId, treasureId)
+
+	var fileHeaders []*FileHeader
+	fileHeaders, err = OpenFileHeaderFile(filepath)
+	if err != nil {
+		return nil, err
+	}
+	ret := make([]bbs.ArticleRecord, len(fileHeaders))
+	for i, v := range fileHeaders {
 		ret[i] = v
 	}
 	return ret, err

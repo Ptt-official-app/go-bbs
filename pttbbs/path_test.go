@@ -266,7 +266,7 @@ func TestGetLoginRecentPath(t *testing.T) {
 
 }
 
-func TestGetBoardArticleDirectoryPath(t *testing.T) {
+func TestGetBoardArticlesDirectoryPath(t *testing.T) {
 
 	type Input struct {
 		wd      string
@@ -309,19 +309,19 @@ func TestGetBoardArticleDirectoryPath(t *testing.T) {
 	}
 
 	for i, c := range cases {
-		actual, err := GetBoardArticleDirectoryPath(c.input.wd, c.input.boardId)
+		actual, err := GetBoardArticlesDirectoryPath(c.input.wd, c.input.boardId)
 		if err != nil {
-			t.Errorf("GetBoardArticleDirectoryPath err != nil on index %d", i)
+			t.Errorf("GetBoardArticlesDirectoryPath err != nil on index %d", i)
 		}
 		if actual != c.expected {
-			t.Errorf("GetBoardArticleDirectoryPath result not match on index %d with input:%v , expected: %v, got: %v",
+			t.Errorf("GetBoardArticlesDirectoryPath result not match on index %d with input:%v , expected: %v, got: %v",
 				i, c.input, c.expected, actual)
 		}
 	}
 
 }
 
-func TestGetBoardArticlePath(t *testing.T) {
+func TestGetBoardArticleFilePath(t *testing.T) {
 
 	type Input struct {
 		wd       string
@@ -369,12 +369,12 @@ func TestGetBoardArticlePath(t *testing.T) {
 	}
 
 	for i, c := range cases {
-		actual, err := GetBoardArticlePath(c.input.wd, c.input.boardId, c.input.filename)
+		actual, err := GetBoardArticleFilePath(c.input.wd, c.input.boardId, c.input.filename)
 		if err != nil {
-			t.Errorf("GetBoardArticlePath err != nil on index %d", i)
+			t.Errorf("GetBoardArticleFilePath err != nil on index %d", i)
 		}
 		if actual != c.expected {
-			t.Errorf("GetBoardArticlePath result not match on index %d with input:%v , expected: %v, got: %v",
+			t.Errorf("GetBoardArticleFilePath result not match on index %d with input:%v , expected: %v, got: %v",
 				i, c.input, c.expected, actual)
 		}
 	}
@@ -438,7 +438,7 @@ func TestGetBoardTreasuresDirectoryPath(t *testing.T) {
 
 }
 
-func TestGetBoardTreasuresFilePath(t *testing.T) {
+func TestGetBoardTreasureFilePath(t *testing.T) {
 
 	type Input struct {
 		wd       string
@@ -487,12 +487,12 @@ func TestGetBoardTreasuresFilePath(t *testing.T) {
 	}
 
 	for i, c := range cases {
-		actual, err := GetBoardTreasuresFilePath(c.input.wd, c.input.boardId, c.input.path, c.input.filename)
+		actual, err := GetBoardTreasureFilePath(c.input.wd, c.input.boardId, c.input.path, c.input.filename)
 		if err != nil {
-			t.Errorf("GetBoardTreasuresFilePath err != nil on index %d", i)
+			t.Errorf("GetBoardTreasureFilePath err != nil on index %d", i)
 		}
 		if actual != c.expected {
-			t.Errorf("GetBoardTreasuresFilePath result not match on index %d with input:%v , expected: %v, got: %v",
+			t.Errorf("GetBoardTreasureFilePath result not match on index %d with input:%v , expected: %v, got: %v",
 				i, c.input, c.expected, actual)
 		}
 	}

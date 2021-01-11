@@ -3,6 +3,9 @@ package pttbbs
 import (
 	"github.com/PichuChen/go-bbs"
 
+	"fmt"
+	"io/ioutil"
+	"os"
 	"strings"
 )
 
@@ -55,12 +58,12 @@ func (c *Connector) ReadBoardRecordsFile(path string) ([]bbs.BoardRecord, error)
 	return ret, err
 }
 
-func (c *Connector) GetBoardArticlesDirectoryPath(boardId string) (string, error) {
-	return GetBoardArticleDirectoryPath(c.home, boardId)
+func (c *Connector) GetBoardArticleRecordsPath(boardId string) (string, error) {
+	return GetBoardArticlesDirectoryPath(c.home, boardId)
 }
 
-func (c *Connector) ReadBoardArticlesFile(boardId string) ([]bbs.ArticleRecord, error) {
-	filepath, err := GetBoardArticleDirectoryPath(c.home, boardId)
+func (c *Connector) ReadBoardArticleRecordsFile(boardId string) ([]bbs.ArticleRecord, error) {
+	filepath, err := GetBoardArticlesDirectoryPath(c.home, boardId)
 
 	var fileHeaders []*FileHeader
 	fileHeaders, err = OpenFileHeaderFile(filepath)
@@ -74,11 +77,11 @@ func (c *Connector) ReadBoardArticlesFile(boardId string) ([]bbs.ArticleRecord, 
 	return ret, err
 }
 
-func (c *Connector) GetBoardTreasuresDirectoryPath(boardId string, treasureId []string) (string, error) {
+func (c *Connector) GetBoardTreasureRecordsPath(boardId string, treasureId []string) (string, error) {
 	return GetBoardTreasuresDirectoryPath(c.home, boardId, treasureId)
 }
 
-func (c *Connector) ReadBoardTreasuresFile(boardId string, treasureId []string) ([]bbs.ArticleRecord, error) {
+func (c *Connector) ReadBoardTreasureRecordsFile(boardId string, treasureId []string) ([]bbs.ArticleRecord, error) {
 	filepath, err := GetBoardTreasuresDirectoryPath(c.home, boardId, treasureId)
 
 	var fileHeaders []*FileHeader
@@ -91,4 +94,36 @@ func (c *Connector) ReadBoardTreasuresFile(boardId string, treasureId []string) 
 		ret[i] = v
 	}
 	return ret, err
+}
+
+// ReadBoardArticleFile returns raw file of specific boardId/filename article.
+func (c *Connector) ReadBoardArticleFile(boardId, filename string) ([]byte, error) {
+
+	path, err := GetBoardArticleFilePath(c.home, boardId, filename)
+	file, err := os.Open(path)
+	if err != nil {
+		return nil, fmt.Errorf("pttbbs: open file error: %v", err)
+	}
+	defer file.Close()
+	buf, err := ioutil.ReadAll(file)
+	if err != nil {
+		return nil, fmt.Errorf("pttbbs: readfile error: %v", err)
+	}
+	return buf, err
+}
+
+// ReadBoardTreasureFile returns raw file of specific boardId/treasureId/filename article.
+func (c *Connector) ReadBoardTreasureFile(boardId string, treasureId []string, filename string) ([]byte, error) {
+
+	path, err := GetBoardTreasureFilePath(c.home, boardId, treasureId, filename)
+	file, err := os.Open(path)
+	if err != nil {
+		return nil, fmt.Errorf("pttbbs: open file error: %v", err)
+	}
+	defer file.Close()
+	buf, err := ioutil.ReadAll(file)
+	if err != nil {
+		return nil, fmt.Errorf("pttbbs: readfile error: %v", err)
+	}
+	return buf, err
 }

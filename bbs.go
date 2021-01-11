@@ -66,11 +66,14 @@ type Connector interface {
 	GetBoardRecordsPath() (string, error)
 	ReadBoardRecordsFile(name string) ([]BoardRecord, error)
 
-	GetBoardArticlesDirectoryPath(boardId string) (string, error)
-	ReadBoardArticlesFile(boardId string) ([]ArticleRecord, error)
+	GetBoardArticleRecordsPath(boardId string) (string, error)
+	ReadBoardArticleRecordsFile(boardId string) ([]ArticleRecord, error)
 
-	GetBoardTreasuresDirectoryPath(boardId string, treasuresId []string) (string, error)
-	ReadBoardTreasuresFile(boardId string, treasuresId []string) ([]ArticleRecord, error)
+	GetBoardTreasureRecordsPath(boardId string, treasuresId []string) (string, error)
+	ReadBoardTreasureRecordsFile(boardId string, treasuresId []string) ([]ArticleRecord, error)
+
+	ReadBoardArticleFile(boardId, filename string) ([]byte, error)
+	ReadBoardTreasureFile(boardId string, treasuresId []string, filename string) ([]byte, error)
 }
 
 var drivers = make(map[string]Connector)

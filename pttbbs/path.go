@@ -53,15 +53,15 @@ func GetLoginRecentPath(workDirectory string, userid string) (string, error) {
 }
 
 // Get Directory normal file path of board
-func GetBoardArticleDirectoryPath(workDirectory string, boardId string) (string, error) {
+func GetBoardArticlesDirectoryPath(workDirectory string, boardId string) (string, error) {
 	return fmt.Sprintf("%s/boards/%c/%s/.DIR", workDirectory, boardId[0], boardId), nil
 }
 
-// Get Directory digest file path of board, `workDirectory` is BBSHome usually, `boardId` means
+// Get Directory article file path of board, `workDirectory` is BBSHome usually, `boardId` means
 // which board, and filename is actual file in board, notice that, we will check is file exist or
 // user has permission for open this file. eg, .DIR file, so please check filename before call
 // this function.
-func GetBoardArticlePath(workDirectory string, boardId string, filename string) (string, error) {
+func GetBoardArticleFilePath(workDirectory string, boardId string, filename string) (string, error) {
 	return fmt.Sprintf("%s/boards/%c/%s/%s", workDirectory, boardId[0], boardId, filename), nil
 }
 
@@ -75,7 +75,7 @@ func GetBoardTreasuresDirectoryPath(workDirectory string, boardId string, path [
 	return fmt.Sprintf("%s/man/boards/%c/%s/%s.DIR", workDirectory, boardId[0], boardId, subPath), nil
 }
 
-func GetBoardTreasuresFilePath(workDirectory string, boardId string, path []string, filename string) (string, error) {
+func GetBoardTreasureFilePath(workDirectory string, boardId string, path []string, filename string) (string, error) {
 	path = append(path, "")
 	subPath := strings.Join(path, "/")
 	return fmt.Sprintf("%s/man/boards/%c/%s/%s%s", workDirectory, boardId[0], boardId, subPath, filename), nil

@@ -61,19 +61,26 @@ type Connector interface {
 	Open(dataSourceName string) error
 
 	GetUserRecordsPath() (string, error)
+	// ReadUserRecordsFile returns UserRecord list in file, name is the file name
 	ReadUserRecordsFile(name string) ([]UserRecord, error)
 
 	GetBoardRecordsPath() (string, error)
+	// ReadBoardRecordsFile returns BoardRecord list in file, name is the file name
 	ReadBoardRecordsFile(name string) ([]BoardRecord, error)
 
 	GetBoardArticleRecordsPath(boardId string) (string, error)
-	ReadBoardArticleRecordsFile(boardId string) ([]ArticleRecord, error)
+	GetBoardTreasureRecordsPath(boardId string, treasureId []string) (string, error)
 
-	GetBoardTreasureRecordsPath(boardId string, treasuresId []string) (string, error)
-	ReadBoardTreasureRecordsFile(boardId string, treasuresId []string) ([]ArticleRecord, error)
+	// ReadArticleRecordsFile returns ArticleRecord list in file, name is the file name
+	ReadArticleRecordsFile(name string) ([]ArticleRecord, error)
 
-	ReadBoardArticleFile(boardId, filename string) ([]byte, error)
-	ReadBoardTreasureFile(boardId string, treasuresId []string, filename string) ([]byte, error)
+	// GetBoardArticleFilePath return file path for specific boardId and filename
+	GetBoardArticleFilePath(boardId string, filename string) (string, error)
+	// GetBoardTreasureFilePath return file path for specific boardId, treasureId and filename
+	GetBoardTreasureFilePath(boardId string, treasureId []string, name string) (string, error)
+
+	// ReadBoardArticleFile returns raw file
+	ReadBoardArticleFile(name string) ([]byte, error)
 }
 
 var drivers = make(map[string]Connector)
@@ -129,6 +136,75 @@ func (db *DB) ReadBoardRecords() ([]BoardRecord, error) {
 	log.Println("path:", path)
 
 	recs, err := db.connector.ReadBoardRecordsFile(path)
+	if err != nil {
+		log.Println("bbs: get user rec error:", err)
+		return nil, err
+	}
+	return recs, nil
+}
+
+func (db *DB) ReadBoardArticleRecordsFile(boardId string) ([]ArticleRecord, error) {
+
+	path, err := db.connector.GetBoardArticleRecordsPath(boardId)
+	if err != nil {
+		log.Println("bbs: open file error:", err)
+		return nil, err
+	}
+	log.Println("path:", path)
+
+	recs, err := db.connector.ReadArticleRecordsFile(path)
+	if err != nil {
+		log.Println("bbs: get user rec error:", err)
+		return nil, err
+	}
+	return recs, nil
+
+}
+
+func (db *DB) ReadBoardTreasureRecordsFile(boardId string, treasureId []string) ([]ArticleRecord, error) {
+
+	path, err := db.connector.GetBoardTreasureRecordsPath(boardId, treasureId)
+	if err != nil {
+		log.Println("bbs: open file error:", err)
+		return nil, err
+	}
+	log.Println("path:", path)
+
+	recs, err := db.connector.ReadArticleRecordsFile(path)
+	if err != nil {
+		log.Println("bbs: get user rec error:", err)
+		return nil, err
+	}
+	return recs, nil
+}
+
+func (db *DB) ReadBoardArticleFile(boardId string, filename string) ([]byte, error) {
+
+	path, err := db.connector.GetBoardArticleFilePath(boardId, filename)
+	if err != nil {
+		log.Println("bbs: open file error:", err)
+		return nil, err
+	}
+	log.Println("path:", path)
+
+	recs, err := db.connector.ReadBoardArticleFile(path)
+	if err != nil {
+		log.Println("bbs: get user rec error:", err)
+		return nil, err
+	}
+	return recs, nil
+}
+
+func (db *DB) ReadBoardTreasureFile(boardId string, treasuresId []string, filename string) ([]byte, error) {
+
+	path, err := db.connector.GetBoardTreasureFilePath(boardId, treasuresId, filename)
+	if err != nil {
+		log.Println("bbs: open file error:", err)
+		return nil, err
+	}
+	log.Println("path:", path)
+
+	recs, err := db.connector.ReadBoardArticleFile(path)
 	if err != nil {
 		log.Println("bbs: get user rec error:", err)
 		return nil, err

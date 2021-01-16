@@ -62,11 +62,10 @@ func (c *Connector) GetBoardArticleRecordsPath(boardId string) (string, error) {
 	return GetBoardArticlesDirectoryPath(c.home, boardId)
 }
 
-func (c *Connector) ReadBoardArticleRecordsFile(boardId string) ([]bbs.ArticleRecord, error) {
-	filepath, err := GetBoardArticlesDirectoryPath(c.home, boardId)
-
+func (c *Connector) ReadArticleRecordsFile(name string) ([]bbs.ArticleRecord, error) {
 	var fileHeaders []*FileHeader
-	fileHeaders, err = OpenFileHeaderFile(filepath)
+	var err error
+	fileHeaders, err = OpenFileHeaderFile(name)
 	if err != nil {
 		return nil, err
 	}
@@ -81,42 +80,17 @@ func (c *Connector) GetBoardTreasureRecordsPath(boardId string, treasureId []str
 	return GetBoardTreasuresDirectoryPath(c.home, boardId, treasureId)
 }
 
-func (c *Connector) ReadBoardTreasureRecordsFile(boardId string, treasureId []string) ([]bbs.ArticleRecord, error) {
-	filepath, err := GetBoardTreasuresDirectoryPath(c.home, boardId, treasureId)
-
-	var fileHeaders []*FileHeader
-	fileHeaders, err = OpenFileHeaderFile(filepath)
-	if err != nil {
-		return nil, err
-	}
-	ret := make([]bbs.ArticleRecord, len(fileHeaders))
-	for i, v := range fileHeaders {
-		ret[i] = v
-	}
-	return ret, err
+func (c *Connector) GetBoardArticleFilePath(boardId string, filename string) (string, error) {
+	return GetBoardArticleFilePath(c.home, boardId, filename)
 }
 
-// ReadBoardArticleFile returns raw file of specific boardId/filename article.
-func (c *Connector) ReadBoardArticleFile(boardId, filename string) ([]byte, error) {
-
-	path, err := GetBoardArticleFilePath(c.home, boardId, filename)
-	file, err := os.Open(path)
-	if err != nil {
-		return nil, fmt.Errorf("pttbbs: open file error: %v", err)
-	}
-	defer file.Close()
-	buf, err := ioutil.ReadAll(file)
-	if err != nil {
-		return nil, fmt.Errorf("pttbbs: readfile error: %v", err)
-	}
-	return buf, err
+func (c *Connector) GetBoardTreasureFilePath(boardId string, treasureId []string, filename string) (string, error) {
+	return GetBoardTreasureFilePath(c.home, boardId, treasureId, filename)
 }
 
-// ReadBoardTreasureFile returns raw file of specific boardId/treasureId/filename article.
-func (c *Connector) ReadBoardTreasureFile(boardId string, treasureId []string, filename string) ([]byte, error) {
-
-	path, err := GetBoardTreasureFilePath(c.home, boardId, treasureId, filename)
-	file, err := os.Open(path)
+// ReadBoardArticleFile returns raw file of specific filename article.
+func (c *Connector) ReadBoardArticleFile(name string) ([]byte, error) {
+	file, err := os.Open(name)
 	if err != nil {
 		return nil, fmt.Errorf("pttbbs: open file error: %v", err)
 	}

@@ -1,10 +1,6 @@
 package crypt
 
-import "unsafe"
-
 type desCBlock [8]uint8
-
-const DES_KEY_SZ = unsafe.Sizeof(desCBlock{})
 
 //desKeySchedule is used for uint32-computation.
 //not-sure how to have *[32]uint32 pointed to [16][8]uint8

@@ -12,7 +12,7 @@ func l2c(l uint32, c []uint8) {
 	//log.Infof("l2c: l: %v c: (%x, %x, %x, %x)", l, c[0], c[1], c[2], c[3])
 }
 
-func PermOp(a uint32, b uint32, n int, m uint32) (retA uint32, retB uint32) {
+func permOp(a uint32, b uint32, n int, m uint32) (retA uint32, retB uint32) {
 
 	t := ((a >> n) ^ b) & m
 	b ^= t
@@ -21,7 +21,7 @@ func PermOp(a uint32, b uint32, n int, m uint32) (retA uint32, retB uint32) {
 	return a, b
 }
 
-func HPermOp(a uint32, n int, m uint32) (retA uint32) {
+func hPermOp(a uint32, n int, m uint32) (retA uint32) {
 	t := ((a << (16 - n)) ^ a) & m
 	a = a ^ t ^ (t >> (16 - n))
 	return a

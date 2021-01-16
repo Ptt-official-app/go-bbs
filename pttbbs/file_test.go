@@ -29,14 +29,14 @@ func TestParseFileHeader(t *testing.T) {
 
 	expected := []FileHeader{
 		{
-			Filename:  "M.1599059246.A.CF6",
-			Modified:  time.Date(2020, time.September, 02, 15, 31, 28, 0, time.UTC),
-			Recommend: 0,
-			Owner:     "SYSOP",
-			Date:      " 9/02",
-			Title:     "[閒聊] 自己的文章自己寫",
+			filename:  "M.1599059246.A.CF6",
+			modified:  time.Date(2020, time.September, 02, 15, 31, 28, 0, time.UTC),
+			recommend: 0,
+			owner:     "SYSOP",
+			date:      " 9/02",
+			title:     "[閒聊] 自己的文章自己寫",
 
-			Money:   0,
+			money:   0,
 			AnnoUid: 0,
 			VoteLimits: VoteLimits{
 				Posts:   0,
@@ -49,14 +49,14 @@ func TestParseFileHeader(t *testing.T) {
 			Filemode:  0,
 		},
 		{
-			Filename:  "M.1599059415.A.FBA",
-			Modified:  time.Date(2020, time.September, 02, 15, 31, 37, 0, time.UTC),
-			Recommend: 0,
-			Owner:     "SYSOP",
-			Date:      " 9/02",
-			Title:     "[討論] 賞大稻埕煙火遠離人潮！",
+			filename:  "M.1599059415.A.FBA",
+			modified:  time.Date(2020, time.September, 02, 15, 31, 37, 0, time.UTC),
+			recommend: 0,
+			owner:     "SYSOP",
+			date:      " 9/02",
+			title:     "[討論] 賞大稻埕煙火遠離人潮！",
 
-			Money:   0,
+			money:   0,
 			AnnoUid: 0,
 			VoteLimits: VoteLimits{
 				Posts:   0,
@@ -69,14 +69,14 @@ func TestParseFileHeader(t *testing.T) {
 			Filemode:  0,
 		},
 		{
-			Filename:  "M.1599059496.A.2BE",
-			Modified:  time.Date(2020, time.September, 02, 15, 31, 46, 0, time.UTC),
-			Recommend: 0,
-			Owner:     "SYSOP",
-			Date:      " 9/02",
-			Title:     "[公告] 何不？ 五大寬容",
+			filename:  "M.1599059496.A.2BE",
+			modified:  time.Date(2020, time.September, 02, 15, 31, 46, 0, time.UTC),
+			recommend: 0,
+			owner:     "SYSOP",
+			date:      " 9/02",
+			title:     "[公告] 何不？ 五大寬容",
 
-			Money:   0,
+			money:   0,
 			AnnoUid: 0,
 			VoteLimits: VoteLimits{
 				Posts:   0,
@@ -103,14 +103,14 @@ func TestParseFileHeader02(t *testing.T) {
 
 	expected := []FileHeader{
 		{
-			Filename:  "M.1604489415.A.C31",
-			Modified:  time.Date(2020, 11, 04, 11, 30, 14, 0, time.UTC),
-			Recommend: 0,
-			Owner:     "pichu",
-			Date:      "11/04",
-			Title:     "[問題] test",
+			filename:  "M.1604489415.A.C31",
+			modified:  time.Date(2020, 11, 04, 11, 30, 14, 0, time.UTC),
+			recommend: 0,
+			owner:     "pichu",
+			date:      "11/04",
+			title:     "[問題] test",
 
-			Money:   0,
+			money:   0,
 			AnnoUid: 0,
 			VoteLimits: VoteLimits{
 				Posts:   0,
@@ -136,14 +136,14 @@ func TestParsePttFileHeaderTreasures(t *testing.T) {
 
 	expected := []FileHeader{
 		{
-			Filename:  "D6D8",
-			Modified:  time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
-			Recommend: 0,
-			Owner:     "SYSOP",
-			Date:      "12/20",
-			Title:     "◆ Folder 1.1.1.1",
+			filename:  "D6D8",
+			modified:  time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
+			recommend: 0,
+			owner:     "SYSOP",
+			date:      "12/20",
+			title:     "◆ Folder 1.1.1.1",
 
-			Money:   0,
+			money:   0,
 			AnnoUid: 0,
 			VoteLimits: VoteLimits{
 				Posts:   0,
@@ -164,29 +164,29 @@ func TestParsePttFileHeaderTreasures(t *testing.T) {
 
 func CheckPttFileHeader(t *testing.T, index int, actual *FileHeader, expected *FileHeader) {
 
-	if actual.Filename != expected.Filename {
-		t.Logf("lena :%d %d", len(actual.Filename), len(expected.Filename))
-		t.Errorf("Filename not match in index %d, expected: %s, got: %s", index, expected.Filename, actual.Filename)
+	if actual.filename != expected.filename {
+		t.Logf("lena :%d %d", len(actual.filename), len(expected.filename))
+		t.Errorf("Filename not match in index %d, expected: %s, got: %s", index, expected.filename, actual.filename)
 	}
 
-	if actual.Modified.Sub(expected.Modified) != 0 {
-		t.Errorf("Modified not match in index %d, expected: %s, got: %s", index, expected.Modified, actual.Modified)
+	if actual.modified.Sub(expected.modified) != 0 {
+		t.Errorf("modified not match in index %d, expected: %s, got: %s", index, expected.modified, actual.modified)
 	}
-	if actual.Recommend != expected.Recommend {
-		t.Errorf("Recommend not match in index %d, expected: %q, got: %q", index, expected.Recommend, actual.Recommend)
+	if actual.recommend != expected.recommend {
+		t.Errorf("recommend not match in index %d, expected: %q, got: %q", index, expected.recommend, actual.recommend)
 	}
-	if actual.Owner != expected.Owner {
-		t.Errorf("Owner not match in index %d, expected: %s, got: %s", index, expected.Owner, actual.Owner)
+	if actual.owner != expected.owner {
+		t.Errorf("owner not match in index %d, expected: %s, got: %s", index, expected.owner, actual.owner)
 	}
-	if actual.Date != expected.Date {
-		t.Logf("Date :%d %d", len(actual.Date), len(expected.Date))
-		t.Errorf("Date not match in index %d, expected: %q, got: %q", index, expected.Date, actual.Date)
+	if actual.date != expected.date {
+		t.Logf("date :%d %d", len(actual.date), len(expected.date))
+		t.Errorf("date not match in index %d, expected: %q, got: %q", index, expected.date, actual.date)
 	}
-	if actual.Title != expected.Title {
-		t.Errorf("Title not match in index %d, expected: %q, got: %q", index, expected.Title, actual.Title)
+	if actual.title != expected.title {
+		t.Errorf("title not match in index %d, expected: %q, got: %q", index, expected.title, actual.title)
 	}
-	if actual.Money != expected.Money {
-		t.Errorf("Money not match in index %d, expected: %q, got: %q", index, expected.Money, actual.Money)
+	if actual.money != expected.money {
+		t.Errorf("money not match in index %d, expected: %q, got: %q", index, expected.money, actual.money)
 	}
 	if actual.AnnoUid != expected.AnnoUid {
 		t.Errorf("AnnoUid not match in index %d, expected: %q, got: %q", index, expected.AnnoUid, actual.AnnoUid)
@@ -211,14 +211,14 @@ func TestEncodingFileHeader(t *testing.T) {
 	testcase := []TestCase{
 		{
 			Input: FileHeader{
-				Filename:  "M.1599059246.A.CF6",
-				Modified:  time.Date(2020, time.September, 02, 15, 31, 28, 0, time.UTC),
-				Recommend: 0,
-				Owner:     "SYSOP",
-				Date:      " 9/02",
-				Title:     "[閒聊] 自己的文章自己寫",
+				filename:  "M.1599059246.A.CF6",
+				modified:  time.Date(2020, time.September, 02, 15, 31, 28, 0, time.UTC),
+				recommend: 0,
+				owner:     "SYSOP",
+				date:      " 9/02",
+				title:     "[閒聊] 自己的文章自己寫",
 
-				Money:   0,
+				money:   0,
 				AnnoUid: 0,
 				VoteLimits: VoteLimits{
 					Posts:   0,
@@ -243,14 +243,14 @@ func TestEncodingFileHeader(t *testing.T) {
 		},
 		{
 			Input: FileHeader{
-				Filename:  "M.1599059415.A.FBA",
-				Modified:  time.Date(2020, time.September, 02, 15, 31, 37, 0, time.UTC),
-				Recommend: 0,
-				Owner:     "SYSOP",
-				Date:      " 9/02",
-				Title:     "[討論] 賞大稻埕煙火遠離人潮！",
+				filename:  "M.1599059415.A.FBA",
+				modified:  time.Date(2020, time.September, 02, 15, 31, 37, 0, time.UTC),
+				recommend: 0,
+				owner:     "SYSOP",
+				date:      " 9/02",
+				title:     "[討論] 賞大稻埕煙火遠離人潮！",
 
-				Money:   0,
+				money:   0,
 				AnnoUid: 0,
 				VoteLimits: VoteLimits{
 					Posts:   0,
@@ -275,14 +275,14 @@ e9a1 4900 0000 0000 0000 0000 0000 0000
 		},
 		{
 			Input: FileHeader{
-				Filename:  "M.1599059496.A.2BE",
-				Modified:  time.Date(2020, time.September, 02, 15, 31, 46, 0, time.UTC),
-				Recommend: 0,
-				Owner:     "SYSOP",
-				Date:      " 9/02",
-				Title:     "[公告] 何不？ 五大寬容",
+				filename:  "M.1599059496.A.2BE",
+				modified:  time.Date(2020, time.September, 02, 15, 31, 46, 0, time.UTC),
+				recommend: 0,
+				owner:     "SYSOP",
+				date:      " 9/02",
+				title:     "[公告] 何不？ 五大寬容",
 
-				Money:   0,
+				money:   0,
 				AnnoUid: 0,
 				VoteLimits: VoteLimits{
 					Posts:   0,

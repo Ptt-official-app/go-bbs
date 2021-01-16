@@ -48,7 +48,15 @@ type BoardRecord interface {
 	BM() []string
 }
 
-type ArticleRecord interface{}
+type ArticleRecord interface {
+	Filename() string
+	Modified() time.Time
+	Recommend() int
+	Date() string
+	Title() string
+	Money() int
+	Owner() string
+}
 
 // DB is whole bbs filesystem, including where file store,
 // how to connect to local cache ( system V shared memory or etc.)

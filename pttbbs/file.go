@@ -57,23 +57,29 @@ type VoteLimits struct {
 
 // FileHeader records article's metainfo
 type FileHeader struct {
-	Filename  string
-	Modified  time.Time
-	Recommend int8   // Important Level
-	Owner     string // uid[.]
-	Date      string
-	Title     string
+	filename  string
+	modified  time.Time
+	recommend int8   // Important Level
+	owner     string // uid[.]
+	date      string
+	title     string
 
-	Money   int
+	money   int
 	AnnoUid int
 	VoteLimits
 	ReferRef  uint // 至底公告？
 	ReferFlag bool // 至底公告？
 
 	Filemode uint8
-
-	Postno int32 // FormosaBBS only
 }
+
+func (f *FileHeader) Filename() string    { return f.filename }
+func (f *FileHeader) Modified() time.Time { return f.modified }
+func (f *FileHeader) Recommend() int      { return int(f.recommend) }
+func (f *FileHeader) Owner() string       { return f.owner }
+func (f *FileHeader) Date() string        { return f.date }
+func (f *FileHeader) Title() string       { return f.title }
+func (f *FileHeader) Money() int          { return f.money }
 
 // OpenFileHeaderFile function open a .DIR file in board directory.
 // It returns slice of FileHeader.
@@ -99,7 +105,7 @@ func OpenFileHeaderFile(filename string) ([]*FileHeader, error) {
 			return nil, err
 		}
 		ret = append(ret, f)
-		// log.Println(f.Filename)
+		// log.Println(f.filename)
 
 	}
 
@@ -110,18 +116,18 @@ func OpenFileHeaderFile(filename string) ([]*FileHeader, error) {
 func NewFileHeaderWithByte(data []byte) (*FileHeader, error) {
 
 	ret := FileHeader{}
-	ret.Filename = string(bytes.Trim(data[PosOfPttFileHeaderFilename:+PosOfPttFileHeaderFilename+PTT_FNLEN], "\x00"))
+	ret.filename = string(bytes.Trim(data[PosOfPttFileHeaderFilename:+PosOfPttFileHeaderFilename+PTT_FNLEN], "\x00"))
 
 	modifiedInt := binary.LittleEndian.Uint32(data[PosOfPttFileHeaderModified : PosOfPttFileHeaderModified+4])
-	ret.Modified = time.Unix(int64(modifiedInt), 0)
+	ret.modified = time.Unix(int64(modifiedInt), 0)
 
-	ret.Recommend = int8(data[PosOfPttFileHeaderRecommend])
-	ret.Owner = string(bytes.Trim(data[PosOfPttFileHeaderOwner:PosOfPttFileHeaderOwner+PTT_IDLEN+2], "\x00"))
-	ret.Date = string(bytes.Trim(data[PosOfPttFileHeaderDate:PosOfPttFileHeaderDate+6], "\x00"))
-	ret.Title = big5uaoToUTF8String(bytes.Trim(data[PosOfPttFileHeaderTitle:PosOfPttFileHeaderTitle+PTT_TTLEN+1], "\x00"))
+	ret.recommend = int8(data[PosOfPttFileHeaderRecommend])
+	ret.owner = string(bytes.Trim(data[PosOfPttFileHeaderOwner:PosOfPttFileHeaderOwner+PTT_IDLEN+2], "\x00"))
+	ret.date = string(bytes.Trim(data[PosOfPttFileHeaderDate:PosOfPttFileHeaderDate+6], "\x00"))
+	ret.title = big5uaoToUTF8String(bytes.Trim(data[PosOfPttFileHeaderTitle:PosOfPttFileHeaderTitle+PTT_TTLEN+1], "\x00"))
 	// log.Println("PosOfUnionMulti:", PosOfUnionMulti, data[PosOfUnionMulti])
 
-	ret.Money = int(binary.LittleEndian.Uint32(data[PosOfPttFileHeaderUnionMulti : PosOfPttFileHeaderUnionMulti+4]))
+	ret.money = int(binary.LittleEndian.Uint32(data[PosOfPttFileHeaderUnionMulti : PosOfPttFileHeaderUnionMulti+4]))
 	ret.AnnoUid = int(binary.LittleEndian.Uint32(data[PosOfPttFileHeaderUnionMulti : PosOfPttFileHeaderUnionMulti+4]))
 
 	ret.Filemode = uint8(data[PosOfPttFileHeaderFilemode])
@@ -133,7 +139,7 @@ func NewFileHeaderWithByte(data []byte) (*FileHeader, error) {
 		ret.VoteLimits.Badpost = data[PosOfPttFileHeaderUnionMulti+3]
 	}
 
-	// ret.Title = binary.LittleEndian.Uint8(data[PTT_FNLEN+5+PTT_IDLEN+2+6 : PTT_FNLEN+5+PTT_IDLEN+2+6+PTT_TTLEN+1])
+	// ret.title = binary.LittleEndian.Uint8(data[PTT_FNLEN+5+PTT_IDLEN+2+6 : PTT_FNLEN+5+PTT_IDLEN+2+6+PTT_TTLEN+1])
 
 	return &ret, nil
 }
@@ -141,13 +147,13 @@ func NewFileHeaderWithByte(data []byte) (*FileHeader, error) {
 func (h *FileHeader) MarshalToByte() ([]byte, error) {
 	ret := make([]byte, 128)
 
-	copy(ret[PosOfPttFileHeaderFilename:PosOfPttFileHeaderFilename+PTT_FNLEN], h.Filename)
-	binary.LittleEndian.PutUint32(ret[PosOfPttFileHeaderModified:PosOfPttFileHeaderModified+4], uint32(h.Modified.Unix()))
+	copy(ret[PosOfPttFileHeaderFilename:PosOfPttFileHeaderFilename+PTT_FNLEN], h.filename)
+	binary.LittleEndian.PutUint32(ret[PosOfPttFileHeaderModified:PosOfPttFileHeaderModified+4], uint32(h.modified.Unix()))
 
-	ret[PosOfPttFileHeaderRecommend] = byte(h.Recommend)
-	copy(ret[PosOfPttFileHeaderOwner:PosOfPttFileHeaderOwner+PTT_IDLEN+2], h.Owner)
-	copy(ret[PosOfPttFileHeaderDate:PosOfPttFileHeaderDate+6], h.Date)
-	copy(ret[PosOfPttFileHeaderTitle:PosOfPttFileHeaderTitle+PTT_TTLEN+1], utf8ToBig5UAOString(h.Title))
+	ret[PosOfPttFileHeaderRecommend] = byte(h.recommend)
+	copy(ret[PosOfPttFileHeaderOwner:PosOfPttFileHeaderOwner+PTT_IDLEN+2], h.owner)
+	copy(ret[PosOfPttFileHeaderDate:PosOfPttFileHeaderDate+6], h.date)
+	copy(ret[PosOfPttFileHeaderTitle:PosOfPttFileHeaderTitle+PTT_TTLEN+1], utf8ToBig5UAOString(h.title))
 
 	// TODO: Check file mode for set Money or AnnoUid ... etc
 

@@ -36,13 +36,54 @@ func (c *Connector) GetUserRecordsPath() (string, error) {
 	return GetPasswdsPath(c.home)
 }
 
-func (c *Connector) ReadUserRecordsFile(path string) ([]bbs.UserRecord, error) {
-	rec, err := OpenUserecFile(path)
+func (c *Connector) ReadUserRecordsFile(filename string) ([]bbs.UserRecord, error) {
+	rec, err := OpenUserecFile(filename)
 	ret := make([]bbs.UserRecord, len(rec))
 	for i, v := range rec {
 		ret[i] = v
 	}
 	return ret, err
+}
+
+func (c *Connector) GetUserFavoriteRecordsPath(userId string) (string, error) {
+	return GetUserFavoritePath(c.home, userId)
+}
+
+func (c *Connector) ReadUserFavoriteRecordsFile(filename string) ([]bbs.FavoriteRecord, error) {
+	rec, err := OpenFavFile(filename)
+
+	bPath, err := c.GetBoardRecordsPath()
+	if err != nil {
+		return nil, fmt.Errorf("pttbbs: GetBoardRecordsPath error: %v", err)
+	}
+	br, err := OpenBoardHeaderFile(bPath)
+	if err != nil {
+		return nil, fmt.Errorf("pttbbs: ReadBoardRecordsFile error: %v", err)
+	}
+	appendBoardId(rec.Folder, br)
+	ret := make([]bbs.FavoriteRecord, len(rec.Folder.FavItems))
+	for i, v := range rec.Folder.FavItems {
+		ret[i] = v
+	}
+	return ret, err
+}
+
+func appendBoardId(folder *FavFolder, brd []*BoardHeader) {
+	for _, item := range folder.FavItems {
+
+		switch item.Item.(type) {
+		case *FavBoardItem:
+			bid := item.Item.(*FavBoardItem).BoardId - 1
+			item.Item.(*FavBoardItem).boardId = brd[bid].BrdName
+		case *FavFolderItem:
+			appendBoardId(item.Item.(*FavFolderItem).ThisFolder, brd)
+		case *FavLineItem:
+			break
+		default:
+			// logger.Warningf("parseFavoriteFolderItem unknown favItem type")
+		}
+	}
+
 }
 
 func (c *Connector) GetBoardRecordsPath() (string, error) {
@@ -62,10 +103,10 @@ func (c *Connector) GetBoardArticleRecordsPath(boardId string) (string, error) {
 	return GetBoardArticlesDirectoryPath(c.home, boardId)
 }
 
-func (c *Connector) ReadArticleRecordsFile(name string) ([]bbs.ArticleRecord, error) {
+func (c *Connector) ReadArticleRecordsFile(filename string) ([]bbs.ArticleRecord, error) {
 	var fileHeaders []*FileHeader
 	var err error
-	fileHeaders, err = OpenFileHeaderFile(name)
+	fileHeaders, err = OpenFileHeaderFile(filename)
 	if err != nil {
 		return nil, err
 	}
@@ -89,8 +130,8 @@ func (c *Connector) GetBoardTreasureFilePath(boardId string, treasureId []string
 }
 
 // ReadBoardArticleFile returns raw file of specific filename article.
-func (c *Connector) ReadBoardArticleFile(name string) ([]byte, error) {
-	file, err := os.Open(name)
+func (c *Connector) ReadBoardArticleFile(filename string) ([]byte, error) {
+	file, err := os.Open(filename)
 	if err != nil {
 		return nil, fmt.Errorf("pttbbs: open file error: %v", err)
 	}

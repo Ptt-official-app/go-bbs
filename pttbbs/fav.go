@@ -17,6 +17,8 @@
 package pttbbs
 
 import (
+	"github.com/PichuChen/go-bbs"
+
 	"bytes"
 	"encoding"
 	"encoding/binary"
@@ -84,6 +86,48 @@ type FavItem struct {
 	Item    interface{} // This could be either FavBoardItem / FavFolderItem / FavLineItem
 }
 
+func (f *FavItem) BoardId() string {
+	if f.FavType != FavItemTypeBoard {
+		return ""
+	}
+	return f.Item.(*FavBoardItem).boardId
+}
+
+func (f *FavItem) Title() string {
+	if f.FavType == FavItemTypeLine {
+		return "------------------------------------------"
+	}
+	if f.FavType == FavItemTypeFolder {
+		return f.Item.(*FavFolderItem).Title
+	}
+	return ""
+}
+
+func (f *FavItem) Type() bbs.FavoriteType {
+	switch f.FavType {
+	case FavItemTypeBoard:
+		return bbs.FavoriteTypeBoard
+	case FavItemTypeFolder:
+		return bbs.FavoriteTypeFolder
+	case FavItemTypeLine:
+		return bbs.FavoriteTypeLine
+	}
+	return bbs.FavoriteTypeBoard
+
+}
+
+func (f *FavItem) Records() []bbs.FavoriteRecord {
+	if f.FavType != FavItemTypeFolder {
+		return nil
+	}
+	rec := f.Item.(*FavFolderItem).ThisFolder.FavItems
+	ret := make([]bbs.FavoriteRecord, len(rec))
+	for i, v := range rec {
+		ret[i] = v
+	}
+	return ret
+}
+
 // GetBoard tries to cast Item to FavBoardItem; return nil if it is not
 func (favt *FavItem) GetBoard() *FavBoardItem {
 	if ret, ok := favt.Item.(*FavBoardItem); ok {
@@ -132,6 +176,7 @@ type FavBoardItem struct {
 	BoardId   uint32
 	LastVisit time.Time
 	Attr      uint32
+	boardId   string
 }
 
 // FavFolderItem represents a Folder in FavFolder. FavFolderItem takes 50 bytes

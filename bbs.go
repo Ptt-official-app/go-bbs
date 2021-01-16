@@ -62,6 +62,8 @@ type BoardRecord interface {
 	Title() string
 
 	IsClass() bool
+	// ClassId should return the class id to which this board/class belongs.
+	ClassId() string
 
 	BM() []string
 }

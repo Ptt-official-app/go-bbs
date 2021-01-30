@@ -4,9 +4,8 @@ import (
 	"bytes"
 	"encoding/binary"
 	"fmt"
-	"os"
-	"strings"
-	"syscall"
+
+	"github.com/PichuChen/go-bbs/cache"
 )
 
 type cachePos struct {
@@ -79,7 +78,7 @@ type MemoryMappingSetting struct {
 // Cache provides an IPC(inter-process communication) bridge with process-based
 // pttbbs process, and shars the cache with board info, user info ...
 type Cache struct {
-	buf []byte
+	*cache.Mmap
 	*MemoryMappingSetting
 	cachePos
 }
@@ -98,8 +97,8 @@ func (c *Cache) caculatePos() {
 
 	c.posOfNextInHash = c.posOfUserId + c.MaxUsers*(c.IDLen+1) + (c.IDLen + 1)
 	// Align
-	if c.posOfNextInHash%AlignmentBytes != 0 {
-		padding := AlignmentBytes - c.posOfNextInHash%AlignmentBytes
+	if c.posOfNextInHash%c.AlignmentBytes != 0 {
+		padding := c.AlignmentBytes - c.posOfNextInHash%c.AlignmentBytes
 		c.posOfNextInHash += padding
 	}
 	fmt.Println("c.posOfNextInHash", c.posOfNextInHash)
@@ -271,48 +270,26 @@ func (c *Cache) caculatePos() {
 // NewCache returns Cache (SHM) by connectionString, connectionString indicate the shm location
 // with uri format  eg. shmkey:1228 or file:/tmp/ramdisk/bbs.shm
 func NewCache(connectionString string, settings *MemoryMappingSetting) (*Cache, error) {
-	if strings.HasPrefix(connectionString, "file:") {
-		// mmap
-		filePath := strings.Replace(connectionString, "file:", "", 1)
-		f, err := os.Open(filePath)
-		// f, err := os.Open("../../../dump.shm")
-		if err != nil {
-			fmt.Println("open shm fail", err)
-			return nil, fmt.Errorf("open error:", err)
-		}
-		fd := int(f.Fd())
-		fmt.Println("fd:", fd)
 
-		stat, err := f.Stat()
-		if err != nil {
-			fmt.Println("stat error", err)
-			return nil, fmt.Errorf("stat error:", err)
-		}
-
-		size := int(stat.Size())
-		fmt.Println("size", size)
-		b, err := syscall.Mmap(fd, 0, size, syscall.PROT_READ, syscall.MAP_SHARED)
-		if err != nil {
-			fmt.Println("mmap error", err)
-			return nil, fmt.Errorf("mmap error:", err)
-		}
-
-		c := Cache{
-			buf:                  b,
-			MemoryMappingSetting: settings,
-		}
-		c.caculatePos()
-		return &c, nil
+	c, err := cache.Open(connectionString)
+	if err != nil {
+		return nil, fmt.Errorf("cache open error: %v", err)
 	}
 	return nil, fmt.Errorf("unsupport connectionString")
 
+	ret := Cache{
+		Mmap:                 c,
+		MemoryMappingSetting: settings,
+	}
+	ret.caculatePos()
+	return &ret, nil
 }
 
 // Version returns cache (SHM) version of pttbbs, it will be 4842 on pttbbs version
 // 4d56e77 (2009/09 ~ )
 func (c *Cache) Version() uint32 {
 	// Should be 4842
-	return binary.LittleEndian.Uint32(c.buf[c.posOfVersion : c.posOfVersion+4])
+	return binary.LittleEndian.Uint32(c.Buf[c.posOfVersion : c.posOfVersion+4])
 }
 
 // UserId returns userId string with specific uid, such as "SYSOP",
@@ -320,12 +297,12 @@ func (c *Cache) Version() uint32 {
 func (c *Cache) UserId(uid int) string {
 	// TODO: Check if it is out of range
 	s := c.posOfUserId + (c.IDLen+1)*uid
-	return string(bytes.Split(c.buf[s:s+c.IDLen+1], []byte("\x00"))[0])
+	return string(bytes.Split(c.Buf[s:s+c.IDLen+1], []byte("\x00"))[0])
 }
 
 // Money returns the money user have with specific uid, uid start with 0
 func (c *Cache) Money(uid int) int32 {
 	// TODO: Check if it is out of range
 	s := c.posOfMoney + 4*uid
-	return int32(binary.LittleEndian.Uint32(c.buf[s : s+4]))
+	return int32(binary.LittleEndian.Uint32(c.Buf[s : s+4]))
 }

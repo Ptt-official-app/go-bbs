@@ -6,9 +6,9 @@ import (
 	"testing"
 )
 
-func TestOpenSHM(t *testing.T) {
+func TestOpenMMAP(t *testing.T) {
 
-	data, err := CreateKey(10, 4)
+	data, err := CreateMmap("./test", 20)
 	data.Buf[0] = 42
 	if err != nil {
 		t.Logf("err should be nil, got: %v", err)
@@ -19,7 +19,7 @@ func TestOpenSHM(t *testing.T) {
 	}
 	data.Close()
 
-	data, err = OpenKey(10)
+	data, err = OpenMmap("./test")
 	if err != nil {
 		t.Logf("err should be nil, got: %v", err)
 	}
@@ -34,7 +34,7 @@ func TestOpenSHM(t *testing.T) {
 		t.Logf("err should be nil, got: %v", err)
 	}
 
-	data, err = OpenKey(10)
+	data, err = OpenMmap("./test")
 	if err != nil {
 		t.Logf("err should be nil, got: %v", err)
 	}
@@ -42,5 +42,5 @@ func TestOpenSHM(t *testing.T) {
 	if data.Buf[0] != 43 {
 		t.Errorf("data buf should be %v, got %v", 43, data.Buf[0])
 	}
-	RemoveKey(10)
+	RemoveMmap("./test")
 }

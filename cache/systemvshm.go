@@ -115,7 +115,7 @@ func CreateKey(key int, size int) (*SHM, error) {
 func OpenKey(key int) (*SHM, error) {
 	return CreateKey(key, 0)
 }
-func Remove(key int) error {
+func RemoveKey(key int) error {
 	shmId, err := Shmget(key, 0, 0)
 	if err != nil {
 		return fmt.Errorf("shmget error: %v", err)

@@ -12,16 +12,35 @@ type Mmap struct {
 	Buf  []byte
 }
 
-func Open(filePath string) (*Mmap, error) {
-	// filePath := strings.Replace(connectionString, "file:", "", 1)
-	f, err := os.Open(filePath)
+func CreateMmap(filePath string, size int64) (*Mmap, error) {
+	f, err := os.Create(filePath)
 	// f, err := os.Open("../../../dump.shm")
 	if err != nil {
-		fmt.Println("open shm fail", err)
+		return nil, fmt.Errorf("create error: %v", err)
+	}
+	err = f.Truncate(size)
+	if err != nil {
+		return nil, fmt.Errorf("truncate error: %v", err)
+	}
+
+	return openFile(f)
+
+}
+
+func OpenMmap(filePath string) (*Mmap, error) {
+	// := os.Open(filePath)
+	f, err := os.OpenFile(filePath, os.O_RDWR, 0644)
+	// f, err := os.Open("../../../dump.shm")
+	if err != nil {
 		return nil, fmt.Errorf("open error: %v", err)
 	}
+	return openFile(f)
+}
+
+func openFile(f *os.File) (*Mmap, error) {
+
 	fd := int(f.Fd())
-	fmt.Println("fd:", fd)
+	// fmt.Println("fd:", fd)
 
 	stat, err := f.Stat()
 	if err != nil {
@@ -30,7 +49,7 @@ func Open(filePath string) (*Mmap, error) {
 	}
 
 	size := int(stat.Size())
-	fmt.Println("size", size)
+	// fmt.Println("size", size)
 
 	b, err := openMmap(fd, size)
 	if err != nil {
@@ -44,15 +63,21 @@ func Open(filePath string) (*Mmap, error) {
 	}
 
 	// For GC
-	runtime.SetFinalizer(ret, (*Mmap).Close)
+	runtime.SetFinalizer(&ret, (*Mmap).Close)
 	return &ret, nil
 }
 
-func (m *Mmap) Close() {
-	closeMmap(m.Buf)
+func (m *Mmap) Close() error {
+	err := closeMmap(m.Buf)
+
 	m.file.Close()
 
 	// release GC setting
 	runtime.SetFinalizer(m, nil)
+	return err
 
+}
+
+func RemoveMmap(filePath string) error {
+	return os.Remove(filePath)
 }

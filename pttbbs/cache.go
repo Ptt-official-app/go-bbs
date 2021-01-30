@@ -179,6 +179,8 @@ type cachePos struct {
 }
 
 type MemoryMappingSetting struct {
+	AlignmentBytes int // 1, 2, 4 or 8, 1 for no aligment
+
 	MaxUsers int
 	IDLen    int
 }
@@ -189,20 +191,28 @@ type Cache struct {
 	cachePos
 }
 
+// cacluatePos find out posOf values on runtime with MemoryMappingSetting
+// notice that, different compiler option will result in different
+// align padding, it may cause bugs.
+// the align usually will be 2 with pttbbs by examine result.
+//
+// See: https://en.wikipedia.org/wiki/Data_structure_alignment
 func (c *Cache) caculatePos() {
+
 	c.posOfVersion = 0
 	c.posOfSize = c.posOfVersion + 4
 	c.posOfUserId = c.posOfSize + 4
 
 	c.posOfNextInHash = c.posOfUserId + c.MaxUsers*(c.IDLen+1) + (c.IDLen + 1)
 	// Align
-	if c.posOfNextInHash%2 != 0 {
-		c.posOfNextInHash += 1
+	if c.posOfNextInHash%AlignmentBytes != 0 {
+		padding := AlignmentBytes - c.posOfNextInHash%AlignmentBytes
+		c.posOfNextInHash += padding
 	}
 	fmt.Println("c.posOfNextInHash", c.posOfNextInHash)
 	c.posOfMoney = c.posOfNextInHash + c.MaxUsers*4 + 4
-	// 	c.posOfMoney      int
-	// c.
+
+	// TODO: other pos value
 	// 	c.posOfCooldownTime int
 	// c.
 	// 	c.posOfHashHeader int
@@ -417,17 +427,22 @@ func NewCache(connectionString string, settings *MemoryMappingSetting) (*Cache, 
 // 	fmt.Println("money, 0:", c.Money(0))
 // }
 
+// Version returns cache (SHM) version of pttbbs, it will be 4842 on pttbbs version
+// 4d56e77 (2009/09 ~ )
 func (c *Cache) Version() uint32 {
 	// Should be 4842
 	return binary.LittleEndian.Uint32(c.buf[c.posOfVersion : c.posOfVersion+4])
 }
 
+// UserId returns userId string with specific uid, such as "SYSOP",
+// uid means the index in PASSWD file, start with 0.
 func (c *Cache) UserId(uid int) string {
 	// TODO: Check for out of range
 	s := c.posOfUserId + (c.IDLen+1)*uid
 	return string(bytes.Split(c.buf[s:s+c.IDLen+1], []byte("\x00"))[0])
 }
 
+// Money returns the money user have with specific uid, uid start with 0
 func (c *Cache) Money(uid int) int32 {
 	// TODO: Check for out of range
 	s := c.posOfMoney + 4*uid

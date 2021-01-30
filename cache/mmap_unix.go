@@ -1,6 +1,6 @@
-package cache
+// +build unix darwin
 
-// +build unix
+package cache
 
 import (
 	"fmt"
@@ -11,8 +11,7 @@ import (
 func openMmap(fd int, size int) ([]byte, error) {
 	b, err := syscall.Mmap(fd, 0, size, syscall.PROT_READ|syscall.PROT_WRITE, syscall.MAP_SHARED)
 	if err != nil {
-		fmt.Println("mmap error", err)
-		return nil, fmt.Errorf("mmap error:", err)
+		return nil, fmt.Errorf("mmap error: %v", err)
 	}
 	return b, err
 

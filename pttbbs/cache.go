@@ -271,7 +271,7 @@ func (c *Cache) caculatePos() {
 // with uri format  eg. shmkey:1228 or file:/tmp/ramdisk/bbs.shm
 func NewCache(connectionString string, settings *MemoryMappingSetting) (*Cache, error) {
 
-	c, err := cache.Open(connectionString)
+	c, err := cache.NewCache(connectionString)
 	if err != nil {
 		return nil, fmt.Errorf("cache open error: %v", err)
 	}

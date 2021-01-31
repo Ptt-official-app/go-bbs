@@ -1,9 +1,5 @@
 package cache
 
-// #include <sys/ipc.h>
-// #include <sys/shm.h>
-import "C"
-
 import (
 	"fmt"
 	"reflect"

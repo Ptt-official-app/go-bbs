@@ -22,7 +22,9 @@ func NewCache(connectionString string) (Cache, error) {
 	scheme := s[0]
 	if scheme == "shmkey" {
 		key, err := strconv.Atoi(s[1])
-		return nil, fmt.Errorf("atoi error: %v", err)
+		if err != nil {
+			return nil, fmt.Errorf("atoi error: %v", err)
+		}
 		return OpenKey(key)
 	} else if scheme == "file" {
 		return OpenMmap(s[1])

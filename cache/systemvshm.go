@@ -57,7 +57,7 @@ const (
 )
 
 type SHM struct {
-	Buf []byte
+	buf []byte
 }
 
 func CreateKey(key int, size int) (*SHM, error) {
@@ -99,7 +99,7 @@ func CreateKey(key int, size int) (*SHM, error) {
 	hdr.Data = ptr
 
 	ret := SHM{
-		Buf: b,
+		buf: b,
 	}
 
 	// For GC
@@ -124,8 +124,13 @@ func RemoveKey(key int) error {
 	}
 	return nil
 }
+
+func (s *SHM) Buf() []byte {
+	return s.buf
+}
+
 func (m *SHM) Close() error {
-	hdr := (*reflect.SliceHeader)(unsafe.Pointer(&m.Buf))
+	hdr := (*reflect.SliceHeader)(unsafe.Pointer(&m.buf))
 	ptr := hdr.Data
 	_, err := Shmdt(ptr)
 

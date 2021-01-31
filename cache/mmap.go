@@ -9,7 +9,7 @@ import (
 
 type Mmap struct {
 	file *os.File
-	Buf  []byte
+	buf  []byte
 }
 
 func CreateMmap(filePath string, size int64) (*Mmap, error) {
@@ -59,7 +59,7 @@ func openFile(f *os.File) (*Mmap, error) {
 
 	ret := Mmap{
 		file: f,
-		Buf:  b,
+		buf:  b,
 	}
 
 	// For GC
@@ -67,8 +67,12 @@ func openFile(f *os.File) (*Mmap, error) {
 	return &ret, nil
 }
 
+func (m *Mmap) Buf() []byte {
+	return m.buf
+}
+
 func (m *Mmap) Close() error {
-	err := closeMmap(m.Buf)
+	err := closeMmap(m.buf)
 
 	m.file.Close()
 

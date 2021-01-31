@@ -78,7 +78,7 @@ type MemoryMappingSetting struct {
 // Cache provides an IPC(inter-process communication) bridge with process-based
 // pttbbs process, and shars the cache with board info, user info ...
 type Cache struct {
-	*cache.Mmap
+	*cache.Cache
 	*MemoryMappingSetting
 	cachePos
 }

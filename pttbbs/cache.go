@@ -78,7 +78,7 @@ type MemoryMappingSetting struct {
 // Cache provides an IPC(inter-process communication) bridge with process-based
 // pttbbs process, and shars the cache with board info, user info ...
 type Cache struct {
-	*cache.Cache
+	cache.Cache
 	*MemoryMappingSetting
 	cachePos
 }
@@ -278,7 +278,7 @@ func NewCache(connectionString string, settings *MemoryMappingSetting) (*Cache, 
 	return nil, fmt.Errorf("unsupport connectionString")
 
 	ret := Cache{
-		Mmap:                 c,
+		Cache:                c,
 		MemoryMappingSetting: settings,
 	}
 	ret.caculatePos()
@@ -289,7 +289,7 @@ func NewCache(connectionString string, settings *MemoryMappingSetting) (*Cache, 
 // 4d56e77 (2009/09 ~ )
 func (c *Cache) Version() uint32 {
 	// Should be 4842
-	return binary.LittleEndian.Uint32(c.Buf[c.posOfVersion : c.posOfVersion+4])
+	return binary.LittleEndian.Uint32(c.Buf()[c.posOfVersion : c.posOfVersion+4])
 }
 
 // UserId returns userId string with specific uid, such as "SYSOP",
@@ -297,12 +297,12 @@ func (c *Cache) Version() uint32 {
 func (c *Cache) UserId(uid int) string {
 	// TODO: Check if it is out of range
 	s := c.posOfUserId + (c.IDLen+1)*uid
-	return string(bytes.Split(c.Buf[s:s+c.IDLen+1], []byte("\x00"))[0])
+	return string(bytes.Split(c.Buf()[s:s+c.IDLen+1], []byte("\x00"))[0])
 }
 
 // Money returns the money user have with specific uid, uid start with 0
 func (c *Cache) Money(uid int) int32 {
 	// TODO: Check if it is out of range
 	s := c.posOfMoney + 4*uid
-	return int32(binary.LittleEndian.Uint32(c.Buf[s : s+4]))
+	return int32(binary.LittleEndian.Uint32(c.Buf()[s : s+4]))
 }

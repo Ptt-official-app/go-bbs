@@ -15,6 +15,8 @@
 package pttbbs
 
 import (
+	"io/ioutil"
+	"os"
 	"testing"
 	"time"
 )
@@ -478,4 +480,52 @@ func TestBoardHeader(t *testing.T) {
 
 	}
 
+}
+
+func TestAppendAndRemoveBoardRecord(t *testing.T) {
+
+	tmpfile, err := ioutil.TempFile("", "board_test_*")
+	if err != nil {
+		t.Errorf("create tmp file error: %v", err)
+	}
+	t.Logf("tmpfile: %v", tmpfile.Name())
+	// t.Errorf("create tmp file error: %v", err)
+	filename := tmpfile.Name()
+	expectedBrdName := "XXXSSS"
+	brd := BoardHeader{
+		BrdName: expectedBrdName,
+	}
+	err = AppendBoardHeaderFileRecord(filename, &brd)
+	if err != nil {
+		t.Errorf("AppendBoardHeaderFileRecord error: %v", err)
+	}
+
+	headers, err := OpenBoardHeaderFile(filename)
+	if err != nil {
+		t.Error(err)
+	}
+
+	if len(headers) != 1 {
+		t.Errorf("AppendBoardHeaderFileRecord failed, len(headers) expected: 1, got %v", len(headers))
+	}
+
+	if headers[0].BrdName != expectedBrdName {
+		t.Errorf("AppendBoardHeaderFileRecord BrdName not match, expected: %v, got %v", expectedBrdName, headers[0].BrdName)
+	}
+
+	err = RemoveBoardHeaderFileRecord(filename, 0)
+	if err != nil {
+		t.Errorf("RemoveBoardHeaderFileRecord error: %v", err)
+	}
+
+	headers, err = OpenBoardHeaderFile(filename)
+	if err != nil {
+		t.Error(err)
+	}
+
+	if len(headers) != 0 {
+		t.Errorf("RemoveBoardHeaderFileRecord failed, len(headers) expected: 0, got %v", len(headers))
+	}
+
+	defer os.Remove(tmpfile.Name()) // clean up
 }

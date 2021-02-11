@@ -200,10 +200,6 @@ func AppendBoardHeaderFileRecord(filename string, newBoardHeader *BoardHeader) e
 	}
 
 	filelock.Unlock(f)
-
-	if err := f.Close(); err != nil {
-		return err
-	}
 	return nil
 }
 
@@ -211,7 +207,7 @@ func RemoveBoardHeaderFileRecord(filename string, index int) error {
 
 	fi, err := os.OpenFile(filename, os.O_RDONLY, 0644)
 	if err != nil {
-		return err
+		return fmt.Errorf("fi.OpenFile error: %v", err)
 	}
 	defer fi.Close()
 
@@ -223,20 +219,27 @@ func RemoveBoardHeaderFileRecord(filename string, index int) error {
 
 	fo, err := os.OpenFile(filename, os.O_WRONLY, 0644)
 	if err != nil {
-		return err
+		return fmt.Errorf("fo.OpenFile error: %v", err)
 	}
 	defer fo.Close()
 
-	fi.Seek(int64(index*BoardHeaderRecordLength), os.SEEK_SET)
-	fo.Seek(int64((index+1)*BoardHeaderRecordLength), os.SEEK_SET)
-	_, err = io.Copy(fo, fi)
+	_, err = fi.Seek(int64((index+1)*BoardHeaderRecordLength), os.SEEK_SET)
 	if err != nil {
-		return err
+		return fmt.Errorf("fi.Seek error: %v", err)
 	}
+	_, err = fo.Seek(int64((index)*BoardHeaderRecordLength), os.SEEK_SET)
+	if err != nil {
+		return fmt.Errorf("fo.Seek error: %v", err)
+	}
+	_, err = io.CopyBuffer(fo, fi, make([]byte, 256))
+	if err != nil {
+		return fmt.Errorf("copy error: %v", err)
+	}
+	log.Println("copy finish")
 
 	size, err := fo.Seek(0, os.SEEK_CUR)
 	if err != nil {
-		return err
+		return fmt.Errorf("fo.Seek for SEEK_CUR error: %v", err)
 	}
 
 	fo.Truncate(size)

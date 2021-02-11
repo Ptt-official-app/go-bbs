@@ -118,6 +118,11 @@ type Connector interface {
 	ReadBoardArticleFile(name string) ([]byte, error)
 }
 
+type WriteBoardConnector interface {
+	AddBoardRecordFileRecord(name string, brd *BoardRecord) error
+	RemoveBoardRecordFileRecord(name string, index uint) error
+}
+
 var drivers = make(map[string]Connector)
 
 func Register(drivername string, connector Connector) {

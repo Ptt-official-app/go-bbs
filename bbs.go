@@ -118,8 +118,21 @@ type Connector interface {
 	ReadBoardArticleFile(name string) ([]byte, error)
 }
 
+// Driver which implement WriteBoardConnector supports modify board record file.
 type WriteBoardConnector interface {
+
+	// AddBoardRecordFileRecord given record file name and new record, should append
+	// file record in that file.
 	AddBoardRecordFileRecord(name string, brd *BoardRecord) error
+
+	// UpdateBoardRecordFileRecord update boardRecord brd on index in record file,
+	// index is start with 0
+	UpdateBoardRecordFileRecord(name string, index uint, brd *BoardRecord) error
+
+	// ReadBoardRecordFileRecord return boardRecord brd on index in record file.
+	ReadBoardRecordFileRecord(name string, index uint) (*BoardRecord, error)
+
+	// RemoveBoardRecordFileRecord remove boardRecord brd on index in record file.
 	RemoveBoardRecordFileRecord(name string, index uint) error
 }
 

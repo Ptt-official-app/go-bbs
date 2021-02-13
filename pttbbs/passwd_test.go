@@ -79,6 +79,7 @@ func TestOpenUserecFile(t *testing.T) {
 			DarkChess: UserecGameScore{
 				Win:  13,
 				Lose: 14,
+				Tie:  15,
 			},
 		},
 		{
@@ -130,6 +131,7 @@ func TestOpenUserecFile(t *testing.T) {
 			DarkChess: UserecGameScore{
 				Win:  13 + HEX256,
 				Lose: 14 + HEX256,
+				Tie:  15 + HEX256,
 			},
 		},
 		{
@@ -181,6 +183,7 @@ func TestOpenUserecFile(t *testing.T) {
 			DarkChess: UserecGameScore{
 				Win:  13 + HEX16,
 				Lose: 14 + HEX16,
+				Tie:  15 + HEX16,
 			},
 		},
 		{
@@ -232,6 +235,7 @@ func TestOpenUserecFile(t *testing.T) {
 			DarkChess: UserecGameScore{
 				Win:  13 + HEX16 + HEX256,
 				Lose: 14 + HEX16 + HEX256,
+				Tie:  15 + HEX16 + HEX256,
 			},
 		},
 		{
@@ -283,6 +287,7 @@ func TestOpenUserecFile(t *testing.T) {
 			DarkChess: UserecGameScore{
 				Win:  13 + 2*HEX16,
 				Lose: 14 + 2*HEX16,
+				Tie:  15 + 2*HEX16,
 			},
 		},
 	}
@@ -565,6 +570,7 @@ func TestEncodingUserec(t *testing.T) {
 				DarkChess: UserecGameScore{
 					Win:  13,
 					Lose: 14,
+					Tie:  15,
 				},
 			},
 			Expected: hexToByte(`
@@ -596,7 +602,7 @@ b36e c5e9 0000 0000 0000 0000 0000 0000
 0000 0000 0000 0000 0000 0000 0000 0000
 0100 0200 0300 0400 0500 0600 0700 0800
 0900 0000 0a00 0b00 0c00 0d00 0e00 0000
-0000 0000 0000 0000 0000 0000 0000 0000
+0000 0f00 0000 0000 0000 0000 0000 0000
 0000 0000 0000 0000 0000 0000 0000 0000
 0000 0000 0000 0000 0000 0000 0000 0000
 0000 0000 0000 0000 0000 0000 0000 0000

@@ -264,25 +264,28 @@ func NewUserecWithByte(data []byte) (*Userec, error) {
 
 	user.ViolateLaw = binary.LittleEndian.Uint16(data[PosOfPttPasswdTimeViolateLaw : PosOfPttPasswdTimeViolateLaw+2])
 
-	// FiveWin    uint16
-	// FiveLose   uint16
-	// FiveTie    uint16
-	// ChcWin     uint16
-	// ChcLose    uint16
-	// ChcTie     uint16
-	// Conn6Win   uint16
-	// Conn6Lose  uint16
-	// Conn6Tie   uint16
-	// GoWin      uint16
-	// GoLose     uint16
-	// GoTie      uint16
-	// DarkWin    uint16
+	user.Five.Win = binary.LittleEndian.Uint16(data[PosOfPttPasswdFiveWin : PosOfPttPasswdFiveWin+2])
+	user.Five.Lose = binary.LittleEndian.Uint16(data[PosOfPttPasswdFiveLose : PosOfPttPasswdFiveLose+2])
+	user.Five.Tie = binary.LittleEndian.Uint16(data[PosOfPttPasswdFiveTie : PosOfPttPasswdFiveTie+2])
+
+	user.ChineseChess.Win = binary.LittleEndian.Uint16(data[PosOfPttPasswdChcWin : PosOfPttPasswdChcWin+2])
+	user.ChineseChess.Lose = binary.LittleEndian.Uint16(data[PosOfPttPasswdChcLose : PosOfPttPasswdChcLose+2])
+	user.ChineseChess.Tie = binary.LittleEndian.Uint16(data[PosOfPttPasswdChcTie : PosOfPttPasswdChcTie+2])
+
+	user.Conn6.Win = binary.LittleEndian.Uint16(data[PosOfPttPasswdConn6Win : PosOfPttPasswdConn6Win+2])
+	user.Conn6.Lose = binary.LittleEndian.Uint16(data[PosOfPttPasswdConn6Lose : PosOfPttPasswdConn6Lose+2])
+	user.Conn6.Tie = binary.LittleEndian.Uint16(data[PosOfPttPasswdConn6Tie : PosOfPttPasswdConn6Tie+2])
+
+	user.GoChess.Win = binary.LittleEndian.Uint16(data[PosOfPttPasswdGoWin : PosOfPttPasswdGoWin+2])
+	user.GoChess.Lose = binary.LittleEndian.Uint16(data[PosOfPttPasswdGoLose : PosOfPttPasswdGoLose+2])
+	user.GoChess.Tie = binary.LittleEndian.Uint16(data[PosOfPttPasswdGoTie : PosOfPttPasswdGoTie+2])
+
 	user.DarkChess.Win = binary.LittleEndian.Uint16(data[PosOfPttPasswdDarkWin : PosOfPttPasswdDarkWin+2])
 	user.DarkChess.Lose = binary.LittleEndian.Uint16(data[PosOfPttPasswdDarkLose : PosOfPttPasswdDarkLose+2])
+
 	user.UaVersion = data[PosOfPttPasswdUaVersion]
 	user.Signature = data[PosOfPttPasswdSignature]
 	user.BadPost = data[PosOfPttPasswdBadPost]
-	// DarkTie           uint16
 	// MyAngel           string
 	// ChessEloRating    uint16
 	// WithMe            uint32

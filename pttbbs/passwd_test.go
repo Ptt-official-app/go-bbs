@@ -27,7 +27,8 @@ func TestOpenUserecFile(t *testing.T) {
 		t.Errorf("OpenUserecFile() error = %v", err)
 		return
 	}
-
+	const HEX16 = 0x10
+	const HEX256 = 0x0100
 	expected := []Userec{
 		{
 			Version:       4194,
@@ -55,6 +56,30 @@ func TestOpenUserecFile(t *testing.T) {
 
 			TimeRemoveBadPost: time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
 			TimeViolateLaw:    time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
+			Five: UserecGameScore{
+				Win:  1,
+				Lose: 2,
+				Tie:  3,
+			},
+			ChineseChess: UserecGameScore{
+				Win:  4,
+				Lose: 5,
+				Tie:  6,
+			},
+			Conn6: UserecGameScore{
+				Win:  7,
+				Lose: 8,
+				Tie:  9,
+			},
+			GoChess: UserecGameScore{
+				Win:  10,
+				Lose: 11,
+				Tie:  12,
+			},
+			DarkChess: UserecGameScore{
+				Win:  13,
+				Lose: 14,
+			},
 		},
 		{
 			Version:       4194,
@@ -82,6 +107,30 @@ func TestOpenUserecFile(t *testing.T) {
 
 			TimeRemoveBadPost: time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
 			TimeViolateLaw:    time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
+			Five: UserecGameScore{
+				Win:  1 + HEX256,
+				Lose: 2 + HEX256,
+				Tie:  3 + HEX256,
+			},
+			ChineseChess: UserecGameScore{
+				Win:  4 + HEX256,
+				Lose: 5 + HEX256,
+				Tie:  6 + HEX256,
+			},
+			Conn6: UserecGameScore{
+				Win:  7 + HEX256,
+				Lose: 8 + HEX256,
+				Tie:  9 + HEX256,
+			},
+			GoChess: UserecGameScore{
+				Win:  10 + HEX256,
+				Lose: 11 + HEX256,
+				Tie:  12 + HEX256,
+			},
+			DarkChess: UserecGameScore{
+				Win:  13 + HEX256,
+				Lose: 14 + HEX256,
+			},
 		},
 		{
 			Version:       4194,
@@ -109,6 +158,30 @@ func TestOpenUserecFile(t *testing.T) {
 
 			TimeRemoveBadPost: time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
 			TimeViolateLaw:    time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
+			Five: UserecGameScore{
+				Win:  1 + HEX16,
+				Lose: 2 + HEX16,
+				Tie:  3 + HEX16,
+			},
+			ChineseChess: UserecGameScore{
+				Win:  4 + HEX16,
+				Lose: 5 + HEX16,
+				Tie:  6 + HEX16,
+			},
+			Conn6: UserecGameScore{
+				Win:  7 + HEX16,
+				Lose: 8 + HEX16,
+				Tie:  9 + HEX16,
+			},
+			GoChess: UserecGameScore{
+				Win:  10 + HEX16,
+				Lose: 11 + HEX16,
+				Tie:  12 + HEX16,
+			},
+			DarkChess: UserecGameScore{
+				Win:  13 + HEX16,
+				Lose: 14 + HEX16,
+			},
 		},
 		{
 			Version:       4194,
@@ -136,6 +209,30 @@ func TestOpenUserecFile(t *testing.T) {
 
 			TimeRemoveBadPost: time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
 			TimeViolateLaw:    time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
+			Five: UserecGameScore{
+				Win:  1 + HEX16 + HEX256,
+				Lose: 2 + HEX16 + HEX256,
+				Tie:  3 + HEX16 + HEX256,
+			},
+			ChineseChess: UserecGameScore{
+				Win:  4 + HEX16 + HEX256,
+				Lose: 5 + HEX16 + HEX256,
+				Tie:  6 + HEX16 + HEX256,
+			},
+			Conn6: UserecGameScore{
+				Win:  7 + HEX16 + HEX256,
+				Lose: 8 + HEX16 + HEX256,
+				Tie:  9 + HEX16 + HEX256,
+			},
+			GoChess: UserecGameScore{
+				Win:  10 + HEX16 + HEX256,
+				Lose: 11 + HEX16 + HEX256,
+				Tie:  12 + HEX16 + HEX256,
+			},
+			DarkChess: UserecGameScore{
+				Win:  13 + HEX16 + HEX256,
+				Lose: 14 + HEX16 + HEX256,
+			},
 		},
 		{
 			Version:       4194,
@@ -163,6 +260,30 @@ func TestOpenUserecFile(t *testing.T) {
 
 			TimeRemoveBadPost: time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
 			TimeViolateLaw:    time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
+			Five: UserecGameScore{
+				Win:  1 + 2*HEX16,
+				Lose: 2 + 2*HEX16,
+				Tie:  3 + 2*HEX16,
+			},
+			ChineseChess: UserecGameScore{
+				Win:  4 + 2*HEX16,
+				Lose: 5 + 2*HEX16,
+				Tie:  6 + 2*HEX16,
+			},
+			Conn6: UserecGameScore{
+				Win:  7 + 2*HEX16,
+				Lose: 8 + 2*HEX16,
+				Tie:  9 + 2*HEX16,
+			},
+			GoChess: UserecGameScore{
+				Win:  10 + 2*HEX16,
+				Lose: 11 + 2*HEX16,
+				Tie:  12 + 2*HEX16,
+			},
+			DarkChess: UserecGameScore{
+				Win:  13 + 2*HEX16,
+				Lose: 14 + 2*HEX16,
+			},
 		},
 	}
 

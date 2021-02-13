@@ -346,11 +346,25 @@ func (r *Userec) MarshalToByte() ([]byte, error) {
 	binary.LittleEndian.PutUint32(ret[PosOfPttPasswdLoginView:PosOfPttPasswdLoginView+4], r.LoginView)
 
 	// ViolateLaw   uint16
-	// Five         UserecGameScore
-	// ChineseChess UserecGameScore
-	// Conn6        UserecGameScore
-	// GoChess      UserecGameScore
-	// DarkChess    UserecGameScore
+	binary.LittleEndian.PutUint16(ret[PosOfPttPasswdFiveWin:PosOfPttPasswdFiveWin+2], r.Five.Win)
+	binary.LittleEndian.PutUint16(ret[PosOfPttPasswdFiveLose:PosOfPttPasswdFiveLose+2], r.Five.Lose)
+	binary.LittleEndian.PutUint16(ret[PosOfPttPasswdFiveTie:PosOfPttPasswdFiveTie+2], r.Five.Tie)
+
+	binary.LittleEndian.PutUint16(ret[PosOfPttPasswdChcWin:PosOfPttPasswdChcWin+2], r.ChineseChess.Win)
+	binary.LittleEndian.PutUint16(ret[PosOfPttPasswdChcLose:PosOfPttPasswdChcLose+2], r.ChineseChess.Lose)
+	binary.LittleEndian.PutUint16(ret[PosOfPttPasswdChcTie:PosOfPttPasswdChcTie+2], r.ChineseChess.Tie)
+
+	binary.LittleEndian.PutUint16(ret[PosOfPttPasswdConn6Win:PosOfPttPasswdConn6Win+2], r.Conn6.Win)
+	binary.LittleEndian.PutUint16(ret[PosOfPttPasswdConn6Lose:PosOfPttPasswdConn6Lose+2], r.Conn6.Lose)
+	binary.LittleEndian.PutUint16(ret[PosOfPttPasswdConn6Tie:PosOfPttPasswdConn6Tie+2], r.Conn6.Tie)
+
+	binary.LittleEndian.PutUint16(ret[PosOfPttPasswdGoWin:PosOfPttPasswdGoWin+2], r.GoChess.Win)
+	binary.LittleEndian.PutUint16(ret[PosOfPttPasswdGoLose:PosOfPttPasswdGoLose+2], r.GoChess.Lose)
+	binary.LittleEndian.PutUint16(ret[PosOfPttPasswdGoTie:PosOfPttPasswdGoTie+2], r.GoChess.Tie)
+
+	binary.LittleEndian.PutUint16(ret[PosOfPttPasswdDarkWin:PosOfPttPasswdDarkWin+2], r.DarkChess.Win)
+	binary.LittleEndian.PutUint16(ret[PosOfPttPasswdDarkLose:PosOfPttPasswdDarkLose+2], r.DarkChess.Lose)
+
 	ret[PosOfPttPasswdUaVersion] = r.UaVersion
 	ret[PosOfPttPasswdSignature] = r.Signature
 

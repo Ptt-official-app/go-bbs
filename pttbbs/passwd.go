@@ -261,8 +261,7 @@ func NewUserecWithByte(data []byte) (*Userec, error) {
 
 	user.LastSong = time.Unix(int64(binary.LittleEndian.Uint32(data[PosOfPttPasswdLastSong:PosOfPttPasswdLastSong+4])), 0)
 	user.LoginView = binary.LittleEndian.Uint32(data[PosOfPttPasswdLoginView : PosOfPttPasswdLoginView+4])
-
-	user.ViolateLaw = binary.LittleEndian.Uint16(data[PosOfPttPasswdTimeViolateLaw : PosOfPttPasswdTimeViolateLaw+2])
+	user.ViolateLaw = binary.LittleEndian.Uint16(data[PosOfPttPasswdLawCounter : PosOfPttPasswdLawCounter+2])
 
 	user.Five.Win = binary.LittleEndian.Uint16(data[PosOfPttPasswdFiveWin : PosOfPttPasswdFiveWin+2])
 	user.Five.Lose = binary.LittleEndian.Uint16(data[PosOfPttPasswdFiveLose : PosOfPttPasswdFiveLose+2])
@@ -282,18 +281,17 @@ func NewUserecWithByte(data []byte) (*Userec, error) {
 
 	user.DarkChess.Win = binary.LittleEndian.Uint16(data[PosOfPttPasswdDarkWin : PosOfPttPasswdDarkWin+2])
 	user.DarkChess.Lose = binary.LittleEndian.Uint16(data[PosOfPttPasswdDarkLose : PosOfPttPasswdDarkLose+2])
-	user.DarkChess.Tie = binary.LittleEndian.Uint16(data[PosOfPttPasswdDarkTie : PosOfPttPasswdDarkTie+2])
-
 	user.UaVersion = data[PosOfPttPasswdUaVersion]
+
 	user.Signature = data[PosOfPttPasswdSignature]
 	user.BadPost = data[PosOfPttPasswdBadPost]
-	// MyAngel           string
-	// ChessEloRating    uint16
-	// WithMe            uint32
+	user.DarkChess.Tie = binary.LittleEndian.Uint16(data[PosOfPttPasswdDarkTie : PosOfPttPasswdDarkTie+2])
+	user.MyAngel = newStringFormCString(data[PosOfPttPasswdMyAngel : PosOfPttPasswdMyAngel+PTT_IDLEN+1+1])
+
+	user.ChessEloRating = binary.LittleEndian.Uint16(data[PosOfPttPasswdChessEloRating : PosOfPttPasswdChessEloRating+2])
+	user.WithMe = binary.LittleEndian.Uint32(data[PosOfPttPasswdWithMe : PosOfPttPasswdWithMe+4])
 	user.TimeRemoveBadPost = time.Unix(int64(binary.LittleEndian.Uint32(data[PosOfPttPasswdTimeRemoveBadPost:PosOfPttPasswdTimeRemoveBadPost+4])), 0)
 	user.TimeViolateLaw = time.Unix(int64(binary.LittleEndian.Uint32(data[PosOfPttPasswdTimeViolateLaw:PosOfPttPasswdTimeViolateLaw+4])), 0)
-	// user. = binary.LittleEndian.Uint16(data[PosOfPttPasswdTimeViolateLaw : PosOfPttPasswdTimeViolateLaw+2])
-	// user.ViolateLaw = binary.LittleEndian.Uint16(data[PosOfPttPasswdTimeViolateLaw : PosOfPttPasswdTimeViolateLaw+2])
 
 	return user, nil
 }
@@ -345,8 +343,8 @@ func (r *Userec) MarshalToByte() ([]byte, error) {
 
 	binary.LittleEndian.PutUint32(ret[PosOfPttPasswdLastSong:PosOfPttPasswdLastSong+4], uint32(r.LastSong.Unix()))
 	binary.LittleEndian.PutUint32(ret[PosOfPttPasswdLoginView:PosOfPttPasswdLoginView+4], r.LoginView)
+	binary.LittleEndian.PutUint16(ret[PosOfPttPasswdLawCounter:PosOfPttPasswdLawCounter+2], r.ViolateLaw)
 
-	// ViolateLaw   uint16
 	binary.LittleEndian.PutUint16(ret[PosOfPttPasswdFiveWin:PosOfPttPasswdFiveWin+2], r.Five.Win)
 	binary.LittleEndian.PutUint16(ret[PosOfPttPasswdFiveLose:PosOfPttPasswdFiveLose+2], r.Five.Lose)
 	binary.LittleEndian.PutUint16(ret[PosOfPttPasswdFiveTie:PosOfPttPasswdFiveTie+2], r.Five.Tie)
@@ -365,26 +363,17 @@ func (r *Userec) MarshalToByte() ([]byte, error) {
 
 	binary.LittleEndian.PutUint16(ret[PosOfPttPasswdDarkWin:PosOfPttPasswdDarkWin+2], r.DarkChess.Win)
 	binary.LittleEndian.PutUint16(ret[PosOfPttPasswdDarkLose:PosOfPttPasswdDarkLose+2], r.DarkChess.Lose)
-	binary.LittleEndian.PutUint16(ret[PosOfPttPasswdDarkTie:PosOfPttPasswdDarkTie+2], r.DarkChess.Tie)
-
 	ret[PosOfPttPasswdUaVersion] = r.UaVersion
-	ret[PosOfPttPasswdSignature] = r.Signature
 
-	// BadPost           uint8
-	// MyAngel           string
-	// ChessEloRating    uint16
-	// WithMe            uint32
+	ret[PosOfPttPasswdSignature] = r.Signature
+	ret[PosOfPttPasswdBadPost] = r.BadPost
+	binary.LittleEndian.PutUint16(ret[PosOfPttPasswdDarkTie:PosOfPttPasswdDarkTie+2], r.DarkChess.Tie)
+	copy(ret[PosOfPttPasswdMyAngel:PosOfPttPasswdMyAngel+PTT_IDLEN+1+1], utf8ToBig5UAOString(r.MyAngel))
+
+	binary.LittleEndian.PutUint16(ret[PosOfPttPasswdChessEloRating:PosOfPttPasswdChessEloRating+2], r.ChessEloRating)
+	binary.LittleEndian.PutUint32(ret[PosOfPttPasswdWithMe:PosOfPttPasswdWithMe+4], r.WithMe)
 	binary.LittleEndian.PutUint32(ret[PosOfPttPasswdTimeRemoveBadPost:PosOfPttPasswdTimeRemoveBadPost+4], uint32(r.TimeRemoveBadPost.Unix()))
 	binary.LittleEndian.PutUint32(ret[PosOfPttPasswdTimeViolateLaw:PosOfPttPasswdTimeViolateLaw+4], uint32(r.TimeViolateLaw.Unix()))
-
-	// ret[PosOfPttFileHeaderRecommend] = byte(h.Recommend)
-	// copy(ret[PosOfPttFileHeaderOwner:PosOfPttFileHeaderOwner+PTT_IDLEN+2], h.Owner)
-	// copy(ret[PosOfPttFileHeaderDate:PosOfPttFileHeaderDate+6], h.Date)
-	// copy(ret[PosOfPttFileHeaderTitle:PosOfPttFileHeaderTitle+PTT_TTLEN+1], Utf8ToBig5(h.Title))
-
-	// user.FirstLogin = binary.LittleEndian.Uint32(data[PosOfPttPasswdFirstLogin : PosOfPttPasswdFirstLogin+4])
-	// user.LastLogin = binary.LittleEndian.Uint32(data[PosOfPttPasswdLastLogin : PosOfPttPasswdLastLogin+4])
-	// user.LastHost = CstrToString(data[PosOfPttPasswdLastHost : PosOfPttPasswdLastHost+PTT_IPV4LEN+1])
 
 	return ret, nil
 }

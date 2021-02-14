@@ -54,6 +54,7 @@ func TestOpenUserecFile(t *testing.T) {
 
 			TimeRemoveBadPost: time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
 			TimeViolateLaw:    time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
+			ViolateLaw:        0x01,
 			Five: UserecGameScore{
 				Win:  0x0001,
 				Lose: 0x0002,
@@ -79,6 +80,7 @@ func TestOpenUserecFile(t *testing.T) {
 				Lose: 0x000e,
 				Tie:  0x000f,
 			},
+			MyAngel: "SYSOP",
 		},
 		{
 			Version:       4194,
@@ -131,6 +133,7 @@ func TestOpenUserecFile(t *testing.T) {
 				Lose: 0x010e,
 				Tie:  0x010f,
 			},
+			MyAngel: "CodingMan",
 		},
 		{
 			Version:       4194,
@@ -183,6 +186,7 @@ func TestOpenUserecFile(t *testing.T) {
 				Lose: 0x001e,
 				Tie:  0x001f,
 			},
+			MyAngel: "pichu",
 		},
 		{
 			Version:       4194,
@@ -235,6 +239,7 @@ func TestOpenUserecFile(t *testing.T) {
 				Lose: 0x011e,
 				Tie:  0x011f,
 			},
+			MyAngel: "Kahou",
 		},
 		{
 			Version:       4194,
@@ -287,6 +292,7 @@ func TestOpenUserecFile(t *testing.T) {
 				Lose: 0x002e,
 				Tie:  0x002f,
 			},
+			MyAngel: "Kahou2",
 		},
 	}
 
@@ -570,6 +576,7 @@ func TestEncodingUserec(t *testing.T) {
 					Lose: 0x000e,
 					Tie:  0x000f,
 				},
+				MyAngel: "SYSOP",
 			},
 			Expected: hexToByte(`
 			6210 0000 5359 534f 5000 0000 0000 0000
@@ -600,7 +607,7 @@ b36e c5e9 0000 0000 0000 0000 0000 0000
 0000 0000 0000 0000 0000 0000 0000 0000
 0100 0200 0300 0400 0500 0600 0700 0800
 0900 0000 0a00 0b00 0c00 0d00 0e00 0000
-0000 0f00 0000 0000 0000 0000 0000 0000
+0000 0f00 5359 534F 5000 0000 0000 0000
 0000 0000 0000 0000 0000 0000 0000 0000
 0000 0000 0000 0000 0000 0000 0000 0000
 0000 0000 0000 0000 0000 0000 0000 0000

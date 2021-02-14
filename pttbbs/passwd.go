@@ -58,7 +58,7 @@ const (
 	PosOfPttPasswdLastSong  = PosOfPttPasswdTimePlayAngel + 4
 	PosOfPttPasswdLoginView = PosOfPttPasswdLastSong + 4
 
-	PosOfPttPasswdLawCounter = PosOfPttPasswdLoginView + 2
+	PosOfPttPasswdLawCounter = PosOfPttPasswdLoginView + 4 + 2
 	PosOfPttPasswdFiveWin    = PosOfPttPasswdLawCounter + 2
 	PosOfPttPasswdFiveLose   = PosOfPttPasswdFiveWin + 2
 	PosOfPttPasswdFiveTie    = PosOfPttPasswdFiveLose + 2
@@ -68,7 +68,7 @@ const (
 	PosOfPttPasswdConn6Win   = PosOfPttPasswdChcTie + 2
 	PosOfPttPasswdConn6Lose  = PosOfPttPasswdConn6Win + 2
 	PosOfPttPasswdConn6Tie   = PosOfPttPasswdConn6Lose + 2
-	PosOfPttPasswdGoWin      = PosOfPttPasswdConn6Tie + 4
+	PosOfPttPasswdGoWin      = PosOfPttPasswdConn6Tie + 2 + 2
 	PosOfPttPasswdGoLose     = PosOfPttPasswdGoWin + 2
 	PosOfPttPasswdGoTie      = PosOfPttPasswdGoLose + 2
 	PosOfPttPasswdDarkWin    = PosOfPttPasswdGoTie + 2
@@ -76,7 +76,7 @@ const (
 	PosOfPttPasswdUaVersion  = PosOfPttPasswdDarkLose + 2
 
 	PosOfPttPasswdSignature = PosOfPttPasswdUaVersion + 1
-	PosOfPttPasswdBadPost   = PosOfPttPasswdSignature + 2
+	PosOfPttPasswdBadPost   = PosOfPttPasswdSignature + 1 + 1
 	PosOfPttPasswdDarkTie   = PosOfPttPasswdBadPost + 1
 	PosOfPttPasswdMyAngel   = PosOfPttPasswdDarkTie + 2
 
@@ -335,7 +335,7 @@ func (r *Userec) MarshalToByte() ([]byte, error) {
 
 	binary.LittleEndian.PutUint32(ret[PosOfPttPasswdExMailBox:PosOfPttPasswdExMailBox+4], r.ExMailBox)
 
-	copy(ret[PosOfPttPasswdCareer:PosOfPttPasswdCareer+44], utf8ToBig5UAOString(r.Career))
+	copy(ret[PosOfPttPasswdCareer:PosOfPttPasswdCareer+40], utf8ToBig5UAOString(r.Career))
 
 	binary.LittleEndian.PutUint32(ret[PosOfPttPasswdLastSeen:PosOfPttPasswdLastSeen+4], uint32(r.LastSeen.Unix()))
 	binary.LittleEndian.PutUint32(ret[PosOfPttPasswdTimeSetAngel:PosOfPttPasswdTimeSetAngel+4], uint32(r.TimeSetAngel.Unix()))

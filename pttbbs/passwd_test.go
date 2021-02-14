@@ -54,6 +54,7 @@ func TestOpenUserecFile(t *testing.T) {
 
 			TimeRemoveBadPost: time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
 			TimeViolateLaw:    time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
+			BadPost:           0x01,
 			ViolateLaw:        0x01,
 			Five: UserecGameScore{
 				Win:  0x0001,
@@ -108,6 +109,8 @@ func TestOpenUserecFile(t *testing.T) {
 
 			TimeRemoveBadPost: time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
 			TimeViolateLaw:    time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
+			BadPost:           0x02,
+			ViolateLaw:        0x02,
 			Five: UserecGameScore{
 				Win:  0x0101,
 				Lose: 0x0102,
@@ -161,6 +164,8 @@ func TestOpenUserecFile(t *testing.T) {
 
 			TimeRemoveBadPost: time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
 			TimeViolateLaw:    time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
+			BadPost:           0x03,
+			ViolateLaw:        0x03,
 			Five: UserecGameScore{
 				Win:  0x0011,
 				Lose: 0x0012,
@@ -214,6 +219,8 @@ func TestOpenUserecFile(t *testing.T) {
 
 			TimeRemoveBadPost: time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
 			TimeViolateLaw:    time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
+			BadPost:           0x04,
+			ViolateLaw:        0x04,
 			Five: UserecGameScore{
 				Win:  0x0111,
 				Lose: 0x0112,
@@ -267,6 +274,8 @@ func TestOpenUserecFile(t *testing.T) {
 
 			TimeRemoveBadPost: time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
 			TimeViolateLaw:    time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
+			BadPost:           0x05,
+			ViolateLaw:        0x05,
 			Five: UserecGameScore{
 				Win:  0x0021,
 				Lose: 0x0022,
@@ -551,6 +560,8 @@ func TestEncodingUserec(t *testing.T) {
 
 				TimeRemoveBadPost: time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
 				TimeViolateLaw:    time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
+				BadPost:           0x01,
+				ViolateLaw:        0x01,
 				Five: UserecGameScore{
 					Win:  0x0001,
 					Lose: 0x0002,
@@ -605,9 +616,9 @@ b36e c5e9 0000 0000 0000 0000 0000 0000
 0000 0000 0000 0000 0000 0000 0000 0000
 0000 0000 0000 0000 0000 0000 4875 685f
 0000 0000 0000 0000 0000 0000 0000 0000
-0100 0200 0300 0400 0500 0600 0700 0800
-0900 0000 0a00 0b00 0c00 0d00 0e00 0000
-0000 0f00 5359 534F 5000 0000 0000 0000
+0000 0100 0100 0200 0300 0400 0500 0600
+0700 0800 0900 0000 0a00 0b00 0c00 0d00
+0e00 0000 0001 0f00 5359 534F 5000 0000
 0000 0000 0000 0000 0000 0000 0000 0000
 0000 0000 0000 0000 0000 0000 0000 0000
 0000 0000 0000 0000 0000 0000 0000 0000

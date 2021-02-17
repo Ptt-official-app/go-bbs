@@ -14,7 +14,7 @@ type MockCache struct {
 	buf []byte
 }
 
-func (c *MockCache) Buf() []byte {
+func (c *MockCache) Bytes() []byte {
 	return c.buf
 }
 func (c *MockCache) Close() error {

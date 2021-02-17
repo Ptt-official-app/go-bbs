@@ -67,7 +67,7 @@ func openFile(f *os.File) (*Mmap, error) {
 	return &ret, nil
 }
 
-func (m *Mmap) Buf() []byte {
+func (m *Mmap) Bytes() []byte {
 	return m.buf
 }
 

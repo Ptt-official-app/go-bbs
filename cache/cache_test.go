@@ -7,10 +7,11 @@ import (
 func TestNewCacheWithMmap(t *testing.T) {
 
 	data, err := CreateMmap("./test", 20)
-	data.Buf()[0] = 42
 	if err != nil {
 		t.Logf("err should be nil, got: %v", err)
 	}
+
+	data.Bytes()[0] = 42
 
 	data.Close()
 
@@ -19,12 +20,15 @@ func TestNewCacheWithMmap(t *testing.T) {
 		t.Logf("err should be nil, got: %v", err)
 	}
 
-	if cache.Buf()[0] != 42 {
-		t.Errorf("cache buf should be %v, got %v", 42, cache.Buf()[0])
+	if cache.Bytes()[0] != 42 {
+		t.Errorf("cache buf should be %v, got %v", 42, cache.Bytes()[0])
 	}
-	cache.Buf()[0] = 43
+	cache.Bytes()[0] = 43
 
 	err = cache.Close()
+	if err != nil {
+		t.Logf("err should be nil, got: %v", err)
+	}
 
 	RemoveMmap("./test")
 }
@@ -32,13 +36,13 @@ func TestNewCacheWithMmap(t *testing.T) {
 func TestNewCacheWithSHM(t *testing.T) {
 
 	data, err := CreateKey(10, 4)
-	data.Buf()[0] = 42
+	data.Bytes()[0] = 42
 	if err != nil {
 		t.Logf("err should be nil, got: %v", err)
 	}
 
-	if data.Buf()[0] != 42 {
-		t.Errorf("data buf should be %v, got %v", 42, data.Buf()[0])
+	if data.Bytes()[0] != 42 {
+		t.Errorf("data buf should be %v, got %v", 42, data.Bytes()[0])
 	}
 	data.Close()
 
@@ -47,10 +51,10 @@ func TestNewCacheWithSHM(t *testing.T) {
 		t.Logf("err should be nil, got: %v", err)
 	}
 
-	if cache.Buf()[0] != 42 {
-		t.Errorf("cache buf should be %v, got %v", 42, cache.Buf()[0])
+	if cache.Bytes()[0] != 42 {
+		t.Errorf("cache buf should be %v, got %v", 42, cache.Bytes()[0])
 	}
-	cache.Buf()[0] = 43
+	cache.Bytes()[0] = 43
 
 	err = cache.Close()
 

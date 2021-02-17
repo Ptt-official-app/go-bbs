@@ -7,7 +7,7 @@ import (
 )
 
 type Cache interface {
-	Buf() []byte
+	Bytes() []byte
 	Close() error
 }
 

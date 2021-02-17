@@ -125,7 +125,7 @@ func RemoveKey(key int) error {
 	return nil
 }
 
-func (s *SHM) Buf() []byte {
+func (s *SHM) Bytes() []byte {
 	return s.buf
 }
 

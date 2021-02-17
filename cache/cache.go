@@ -20,15 +20,16 @@ func NewCache(connectionString string) (Cache, error) {
 		return OpenMmap(s[0])
 	}
 	scheme := s[0]
-	if scheme == "shmkey" {
+	switch scheme {
+	case "shmkey":
 		key, err := strconv.Atoi(s[1])
 		if err != nil {
 			return nil, fmt.Errorf("atoi error: %v", err)
 		}
 		return OpenKey(key)
-	} else if scheme == "file" {
+	case "file":
 		return OpenMmap(s[1])
-	} else {
+	default:
 		return nil, fmt.Errorf("unsupport scheme: %v", scheme)
 	}
 

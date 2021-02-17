@@ -34,6 +34,11 @@ func TestFnv32a(t *testing.T) {
 			expected: 0x7AEB94B2,
 		},
 		{
+			input:    "PICHU",
+			offset:   PttFnv32Init,
+			expected: 0xA3389082,
+		},
+		{
 			input:    "12312",
 			offset:   12345,
 			expected: 0x2d7500e0,

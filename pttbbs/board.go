@@ -23,6 +23,8 @@ import (
 	"os"
 	"strings"
 	"time"
+
+	"github.com/PichuChen/go-bbs/filelock"
 )
 
 //
@@ -140,6 +142,8 @@ const (
 	PTT_PERM_SYSOP     = 000000040000
 	PTT_PERM_BM        = 000000002000
 	PTT_BRD_HIDE       = 0x00000010
+
+	BoardHeaderRecordLength = 256
 )
 
 func OpenBoardHeaderFile(filename string) ([]*BoardHeader, error) {
@@ -152,7 +156,7 @@ func OpenBoardHeaderFile(filename string) ([]*BoardHeader, error) {
 	ret := []*BoardHeader{}
 
 	for {
-		hdr := make([]byte, 256)
+		hdr := make([]byte, BoardHeaderRecordLength)
 		_, err := file.Read(hdr)
 		// log.Println(len, err)
 		if err == io.EOF {
@@ -169,6 +173,79 @@ func OpenBoardHeaderFile(filename string) ([]*BoardHeader, error) {
 	}
 
 	return ret, nil
+}
+
+func AppendBoardHeaderFileRecord(filename string, newBoardHeader *BoardHeader) error {
+	// If the file doesn't exist, create it, or append to the file
+
+	f, err := os.OpenFile(filename, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+
+	err = filelock.Lock(f)
+	if err != nil {
+		// File is lock
+		return err
+	}
+
+	data, err := newBoardHeader.MarshalBinary()
+	if err != nil {
+		return err
+	}
+
+	if _, err := f.Write(data); err != nil {
+		return err
+	}
+
+	filelock.Unlock(f)
+	return nil
+}
+
+func RemoveBoardHeaderFileRecord(filename string, index int) error {
+
+	fi, err := os.OpenFile(filename, os.O_RDONLY, 0644)
+	if err != nil {
+		return fmt.Errorf("fi.OpenFile error: %v", err)
+	}
+	defer fi.Close()
+
+	err = filelock.Lock(fi)
+	if err != nil {
+		// File is lock
+		return err
+	}
+
+	fo, err := os.OpenFile(filename, os.O_WRONLY, 0644)
+	if err != nil {
+		return fmt.Errorf("fo.OpenFile error: %v", err)
+	}
+	defer fo.Close()
+
+	_, err = fi.Seek(int64((index+1)*BoardHeaderRecordLength), os.SEEK_SET)
+	if err != nil {
+		return fmt.Errorf("fi.Seek error: %v", err)
+	}
+	_, err = fo.Seek(int64((index)*BoardHeaderRecordLength), os.SEEK_SET)
+	if err != nil {
+		return fmt.Errorf("fo.Seek error: %v", err)
+	}
+	_, err = io.CopyBuffer(fo, fi, make([]byte, 256))
+	if err != nil {
+		return fmt.Errorf("copy error: %v", err)
+	}
+	log.Println("copy finish")
+
+	size, err := fo.Seek(0, os.SEEK_CUR)
+	if err != nil {
+		return fmt.Errorf("fo.Seek for SEEK_CUR error: %v", err)
+	}
+
+	fo.Truncate(size)
+	filelock.Unlock(fi)
+	return nil
+
 }
 
 func NewBoardHeaderWithByte(data []byte) (*BoardHeader, error) {
@@ -213,4 +290,20 @@ func NewBoardHeaderWithByte(data []byte) (*BoardHeader, error) {
 	ret.SRexpire = time.Unix(int64(srExpire), 0)
 
 	return &ret, nil
+}
+
+func (r *BoardHeader) MarshalBinary() ([]byte, error) {
+	ret := make([]byte, BoardHeaderRecordLength)
+
+	// ret[PosOfPTTBoardName : PosOfPTTBoardName+PTT_IDLEN+1]
+
+	// binary.LittleEndian.PutUint32(ret[PosOfPttPasswdVersion:PosOfPttPasswdVersion+4], r.Version)
+
+	copy(ret[PosOfPTTBoardName:PosOfPTTBoardName+PTT_IDLEN+1], utf8ToBig5UAOString(r.BrdName))
+	copy(ret[PosOfPTTBoardTitle:PosOfPTTBoardTitle+PTT_IDLEN+1], utf8ToBig5UAOString(r.title))
+
+	// TODO fill other fileds
+
+	return ret, nil
+
 }

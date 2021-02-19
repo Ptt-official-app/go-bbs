@@ -11,7 +11,7 @@ import (
 func openMmap(fd int, size int) ([]byte, error) {
 	b, err := syscall.Mmap(fd, 0, size, syscall.PROT_READ|syscall.PROT_WRITE, syscall.MAP_SHARED)
 	if err != nil {
-		return nil, fmt.Errorf("mmap error: %v", err)
+		return nil, fmt.Errorf("mmap error: %w", err)
 	}
 	return b, err
 

@@ -69,7 +69,7 @@ func CreateKey(key int, size int) (*SHM, error) {
 
 	shmId, err := Shmget(key, size, flag)
 	if err != nil {
-		return nil, fmt.Errorf("shmget error: %v", err)
+		return nil, fmt.Errorf("shmget error: %w", err)
 	}
 	// fmt.Println("shmid", shmId)
 	// size = 4
@@ -78,7 +78,7 @@ func CreateKey(key int, size int) (*SHM, error) {
 		ds := ShmidDs{}
 		_, err = Shmctl(shmId, IPCStat, &ds)
 		if err != nil {
-			return nil, fmt.Errorf("shmctl error: %v", err)
+			return nil, fmt.Errorf("shmctl error: %w", err)
 		}
 		// fmt.Println(ds)
 		size = int(ds.ShmSegsz)
@@ -88,7 +88,7 @@ func CreateKey(key int, size int) (*SHM, error) {
 
 	ptr, err := Shmat(shmId, uintptr(0), 0)
 	if err != nil {
-		return nil, fmt.Errorf("shmat error: %v", err)
+		return nil, fmt.Errorf("shmat error: %w", err)
 	}
 	// fmt.Println("ptr", *(*int)(ptr))
 	// fmt.Println("size", size)
@@ -114,13 +114,13 @@ func OpenKey(key int) (*SHM, error) {
 func RemoveKey(key int) error {
 	shmId, err := Shmget(key, 0, 0)
 	if err != nil {
-		return fmt.Errorf("shmget error: %v", err)
+		return fmt.Errorf("shmget error: %w", err)
 	}
 
 	// ds := ShmidDs{}
 	_, err = Shmctl(shmId, IPCRMID, nil)
 	if err != nil {
-		return fmt.Errorf("shmctl error: %v", err)
+		return fmt.Errorf("shmctl error: %w", err)
 	}
 	return nil
 }
@@ -137,7 +137,7 @@ func (m *SHM) Close() error {
 	// release GC setting
 	runtime.SetFinalizer(m, nil)
 	if err != nil {
-		return fmt.Errorf("shmdt error: %v", err)
+		return fmt.Errorf("shmdt error: %w", err)
 	}
 	return nil
 }

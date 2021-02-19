@@ -24,7 +24,7 @@ func NewCache(connectionString string) (Cache, error) {
 	case "shmkey":
 		key, err := strconv.Atoi(s[1])
 		if err != nil {
-			return nil, fmt.Errorf("atoi error: %v", err)
+			return nil, fmt.Errorf("atoi error: %w", err)
 		}
 		return OpenKey(key)
 	case "file":

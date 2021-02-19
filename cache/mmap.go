@@ -16,7 +16,7 @@ func CreateMmap(filePath string, size int64) (*Mmap, error) {
 	f, err := os.Create(filePath)
 	// f, err := os.Open("../../../dump.shm")
 	if err != nil {
-		return nil, fmt.Errorf("create error: %v", err)
+		return nil, fmt.Errorf("create error: %w", err)
 	}
 	err = f.Truncate(size)
 	if err != nil {
@@ -32,7 +32,7 @@ func OpenMmap(filePath string) (*Mmap, error) {
 	f, err := os.OpenFile(filePath, os.O_RDWR, 0644)
 	// f, err := os.Open("../../../dump.shm")
 	if err != nil {
-		return nil, fmt.Errorf("open error: %v", err)
+		return nil, fmt.Errorf("open error: %w", err)
 	}
 	return openFile(f)
 }
@@ -44,8 +44,8 @@ func openFile(f *os.File) (*Mmap, error) {
 
 	stat, err := f.Stat()
 	if err != nil {
-		fmt.Println("stat error", err)
-		return nil, fmt.Errorf("stat error: %v", err)
+		// fmt.Println("stat error", err)
+		return nil, fmt.Errorf("stat error: %w", err)
 	}
 
 	size := int(stat.Size())

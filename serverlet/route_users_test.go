@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/PichuChen/go-bbs"
+	"github.com/Ptt-official-app/go-bbs"
 
 	"encoding/json"
 	"net/http"

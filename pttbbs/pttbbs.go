@@ -1,7 +1,7 @@
 package pttbbs
 
 import (
-	"github.com/PichuChen/go-bbs"
+	"github.com/Ptt-official-app/go-bbs"
 
 	"fmt"
 	"io/ioutil"

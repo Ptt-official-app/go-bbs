@@ -3,7 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/PichuChen/go-bbs"
+	"github.com/Ptt-official-app/go-bbs"
 	"github.com/dgrijalva/jwt-go"
 	"log"
 	"net/http"

@@ -24,7 +24,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/PichuChen/go-bbs/filelock"
+	"github.com/Ptt-official-app/go-bbs/filelock"
 )
 
 //

@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/PichuChen/go-bbs"
-	_ "github.com/PichuChen/go-bbs/pttbbs"
+	"github.com/Ptt-official-app/go-bbs"
+	_ "github.com/Ptt-official-app/go-bbs/pttbbs"
 
 	"encoding/json"
 	"fmt"

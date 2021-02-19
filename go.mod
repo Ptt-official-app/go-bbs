@@ -1,4 +1,4 @@
-module github.com/PichuChen/go-bbs
+module github.com/Ptt-official-app/go-bbs
 
 go 1.14
 

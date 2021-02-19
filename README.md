@@ -1,5 +1,5 @@
 # BBS Library
-[![GoDoc](https://godoc.org/github.com/PichuChen/go-bbs?status.svg)](https://godoc.org/github.com/PichuChen/go-bbs)
+[![GoDoc](https://godoc.org/github.com/Ptt-official-app/go-bbs?status.svg)](https://godoc.org/github.com/Ptt-official-app/go-bbs)
 
 
 這個專案是提供 Golang 開發者存取現有在台灣的 BBS 資料結構的函式庫。
@@ -10,7 +10,7 @@
 
 ## 目前支援的檔案
 
-目前 pttbbs 支援的檔案請見[此處](https://github.com/PichuChen/go-bbs/issues/16)
+目前 pttbbs 支援的檔案請見[此處](https://github.com/Ptt-official-app/go-bbs/issues/16)
  
 ## 給開發者的資訊
 

@@ -15,7 +15,7 @@
 package pttbbs
 
 import (
-	"github.com/PichuChen/go-bbs/crypt"
+	"github.com/Ptt-official-app/go-bbs/crypt"
 
 	"encoding/binary"
 	"fmt"

@@ -121,16 +121,19 @@ type Connector interface {
 // Driver which implement WriteBoardConnector supports modify board record file.
 type WriteBoardConnector interface {
 
+	// NewBoardRecord return BoardRecord object in this driver with arugments
+	NewBoardRecord(args map[string]interface{}) (BoardRecord, error)
+
 	// AddBoardRecordFileRecord given record file name and new record, should append
 	// file record in that file.
-	AddBoardRecordFileRecord(name string, brd *BoardRecord) error
+	AddBoardRecordFileRecord(name string, brd BoardRecord) error
 
 	// UpdateBoardRecordFileRecord update boardRecord brd on index in record file,
 	// index is start with 0
-	UpdateBoardRecordFileRecord(name string, index uint, brd *BoardRecord) error
+	UpdateBoardRecordFileRecord(name string, index uint, brd BoardRecord) error
 
 	// ReadBoardRecordFileRecord return boardRecord brd on index in record file.
-	ReadBoardRecordFileRecord(name string, index uint) (*BoardRecord, error)
+	ReadBoardRecordFileRecord(name string, index uint) (BoardRecord, error)
 
 	// RemoveBoardRecordFileRecord remove boardRecord brd on index in record file.
 	RemoveBoardRecordFileRecord(name string, index uint) error
@@ -285,4 +288,41 @@ func (db *DB) ReadBoardTreasureFile(boardId string, treasuresId []string, filena
 		return nil, err
 	}
 	return recs, nil
+}
+
+func (db *DB) NewBoardRecord(args map[string]interface{}) (BoardRecord, error) {
+	return db.connector.(WriteBoardConnector).NewBoardRecord(args)
+}
+
+func (db *DB) AddBoardRecord(brd BoardRecord) error {
+
+	path, err := db.connector.GetBoardRecordsPath()
+	if err != nil {
+		log.Println("bbs: open file error:", err)
+		return err
+	}
+	log.Println("path:", path)
+
+	err = db.connector.(WriteBoardConnector).AddBoardRecordFileRecord(path, brd)
+	if err != nil {
+		log.Println("bbs: AddBoardRecordFileRecord error:", err)
+		return err
+	}
+	return nil
+}
+
+// UpdateBoardRecordFileRecord update boardRecord brd on index in record file,
+// index is start with 0
+func (db *DB) UpdateBoardRecord(index uint, brd *BoardRecord) error {
+	return fmt.Errorf("not implement")
+}
+
+// ReadBoardRecordFileRecord return boardRecord brd on index in record file.
+func (db *DB) ReadBoardRecord(index uint) (*BoardRecord, error) {
+	return nil, fmt.Errorf("not implement")
+}
+
+// RemoveBoardRecordFileRecord remove boardRecord brd on index in record file.
+func (db *DB) RemoveBoardRecord(index uint) error {
+	return fmt.Errorf("not implement")
 }

@@ -38,6 +38,24 @@ type UserRecord interface {
 	LastHost() string
 }
 
+// BadPostUserRecord return UserRecord interface which support NumBadPosts
+type BadPostUserRecord interface {
+	// NumBadPosts return how many bad post this use have
+	NumBadPosts() int
+}
+
+// LastCountryUserRecord return UserRecord interface which support LastCountry
+type LastCountryUserRecord interface {
+	// LastLoginCountry will return the country with this user's last login IP
+	LastLoginCountry() string
+}
+
+// MailboxUserRecord return UserRecord interface which support MailboxDescription
+type MailboxyUserRecord interface {
+	// MailboxDescription will return the mailbox description with this user
+	MailboxDescription() string
+}
+
 type FavoriteType int
 
 const (

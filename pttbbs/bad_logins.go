@@ -68,7 +68,7 @@ const (
 )
 
 var (
-	InvalidLoginsBadFormat = errors.New("Invalid logins.bad line format")
+	ErrInvalidLoginsBadFormat = errors.New("Invalid logins.bad line format")
 )
 
 // LoginAttempt represents an entry in logins.bad file to indicate a successful or failed login
@@ -113,13 +113,13 @@ func (l *LoginAttempt) UnmarshalText(text []byte) error {
 	// Handle Success and UserID
 	switch str[idx] {
 	case ' ':
-		idx += 1
+		idx++
 		l.Success = true
 		// Next 12 is UserID
 		l.UserID = str[idx : idx+UserIDLength]
 		idx += UserIDLength
 	case '-':
-		idx += 1
+		idx++
 		l.Success = false
 		l.UserID = str[idx : idx+UserIDLength]
 		idx += UserIDLength
@@ -128,7 +128,7 @@ func (l *LoginAttempt) UnmarshalText(text []byte) error {
 		l.Success = false
 		l.UserID = ""
 	default:
-		return InvalidLoginsBadFormat
+		return ErrInvalidLoginsBadFormat
 	}
 	l.UserID = strings.TrimSpace(l.UserID)
 	// Now idx points to the start of time

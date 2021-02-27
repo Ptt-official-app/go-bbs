@@ -51,7 +51,7 @@ type LastCountryUserRecord interface {
 }
 
 // MailboxUserRecord return UserRecord interface which support MailboxDescription
-type MailboxyUserRecord interface {
+type MailboxUserRecord interface {
 	// MailboxDescription will return the mailbox description with this user
 	MailboxDescription() string
 }
@@ -216,8 +216,6 @@ func (db *DB) ReadUserFavoriteRecords(userID string) ([]FavoriteRecord, error) {
 		return nil, err
 	}
 	return recs, nil
-
-	return nil, err
 
 }
 

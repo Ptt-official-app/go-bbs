@@ -57,8 +57,8 @@ const (
 )
 
 var (
-	InvalidFavTypeError  = errors.New("invalid Favorite type")
-	IndexOutOfBoundError = errors.New("index out of range, file format invalid")
+	ErrInvalidFavType  = errors.New("invalid Favorite type")
+	ErrIndexOutOfBound = errors.New("index out of range, file format invalid")
 )
 
 type FavItemType uint8
@@ -224,7 +224,7 @@ func (favf *FavFolder) getDataNumber() uint16 {
 func NewFavFolder(data []byte, startIndex int) (*FavFolder, int, error) {
 	// data must at least has 4 bytes for a new FavFolder
 	if len(data) < startIndex+4 {
-		return nil, startIndex, IndexOutOfBoundError
+		return nil, startIndex, ErrIndexOutOfBound
 	}
 	ret := &FavFolder{}
 	c := startIndex // current index
@@ -286,7 +286,7 @@ func NewFavFolder(data []byte, startIndex int) (*FavFolder, int, error) {
 func NewFavItem(data []byte, startIndex int) (*FavItem, int, error) {
 	// data at least must have 2 bytes for a new FavItem
 	if len(data) < startIndex+2 {
-		return nil, startIndex, IndexOutOfBoundError
+		return nil, startIndex, ErrIndexOutOfBound
 	}
 	ret := &FavItem{}
 	c := startIndex // current index
@@ -310,7 +310,7 @@ func NewFavItem(data []byte, startIndex int) (*FavItem, int, error) {
 	case FavItemTypeFolder:
 		item, c, err = NewFavFolderItem(data, c)
 	default:
-		err = InvalidFavTypeError
+		err = ErrInvalidFavType
 	}
 	if err != nil {
 		return nil, c, err
@@ -323,7 +323,7 @@ func NewFavItem(data []byte, startIndex int) (*FavItem, int, error) {
 // NewFavBoardItem takes a []byte and parse it starting from startIndex, return FavBoardItem, end index and error
 func NewFavBoardItem(data []byte, startIndex int) (*FavBoardItem, int, error) {
 	if len(data) < startIndex+sizeOfPttFavBoardBytes {
-		return nil, startIndex, IndexOutOfBoundError
+		return nil, startIndex, ErrIndexOutOfBound
 	}
 	ret := &FavBoardItem{}
 	c := startIndex
@@ -349,7 +349,7 @@ func NewFavBoardItem(data []byte, startIndex int) (*FavBoardItem, int, error) {
 // NewFavFolderItem takes a []byte and parse it starting from startIndex, return FavFolderItem, end index and error
 func NewFavFolderItem(data []byte, startIndex int) (*FavFolderItem, int, error) {
 	if len(data) < startIndex+sizeOfPttFavFolderBytes {
-		return nil, startIndex, IndexOutOfBoundError
+		return nil, startIndex, ErrIndexOutOfBound
 	}
 	ret := &FavFolderItem{}
 	c := startIndex
@@ -368,7 +368,7 @@ func NewFavFolderItem(data []byte, startIndex int) (*FavFolderItem, int, error) 
 // NewFavLineItem takes a []byte and parse it starting from startIndex, return FavLineItem, end index and error
 func NewFavLineItem(data []byte, startIndex int) (*FavLineItem, int, error) {
 	if len(data) < startIndex+sizeOfPttFavLineBytes {
-		return nil, startIndex, IndexOutOfBoundError
+		return nil, startIndex, ErrIndexOutOfBound
 	}
 	ret := &FavLineItem{}
 	c := startIndex
@@ -400,7 +400,7 @@ func (favf *FavFolder) MarshalBinary() ([]byte, error) {
 	c += size
 
 	ret[c] = favf.NLines
-	c += 1
+	c++
 
 	ret[c] = favf.NFolders
 

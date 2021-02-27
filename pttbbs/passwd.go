@@ -296,84 +296,84 @@ func NewUserecWithByte(data []byte) (*Userec, error) {
 	return user, nil
 }
 
-func (r *Userec) MarshalToByte() ([]byte, error) {
+func (u *Userec) MarshalToByte() ([]byte, error) {
 	ret := make([]byte, 512)
 
-	binary.LittleEndian.PutUint32(ret[PosOfPttPasswdVersion:PosOfPttPasswdVersion+4], r.Version)
-	copy(ret[PosOfPttPasswdUserID:PosOfPttPasswdUserID+PTT_IDLEN+1], utf8ToBig5UAOString(r.userID))
-	copy(ret[PosOfPttPasswdRealName:PosOfPttPasswdRealName+PTT_IDLEN+1], utf8ToBig5UAOString(r.realName))
-	copy(ret[PosOfPttPasswdNickname:PosOfPttPasswdNickname+PTT_NICKNAMESZ], utf8ToBig5UAOString(r.nickname))
-	copy(ret[PosOfPttPasswdPassword:PosOfPttPasswdPassword+PTT_PASSLEN], utf8ToBig5UAOString(r.password))
+	binary.LittleEndian.PutUint32(ret[PosOfPttPasswdVersion:PosOfPttPasswdVersion+4], u.Version)
+	copy(ret[PosOfPttPasswdUserID:PosOfPttPasswdUserID+PTT_IDLEN+1], utf8ToBig5UAOString(u.userID))
+	copy(ret[PosOfPttPasswdRealName:PosOfPttPasswdRealName+PTT_IDLEN+1], utf8ToBig5UAOString(u.realName))
+	copy(ret[PosOfPttPasswdNickname:PosOfPttPasswdNickname+PTT_NICKNAMESZ], utf8ToBig5UAOString(u.nickname))
+	copy(ret[PosOfPttPasswdPassword:PosOfPttPasswdPassword+PTT_PASSLEN], utf8ToBig5UAOString(u.password))
 
-	binary.LittleEndian.PutUint32(ret[PosOfPttPasswdUserFlag:PosOfPttPasswdUserFlag+4], r.UserFlag)
-	binary.LittleEndian.PutUint32(ret[PosOfPttPasswdUserLevel:PosOfPttPasswdUserLevel+4], r.UserLevel)
-	binary.LittleEndian.PutUint32(ret[PosOfPttPasswdNumLoginDays:PosOfPttPasswdNumLoginDays+4], r.numLoginDays)
-	binary.LittleEndian.PutUint32(ret[PosOfPttPasswdNumPosts:PosOfPttPasswdNumPosts+4], r.numPosts)
-	binary.LittleEndian.PutUint32(ret[PosOfPttPasswdFirstLogin:PosOfPttPasswdFirstLogin+4], uint32(r.firstLogin.Unix()))
-	binary.LittleEndian.PutUint32(ret[PosOfPttPasswdLastLogin:PosOfPttPasswdLastLogin+4], uint32(r.lastLogin.Unix()))
-	copy(ret[PosOfPttPasswdLastHost:PosOfPttPasswdLastHost+PTT_IPV4LEN+1], utf8ToBig5UAOString(r.lastHost))
-	binary.LittleEndian.PutUint32(ret[PosOfPttPasswdMoney:PosOfPttPasswdMoney+4], uint32(r.money))
+	binary.LittleEndian.PutUint32(ret[PosOfPttPasswdUserFlag:PosOfPttPasswdUserFlag+4], u.UserFlag)
+	binary.LittleEndian.PutUint32(ret[PosOfPttPasswdUserLevel:PosOfPttPasswdUserLevel+4], u.UserLevel)
+	binary.LittleEndian.PutUint32(ret[PosOfPttPasswdNumLoginDays:PosOfPttPasswdNumLoginDays+4], u.numLoginDays)
+	binary.LittleEndian.PutUint32(ret[PosOfPttPasswdNumPosts:PosOfPttPasswdNumPosts+4], u.numPosts)
+	binary.LittleEndian.PutUint32(ret[PosOfPttPasswdFirstLogin:PosOfPttPasswdFirstLogin+4], uint32(u.firstLogin.Unix()))
+	binary.LittleEndian.PutUint32(ret[PosOfPttPasswdLastLogin:PosOfPttPasswdLastLogin+4], uint32(u.lastLogin.Unix()))
+	copy(ret[PosOfPttPasswdLastHost:PosOfPttPasswdLastHost+PTT_IPV4LEN+1], utf8ToBig5UAOString(u.lastHost))
+	binary.LittleEndian.PutUint32(ret[PosOfPttPasswdMoney:PosOfPttPasswdMoney+4], uint32(u.money))
 
-	copy(ret[PosOfPttPasswdEmail:PosOfPttPasswdEmail+PTT_EMAILSZ], utf8ToBig5UAOString(r.Email))
-	copy(ret[PosOfPttPasswdAddress:PosOfPttPasswdAddress+PTT_ADDRESSSZ], utf8ToBig5UAOString(r.Address))
-	copy(ret[PosOfPttPasswdJustify:PosOfPttPasswdJustify+PTT_REGLEN], utf8ToBig5UAOString(r.Justify))
+	copy(ret[PosOfPttPasswdEmail:PosOfPttPasswdEmail+PTT_EMAILSZ], utf8ToBig5UAOString(u.Email))
+	copy(ret[PosOfPttPasswdAddress:PosOfPttPasswdAddress+PTT_ADDRESSSZ], utf8ToBig5UAOString(u.Address))
+	copy(ret[PosOfPttPasswdJustify:PosOfPttPasswdJustify+PTT_REGLEN], utf8ToBig5UAOString(u.Justify))
 
-	if r.Over18 {
+	if u.Over18 {
 		ret[PosOfPttPasswdOver18] = 1
 	} else {
 		ret[PosOfPttPasswdOver18] = 0
 	}
 
-	ret[PosOfPttPasswdPagerUIType] = r.PagerUIType
-	ret[PosOfPttPasswdPager] = r.Pager
+	ret[PosOfPttPasswdPagerUIType] = u.PagerUIType
+	ret[PosOfPttPasswdPager] = u.Pager
 
-	if r.Invisible {
+	if u.Invisible {
 		ret[PosOfPttPasswdInvisible] = 1
 	} else {
 		ret[PosOfPttPasswdInvisible] = 0
 	}
 
-	binary.LittleEndian.PutUint32(ret[PosOfPttPasswdExMailBox:PosOfPttPasswdExMailBox+4], r.ExMailBox)
+	binary.LittleEndian.PutUint32(ret[PosOfPttPasswdExMailBox:PosOfPttPasswdExMailBox+4], u.ExMailBox)
 
-	copy(ret[PosOfPttPasswdCareer:PosOfPttPasswdCareer+PTT_CAREERSZ], utf8ToBig5UAOString(r.Career))
+	copy(ret[PosOfPttPasswdCareer:PosOfPttPasswdCareer+PTT_CAREERSZ], utf8ToBig5UAOString(u.Career))
 
-	binary.LittleEndian.PutUint32(ret[PosOfPttPasswdLastSeen:PosOfPttPasswdLastSeen+4], uint32(r.LastSeen.Unix()))
-	binary.LittleEndian.PutUint32(ret[PosOfPttPasswdTimeSetAngel:PosOfPttPasswdTimeSetAngel+4], uint32(r.TimeSetAngel.Unix()))
-	binary.LittleEndian.PutUint32(ret[PosOfPttPasswdTimePlayAngel:PosOfPttPasswdTimePlayAngel+4], uint32(r.TimePlayAngel.Unix()))
+	binary.LittleEndian.PutUint32(ret[PosOfPttPasswdLastSeen:PosOfPttPasswdLastSeen+4], uint32(u.LastSeen.Unix()))
+	binary.LittleEndian.PutUint32(ret[PosOfPttPasswdTimeSetAngel:PosOfPttPasswdTimeSetAngel+4], uint32(u.TimeSetAngel.Unix()))
+	binary.LittleEndian.PutUint32(ret[PosOfPttPasswdTimePlayAngel:PosOfPttPasswdTimePlayAngel+4], uint32(u.TimePlayAngel.Unix()))
 
-	binary.LittleEndian.PutUint32(ret[PosOfPttPasswdLastSong:PosOfPttPasswdLastSong+4], uint32(r.LastSong.Unix()))
-	binary.LittleEndian.PutUint32(ret[PosOfPttPasswdLoginView:PosOfPttPasswdLoginView+4], r.LoginView)
-	binary.LittleEndian.PutUint16(ret[PosOfPttPasswdLawCounter:PosOfPttPasswdLawCounter+2], r.ViolateLaw)
+	binary.LittleEndian.PutUint32(ret[PosOfPttPasswdLastSong:PosOfPttPasswdLastSong+4], uint32(u.LastSong.Unix()))
+	binary.LittleEndian.PutUint32(ret[PosOfPttPasswdLoginView:PosOfPttPasswdLoginView+4], u.LoginView)
+	binary.LittleEndian.PutUint16(ret[PosOfPttPasswdLawCounter:PosOfPttPasswdLawCounter+2], u.ViolateLaw)
 
-	binary.LittleEndian.PutUint16(ret[PosOfPttPasswdFiveWin:PosOfPttPasswdFiveWin+2], r.Five.Win)
-	binary.LittleEndian.PutUint16(ret[PosOfPttPasswdFiveLose:PosOfPttPasswdFiveLose+2], r.Five.Lose)
-	binary.LittleEndian.PutUint16(ret[PosOfPttPasswdFiveTie:PosOfPttPasswdFiveTie+2], r.Five.Tie)
+	binary.LittleEndian.PutUint16(ret[PosOfPttPasswdFiveWin:PosOfPttPasswdFiveWin+2], u.Five.Win)
+	binary.LittleEndian.PutUint16(ret[PosOfPttPasswdFiveLose:PosOfPttPasswdFiveLose+2], u.Five.Lose)
+	binary.LittleEndian.PutUint16(ret[PosOfPttPasswdFiveTie:PosOfPttPasswdFiveTie+2], u.Five.Tie)
 
-	binary.LittleEndian.PutUint16(ret[PosOfPttPasswdChcWin:PosOfPttPasswdChcWin+2], r.ChineseChess.Win)
-	binary.LittleEndian.PutUint16(ret[PosOfPttPasswdChcLose:PosOfPttPasswdChcLose+2], r.ChineseChess.Lose)
-	binary.LittleEndian.PutUint16(ret[PosOfPttPasswdChcTie:PosOfPttPasswdChcTie+2], r.ChineseChess.Tie)
+	binary.LittleEndian.PutUint16(ret[PosOfPttPasswdChcWin:PosOfPttPasswdChcWin+2], u.ChineseChess.Win)
+	binary.LittleEndian.PutUint16(ret[PosOfPttPasswdChcLose:PosOfPttPasswdChcLose+2], u.ChineseChess.Lose)
+	binary.LittleEndian.PutUint16(ret[PosOfPttPasswdChcTie:PosOfPttPasswdChcTie+2], u.ChineseChess.Tie)
 
-	binary.LittleEndian.PutUint16(ret[PosOfPttPasswdConn6Win:PosOfPttPasswdConn6Win+2], r.Conn6.Win)
-	binary.LittleEndian.PutUint16(ret[PosOfPttPasswdConn6Lose:PosOfPttPasswdConn6Lose+2], r.Conn6.Lose)
-	binary.LittleEndian.PutUint16(ret[PosOfPttPasswdConn6Tie:PosOfPttPasswdConn6Tie+2], r.Conn6.Tie)
+	binary.LittleEndian.PutUint16(ret[PosOfPttPasswdConn6Win:PosOfPttPasswdConn6Win+2], u.Conn6.Win)
+	binary.LittleEndian.PutUint16(ret[PosOfPttPasswdConn6Lose:PosOfPttPasswdConn6Lose+2], u.Conn6.Lose)
+	binary.LittleEndian.PutUint16(ret[PosOfPttPasswdConn6Tie:PosOfPttPasswdConn6Tie+2], u.Conn6.Tie)
 
-	binary.LittleEndian.PutUint16(ret[PosOfPttPasswdGoWin:PosOfPttPasswdGoWin+2], r.GoChess.Win)
-	binary.LittleEndian.PutUint16(ret[PosOfPttPasswdGoLose:PosOfPttPasswdGoLose+2], r.GoChess.Lose)
-	binary.LittleEndian.PutUint16(ret[PosOfPttPasswdGoTie:PosOfPttPasswdGoTie+2], r.GoChess.Tie)
+	binary.LittleEndian.PutUint16(ret[PosOfPttPasswdGoWin:PosOfPttPasswdGoWin+2], u.GoChess.Win)
+	binary.LittleEndian.PutUint16(ret[PosOfPttPasswdGoLose:PosOfPttPasswdGoLose+2], u.GoChess.Lose)
+	binary.LittleEndian.PutUint16(ret[PosOfPttPasswdGoTie:PosOfPttPasswdGoTie+2], u.GoChess.Tie)
 
-	binary.LittleEndian.PutUint16(ret[PosOfPttPasswdDarkWin:PosOfPttPasswdDarkWin+2], r.DarkChess.Win)
-	binary.LittleEndian.PutUint16(ret[PosOfPttPasswdDarkLose:PosOfPttPasswdDarkLose+2], r.DarkChess.Lose)
-	ret[PosOfPttPasswdUaVersion] = r.UaVersion
+	binary.LittleEndian.PutUint16(ret[PosOfPttPasswdDarkWin:PosOfPttPasswdDarkWin+2], u.DarkChess.Win)
+	binary.LittleEndian.PutUint16(ret[PosOfPttPasswdDarkLose:PosOfPttPasswdDarkLose+2], u.DarkChess.Lose)
+	ret[PosOfPttPasswdUaVersion] = u.UaVersion
 
-	ret[PosOfPttPasswdSignature] = r.Signature
-	ret[PosOfPttPasswdBadPost] = r.BadPost
-	binary.LittleEndian.PutUint16(ret[PosOfPttPasswdDarkTie:PosOfPttPasswdDarkTie+2], r.DarkChess.Tie)
-	copy(ret[PosOfPttPasswdMyAngel:PosOfPttPasswdMyAngel+PTT_IDLEN+1+1], utf8ToBig5UAOString(r.MyAngel))
+	ret[PosOfPttPasswdSignature] = u.Signature
+	ret[PosOfPttPasswdBadPost] = u.BadPost
+	binary.LittleEndian.PutUint16(ret[PosOfPttPasswdDarkTie:PosOfPttPasswdDarkTie+2], u.DarkChess.Tie)
+	copy(ret[PosOfPttPasswdMyAngel:PosOfPttPasswdMyAngel+PTT_IDLEN+1+1], utf8ToBig5UAOString(u.MyAngel))
 
-	binary.LittleEndian.PutUint16(ret[PosOfPttPasswdChessEloRating:PosOfPttPasswdChessEloRating+2], r.ChessEloRating)
-	binary.LittleEndian.PutUint32(ret[PosOfPttPasswdWithMe:PosOfPttPasswdWithMe+4], r.WithMe)
-	binary.LittleEndian.PutUint32(ret[PosOfPttPasswdTimeRemoveBadPost:PosOfPttPasswdTimeRemoveBadPost+4], uint32(r.TimeRemoveBadPost.Unix()))
-	binary.LittleEndian.PutUint32(ret[PosOfPttPasswdTimeViolateLaw:PosOfPttPasswdTimeViolateLaw+4], uint32(r.TimeViolateLaw.Unix()))
+	binary.LittleEndian.PutUint16(ret[PosOfPttPasswdChessEloRating:PosOfPttPasswdChessEloRating+2], u.ChessEloRating)
+	binary.LittleEndian.PutUint32(ret[PosOfPttPasswdWithMe:PosOfPttPasswdWithMe+4], u.WithMe)
+	binary.LittleEndian.PutUint32(ret[PosOfPttPasswdTimeRemoveBadPost:PosOfPttPasswdTimeRemoveBadPost+4], uint32(u.TimeRemoveBadPost.Unix()))
+	binary.LittleEndian.PutUint32(ret[PosOfPttPasswdTimeViolateLaw:PosOfPttPasswdTimeViolateLaw+4], uint32(u.TimeViolateLaw.Unix()))
 
 	return ret, nil
 }

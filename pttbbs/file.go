@@ -144,22 +144,22 @@ func NewFileHeaderWithByte(data []byte) (*FileHeader, error) {
 	return &ret, nil
 }
 
-func (h *FileHeader) MarshalToByte() ([]byte, error) {
+func (f *FileHeader) MarshalToByte() ([]byte, error) {
 	ret := make([]byte, 128)
 
-	copy(ret[PosOfPttFileHeaderFilename:PosOfPttFileHeaderFilename+PTT_FNLEN], h.filename)
-	binary.LittleEndian.PutUint32(ret[PosOfPttFileHeaderModified:PosOfPttFileHeaderModified+4], uint32(h.modified.Unix()))
+	copy(ret[PosOfPttFileHeaderFilename:PosOfPttFileHeaderFilename+PTT_FNLEN], f.filename)
+	binary.LittleEndian.PutUint32(ret[PosOfPttFileHeaderModified:PosOfPttFileHeaderModified+4], uint32(f.modified.Unix()))
 
-	ret[PosOfPttFileHeaderRecommend] = byte(h.recommend)
-	copy(ret[PosOfPttFileHeaderOwner:PosOfPttFileHeaderOwner+PTT_IDLEN+2], h.owner)
-	copy(ret[PosOfPttFileHeaderDate:PosOfPttFileHeaderDate+6], h.date)
-	copy(ret[PosOfPttFileHeaderTitle:PosOfPttFileHeaderTitle+PTT_TTLEN+1], utf8ToBig5UAOString(h.title))
+	ret[PosOfPttFileHeaderRecommend] = byte(f.recommend)
+	copy(ret[PosOfPttFileHeaderOwner:PosOfPttFileHeaderOwner+PTT_IDLEN+2], f.owner)
+	copy(ret[PosOfPttFileHeaderDate:PosOfPttFileHeaderDate+6], f.date)
+	copy(ret[PosOfPttFileHeaderTitle:PosOfPttFileHeaderTitle+PTT_TTLEN+1], utf8ToBig5UAOString(f.title))
 
 	// TODO: Check file mode for set Money or AnnoUID ... etc
 
 	return ret, nil
 }
 
-func (h *FileHeader) IsVotePost() bool {
-	return h.Filemode&PTT_FILE_VOTE != 0
+func (f *FileHeader) IsVotePost() bool {
+	return f.Filemode&PTT_FILE_VOTE != 0
 }

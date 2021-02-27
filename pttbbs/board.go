@@ -300,15 +300,15 @@ func NewBoardHeaderWithByte(data []byte) (*BoardHeader, error) {
 	return &ret, nil
 }
 
-func (r *BoardHeader) MarshalBinary() ([]byte, error) {
+func (b *BoardHeader) MarshalBinary() ([]byte, error) {
 	ret := make([]byte, BoardHeaderRecordLength)
 
 	// ret[PosOfPTTBoardName : PosOfPTTBoardName+PTT_IDLEN+1]
 
-	// binary.LittleEndian.PutUint32(ret[PosOfPttPasswdVersion:PosOfPttPasswdVersion+4], r.Version)
+	// binary.LittleEndian.PutUint32(ret[PosOfPttPasswdVersion:PosOfPttPasswdVersion+4], b.Version)
 
-	copy(ret[PosOfPTTBoardName:PosOfPTTBoardName+PTT_IDLEN+1], utf8ToBig5UAOString(r.BrdName))
-	copy(ret[PosOfPTTBoardTitle:PosOfPTTBoardTitle+PTT_IDLEN+1], utf8ToBig5UAOString(r.title))
+	copy(ret[PosOfPTTBoardName:PosOfPTTBoardName+PTT_IDLEN+1], utf8ToBig5UAOString(b.BrdName))
+	copy(ret[PosOfPTTBoardTitle:PosOfPTTBoardTitle+PTT_IDLEN+1], utf8ToBig5UAOString(b.title))
 
 	// TODO fill other fileds
 

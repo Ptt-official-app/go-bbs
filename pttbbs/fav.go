@@ -86,25 +86,25 @@ type FavItem struct {
 	Item    interface{} // This could be either FavBoardItem / FavFolderItem / FavLineItem
 }
 
-func (f *FavItem) BoardID() string {
-	if f.FavType != FavItemTypeBoard {
+func (favi *FavItem) BoardID() string {
+	if favi.FavType != FavItemTypeBoard {
 		return ""
 	}
-	return f.Item.(*FavBoardItem).boardID
+	return favi.Item.(*FavBoardItem).boardID
 }
 
-func (f *FavItem) Title() string {
-	if f.FavType == FavItemTypeLine {
+func (favi *FavItem) Title() string {
+	if favi.FavType == FavItemTypeLine {
 		return "------------------------------------------"
 	}
-	if f.FavType == FavItemTypeFolder {
-		return f.Item.(*FavFolderItem).Title
+	if favi.FavType == FavItemTypeFolder {
+		return favi.Item.(*FavFolderItem).Title
 	}
 	return ""
 }
 
-func (f *FavItem) Type() bbs.FavoriteType {
-	switch f.FavType {
+func (favi *FavItem) Type() bbs.FavoriteType {
+	switch favi.FavType {
 	case FavItemTypeBoard:
 		return bbs.FavoriteTypeBoard
 	case FavItemTypeFolder:
@@ -116,11 +116,11 @@ func (f *FavItem) Type() bbs.FavoriteType {
 
 }
 
-func (f *FavItem) Records() []bbs.FavoriteRecord {
-	if f.FavType != FavItemTypeFolder {
+func (favi *FavItem) Records() []bbs.FavoriteRecord {
+	if favi.FavType != FavItemTypeFolder {
 		return nil
 	}
-	rec := f.Item.(*FavFolderItem).ThisFolder.FavItems
+	rec := favi.Item.(*FavFolderItem).ThisFolder.FavItems
 	ret := make([]bbs.FavoriteRecord, len(rec))
 	for i, v := range rec {
 		ret[i] = v
@@ -129,24 +129,24 @@ func (f *FavItem) Records() []bbs.FavoriteRecord {
 }
 
 // GetBoard tries to cast Item to FavBoardItem; return nil if it is not
-func (favt *FavItem) GetBoard() *FavBoardItem {
-	if ret, ok := favt.Item.(*FavBoardItem); ok {
+func (favi *FavItem) GetBoard() *FavBoardItem {
+	if ret, ok := favi.Item.(*FavBoardItem); ok {
 		return ret
 	}
 	return nil
 }
 
 // GetFolder tries to cast Item to FavFolderItem; return nil if it is not
-func (favt *FavItem) GetFolder() *FavFolderItem {
-	if ret, ok := favt.Item.(*FavFolderItem); ok {
+func (favi *FavItem) GetFolder() *FavFolderItem {
+	if ret, ok := favi.Item.(*FavFolderItem); ok {
 		return ret
 	}
 	return nil
 }
 
 // GetLine tries to cast Item to FavLineItem; return nil if it is not
-func (favt *FavItem) GetLine() *FavLineItem {
-	if ret, ok := favt.Item.(*FavLineItem); ok {
+func (favi *FavItem) GetLine() *FavLineItem {
+	if ret, ok := favi.Item.(*FavLineItem); ok {
 		return ret
 	}
 	return nil
@@ -215,8 +215,8 @@ func NewFavFile(data []byte) (*FavFile, error) {
 }
 
 // getDataNumber returns the count of total items in FavFolder
-func (f *FavFolder) getDataNumber() uint16 {
-	return f.NBoards + uint16(f.NFolders) + uint16(f.NLines)
+func (favf *FavFolder) getDataNumber() uint16 {
+	return favf.NBoards + uint16(favf.NFolders) + uint16(favf.NLines)
 }
 
 // NewFavFolder takes a []byte, parse it starting with startIndex, return an instance of FavFolder, endIndex

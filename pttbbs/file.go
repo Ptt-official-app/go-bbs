@@ -65,7 +65,7 @@ type FileHeader struct {
 	title     string
 
 	money   int
-	AnnoUid int
+	AnnoUID int
 	VoteLimits
 	ReferRef  uint // 至底公告？
 	ReferFlag bool // 至底公告？
@@ -128,7 +128,7 @@ func NewFileHeaderWithByte(data []byte) (*FileHeader, error) {
 	// log.Println("PosOfUnionMulti:", PosOfUnionMulti, data[PosOfUnionMulti])
 
 	ret.money = int(binary.LittleEndian.Uint32(data[PosOfPttFileHeaderUnionMulti : PosOfPttFileHeaderUnionMulti+4]))
-	ret.AnnoUid = int(binary.LittleEndian.Uint32(data[PosOfPttFileHeaderUnionMulti : PosOfPttFileHeaderUnionMulti+4]))
+	ret.AnnoUID = int(binary.LittleEndian.Uint32(data[PosOfPttFileHeaderUnionMulti : PosOfPttFileHeaderUnionMulti+4]))
 
 	ret.Filemode = uint8(data[PosOfPttFileHeaderFilemode])
 
@@ -155,7 +155,7 @@ func (h *FileHeader) MarshalToByte() ([]byte, error) {
 	copy(ret[PosOfPttFileHeaderDate:PosOfPttFileHeaderDate+6], h.date)
 	copy(ret[PosOfPttFileHeaderTitle:PosOfPttFileHeaderTitle+PTT_TTLEN+1], utf8ToBig5UAOString(h.title))
 
-	// TODO: Check file mode for set Money or AnnoUid ... etc
+	// TODO: Check file mode for set Money or AnnoUID ... etc
 
 	return ret, nil
 }

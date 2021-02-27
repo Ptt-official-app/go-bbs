@@ -74,7 +74,7 @@ func (b *BoardHeader) Title() string            { return b.title }
 func (b *BoardHeader) SetTitle(newValue string) { b.title = newValue }
 
 func (b *BoardHeader) IsClass() bool   { return b.IsGroupBoard() }
-func (b *BoardHeader) ClassId() string { return fmt.Sprintf("%v", b.Gid) }
+func (b *BoardHeader) ClassID() string { return fmt.Sprintf("%v", b.Gid) }
 
 func (b *BoardHeader) IsNoCount() bool          { return b.Brdattr&0x00000002 != 0 }
 func (b *BoardHeader) IsGroupBoard() bool       { return b.Brdattr&0x00000008 != 0 } // Class

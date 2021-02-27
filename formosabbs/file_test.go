@@ -144,8 +144,8 @@ func TestParseFormosaBBSFileHeader(t *testing.T) {
 		if header.Money != expected[index].Money {
 			t.Errorf("Money not match in index %d, expected: %q, got: %q", index, expected[index].Money, header.Money)
 		}
-		if header.AnnoUid != expected[index].AnnoUid {
-			t.Errorf("AnnoUid not match in index %d, expected: %q, got: %q", index, expected[index].AnnoUid, header.AnnoUid)
+		if header.AnnoUID != expected[index].AnnoUID {
+			t.Errorf("AnnoUID not match in index %d, expected: %q, got: %q", index, expected[index].AnnoUID, header.AnnoUID)
 		}
 		if header.ReferRef != expected[index].ReferRef {
 			t.Errorf("ReferRef not match in index %d, expected: %q, got: %q", index, expected[index].ReferRef, header.ReferRef)

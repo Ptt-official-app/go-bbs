@@ -30,7 +30,7 @@ type FileHeader struct {
 	Title     string
 
 	Money   int
-	AnnoUid int
+	AnnoUID int
 	// VoteLimits
 	ReferRef  uint // 至底公告？
 	ReferFlag bool // 至底公告？
@@ -86,7 +86,7 @@ func NewFomosaBBSFileHeaderWithByte(data []byte) (*FileHeader, error) {
 	// // log.Println("PosOfUnionMulti:", PosOfUnionMulti, data[PosOfUnionMulti])
 
 	// ret.Money = int(binary.LittleEndian.Uint32(data[PosOfUnionMulti : PosOfUnionMulti+4]))
-	// ret.AnnoUid = int(binary.LittleEndian.Uint32(data[PosOfUnionMulti : PosOfUnionMulti+4]))
+	// ret.AnnoUID = int(binary.LittleEndian.Uint32(data[PosOfUnionMulti : PosOfUnionMulti+4]))
 
 	// ret.Filemode = uint8(data[PosOfFilemode])
 

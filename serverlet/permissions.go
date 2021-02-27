@@ -7,6 +7,6 @@ const (
 	PermissionReadFavorite        permission = "READ_FAVORITE"
 )
 
-func checkTokenPermission(token string, permissionId []permission, userInfo map[string]string) error {
+func checkTokenPermission(token string, permissionID []permission, userInfo map[string]string) error {
 	return nil
 }

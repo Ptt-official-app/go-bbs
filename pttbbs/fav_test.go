@@ -39,8 +39,8 @@ func TestNewFavLineItem(t *testing.T) {
 	if item.FavType != FavItemTypeLine {
 		t.Errorf("Line type should be FavItemTypeLine but was %d", item.FavType)
 	}
-	if line.LineId != 2 {
-		t.Errorf("Line should have ID 2 but was %d", line.LineId)
+	if line.LineID != 2 {
+		t.Errorf("Line should have ID 2 but was %d", line.LineID)
 	}
 
 	encoded, err := item.MarshalBinary()
@@ -65,14 +65,14 @@ func TestOpenFavFile(t *testing.T) {
 					NBoards:  2,
 					NLines:   0,
 					NFolders: 0,
-					LineId:   0,
-					FolderId: 0,
+					LineID:   0,
+					FolderID: 0,
 					FavItems: []*FavItem{
 						{
 							FavType: 1,
 							FavAttr: 1,
 							Item: &FavBoardItem{
-								BoardId:   14,
+								BoardID:   14,
 								LastVisit: time0,
 								Attr:      0,
 							},
@@ -81,7 +81,7 @@ func TestOpenFavFile(t *testing.T) {
 							FavType: 1,
 							FavAttr: 1,
 							Item: &FavBoardItem{
-								BoardId:   6,
+								BoardID:   6,
 								LastVisit: time0,
 								Attr:      0,
 							},
@@ -100,14 +100,14 @@ func TestOpenFavFile(t *testing.T) {
 					NBoards:  3,
 					NLines:   0,
 					NFolders: 1,
-					LineId:   0,
-					FolderId: 1,
+					LineID:   0,
+					FolderID: 1,
 					FavItems: []*FavItem{
 						{
 							FavType: 2,
 							FavAttr: 1,
 							Item: &FavFolderItem{
-								FolderId: 1,
+								FolderID: 1,
 								Title:    "新的目錄",
 								ThisFolder: &FavFolder{
 									NAlloc:   11,
@@ -115,19 +115,19 @@ func TestOpenFavFile(t *testing.T) {
 									NBoards:  0,
 									NLines:   2,
 									NFolders: 1,
-									LineId:   2,
-									FolderId: 1,
+									LineID:   2,
+									FolderID: 1,
 									FavItems: []*FavItem{
 										{
 											FavType: 3,
 											FavAttr: 1,
-											Item:    &FavLineItem{LineId: 1},
+											Item:    &FavLineItem{LineID: 1},
 										},
 										{
 											FavType: 2,
 											FavAttr: 1,
 											Item: &FavFolderItem{
-												FolderId: 1,
+												FolderID: 1,
 												Title:    "Folder02",
 												ThisFolder: &FavFolder{
 													NAlloc:   9,
@@ -135,14 +135,14 @@ func TestOpenFavFile(t *testing.T) {
 													NBoards:  0,
 													NLines:   0,
 													NFolders: 1,
-													LineId:   0,
-													FolderId: 1,
+													LineID:   0,
+													FolderID: 1,
 													FavItems: []*FavItem{
 														{
 															FavType: 2,
 															FavAttr: 1,
 															Item: &FavFolderItem{
-																FolderId: 1,
+																FolderID: 1,
 																Title:    "Folder03",
 																ThisFolder: &FavFolder{
 																	NAlloc:   12,
@@ -150,14 +150,14 @@ func TestOpenFavFile(t *testing.T) {
 																	NBoards:  1,
 																	NLines:   1,
 																	NFolders: 2,
-																	LineId:   1,
-																	FolderId: 2,
+																	LineID:   1,
+																	FolderID: 2,
 																	FavItems: []*FavItem{
 																		{
 																			FavType: 2,
 																			FavAttr: 1,
 																			Item: &FavFolderItem{
-																				FolderId: 1,
+																				FolderID: 1,
 																				Title:    "Folder04",
 																				ThisFolder: &FavFolder{
 																					NAlloc:   9,
@@ -165,14 +165,14 @@ func TestOpenFavFile(t *testing.T) {
 																					NBoards:  1,
 																					NLines:   0,
 																					NFolders: 0,
-																					LineId:   0,
-																					FolderId: 0,
+																					LineID:   0,
+																					FolderID: 0,
 																					FavItems: []*FavItem{
 																						{
 																							FavType: 1,
 																							FavAttr: 1,
 																							Item: &FavBoardItem{
-																								BoardId:   14,
+																								BoardID:   14,
 																								LastVisit: time0,
 																								Attr:      0,
 																							},
@@ -185,7 +185,7 @@ func TestOpenFavFile(t *testing.T) {
 																			FavType: 1,
 																			FavAttr: 1,
 																			Item: &FavBoardItem{
-																				BoardId:   14,
+																				BoardID:   14,
 																				LastVisit: time0,
 																				Attr:      0,
 																			},
@@ -193,13 +193,13 @@ func TestOpenFavFile(t *testing.T) {
 																		{
 																			FavType: 3,
 																			FavAttr: 1,
-																			Item:    &FavLineItem{LineId: 1},
+																			Item:    &FavLineItem{LineID: 1},
 																		},
 																		{
 																			FavType: 2,
 																			FavAttr: 1,
 																			Item: &FavFolderItem{
-																				FolderId: 2,
+																				FolderID: 2,
 																				Title:    "MAX Length:2345672234567890323456789042345678905",
 																				ThisFolder: &FavFolder{
 																					NAlloc:   8,
@@ -207,8 +207,8 @@ func TestOpenFavFile(t *testing.T) {
 																					NBoards:  0,
 																					NLines:   0,
 																					NFolders: 0,
-																					LineId:   0,
-																					FolderId: 0,
+																					LineID:   0,
+																					FolderID: 0,
 																					FavItems: []*FavItem{},
 																				},
 																			},
@@ -224,7 +224,7 @@ func TestOpenFavFile(t *testing.T) {
 										{
 											FavType: 3,
 											FavAttr: 1,
-											Item:    &FavLineItem{LineId: 2},
+											Item:    &FavLineItem{LineID: 2},
 										},
 									},
 								},
@@ -234,7 +234,7 @@ func TestOpenFavFile(t *testing.T) {
 							FavType: 1,
 							FavAttr: 1,
 							Item: &FavBoardItem{
-								BoardId:   13,
+								BoardID:   13,
 								LastVisit: time0,
 								Attr:      0,
 							},
@@ -243,7 +243,7 @@ func TestOpenFavFile(t *testing.T) {
 							FavType: 1,
 							FavAttr: 1,
 							Item: &FavBoardItem{
-								BoardId:   14,
+								BoardID:   14,
 								LastVisit: time0,
 								Attr:      0,
 							},
@@ -252,7 +252,7 @@ func TestOpenFavFile(t *testing.T) {
 							FavType: 1,
 							FavAttr: 1,
 							Item: &FavBoardItem{
-								BoardId:   6,
+								BoardID:   6,
 								LastVisit: time0,
 								Attr:      0,
 							},
@@ -269,10 +269,10 @@ func TestOpenFavFile(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		favJson, _ := json.Marshal(fav)
-		expectedJson, _ := json.Marshal(c.expected)
-		if strings.Compare(string(favJson), string(expectedJson)) != 0 {
-			t.Errorf("Parsed result does not equal to expected. Expected json string: %s \nParsed json string: %s", string(expectedJson), string(favJson))
+		favJSON, _ := json.Marshal(fav)
+		expectedJSON, _ := json.Marshal(c.expected)
+		if strings.Compare(string(favJSON), string(expectedJSON)) != 0 {
+			t.Errorf("Parsed result does not equal to expected. Expected json string: %s \nParsed json string: %s", string(expectedJSON), string(favJSON))
 		}
 		for _, item := range fav.Folder.FavItems {
 			switch item.FavType {

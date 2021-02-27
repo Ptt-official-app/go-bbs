@@ -52,16 +52,16 @@ import (
 //
 // type LoginAttempt struct {
 // 	Success        bool
-// 	UserId         string
+// 	UserID         string
 // 	LoginStartTime time.Time
 // 	FromHost       string
 // }
 // For BBSHOME/logins.bad ，這個檔裡四個field都有，所以沒問題。
-// 但在user/logins.bad，缺少 UserId ，所以parse出來的struct就沒有 UserId，需要caller assign
+// 但在user/logins.bad，缺少 UserID ，所以parse出來的struct就沒有 UserID，需要caller assign
 
 const (
-	// UserIdLength is fixed to 12
-	UserIdLength = 12
+	// UserIDLength is fixed to 12
+	UserIDLength = 12
 	// FromHostPrefix is a prefix affixed to ip only in BBSHOME/logins.bad
 	fromHostPrefix             = "?@"
 	loginStartTimeFormatString = "[01/02/2006 15:04:05 Mon]"
@@ -72,17 +72,17 @@ var (
 )
 
 // LoginAttempt represents an entry in logins.bad file to indicate a successful or failed login
-// attempt for a UserId. Note that UserId could be empty if the logins.bad is under user dir.
+// attempt for a UserID. Note that UserID could be empty if the logins.bad is under user dir.
 type LoginAttempt struct {
 	Success        bool
-	UserId         string
+	UserID         string
 	LoginStartTime time.Time
 	FromHost       string
 }
 
 // OpenBadLoginFile opens logins.bad file and returns a slice of LoginAttempt.
 // Note that depending on different format of logins.bad as descirbed above, each LoginAttempt
-// might not have LoginAttempt.UserId field
+// might not have LoginAttempt.UserID field
 func OpenBadLoginFile(filename string) ([]*LoginAttempt, error) {
 	file, err := os.Open(filename)
 	if err != nil {
@@ -110,27 +110,27 @@ func (l *LoginAttempt) UnmarshalText(text []byte) error {
 	str := string(text)
 
 	idx := 0 // current index of str
-	// Handle Success and UserId
+	// Handle Success and UserID
 	switch str[idx] {
 	case ' ':
 		idx += 1
 		l.Success = true
-		// Next 12 is UserId
-		l.UserId = str[idx : idx+UserIdLength]
-		idx += UserIdLength
+		// Next 12 is UserID
+		l.UserID = str[idx : idx+UserIDLength]
+		idx += UserIDLength
 	case '-':
 		idx += 1
 		l.Success = false
-		l.UserId = str[idx : idx+UserIdLength]
-		idx += UserIdLength
+		l.UserID = str[idx : idx+UserIDLength]
+		idx += UserIDLength
 	case '[':
-		// This indicates this line has no Success and UserId, set Success to false
+		// This indicates this line has no Success and UserID, set Success to false
 		l.Success = false
-		l.UserId = ""
+		l.UserID = ""
 	default:
 		return InvalidLoginsBadFormat
 	}
-	l.UserId = strings.TrimSpace(l.UserId)
+	l.UserID = strings.TrimSpace(l.UserID)
 	// Now idx points to the start of time
 	// TODO: do we need to consider timezone? This Parse returns UTC
 	t, err := time.Parse(loginStartTimeFormatString, str[idx:idx+len(loginStartTimeFormatString)])
@@ -153,8 +153,8 @@ func (l *LoginAttempt) MarshalText() ([]byte, error) {
 		} else {
 			sb.WriteRune('-')
 		}
-		// Right padding UserId
-		sb.WriteString(fmt.Sprintf("%-*s", UserIdLength, l.UserId))
+		// Right padding UserID
+		sb.WriteString(fmt.Sprintf("%-*s", UserIDLength, l.UserID))
 	}
 	// time
 	formatted := ""
@@ -173,7 +173,7 @@ func (l *LoginAttempt) MarshalText() ([]byte, error) {
 
 // IsUnderBbsHome return true if this LoginAttempt was read from logins.bad from under BBSHOME.
 // The difference between logins.bad between under BBSHOME and under User Dir is whether it contains
-// UserId
+// UserID
 func (l *LoginAttempt) IsUnderBbsHome() bool {
-	return len(l.UserId) > 1
+	return len(l.UserID) > 1
 }

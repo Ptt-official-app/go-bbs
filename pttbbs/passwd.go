@@ -28,8 +28,8 @@ import (
 
 const (
 	PosOfPttPasswdVersion      = 0
-	PosOfPttPasswdUserId       = PosOfPttPasswdVersion + 4
-	PosOfPttPasswdRealName     = PosOfPttPasswdUserId + PTT_IDLEN + 1
+	PosOfPttPasswdUserID       = PosOfPttPasswdVersion + 4
+	PosOfPttPasswdRealName     = PosOfPttPasswdUserID + PTT_IDLEN + 1
 	PosOfPttPasswdNickname     = PosOfPttPasswdRealName + PTT_REALNAMESZ
 	PosOfPttPasswdPassword     = PosOfPttPasswdNickname + PTT_NICKNAMESZ
 	PosOfPttPasswdUserFlag     = PosOfPttPasswdPassword + PTT_PASSLEN + 1
@@ -44,8 +44,8 @@ const (
 	PosOfPttPasswdAddress      = PosOfPttPasswdEmail + PTT_EMAILSZ
 	PosOfPttPasswdJustify      = PosOfPttPasswdAddress + PTT_ADDRESSSZ
 	PosOfPttPasswdOver18       = PosOfPttPasswdJustify + PTT_REGLEN + 1 + 3
-	PosOfPttPasswdPagerUiType  = PosOfPttPasswdOver18 + 1
-	PosOfPttPasswdPager        = PosOfPttPasswdPagerUiType + 1
+	PosOfPttPasswdPagerUIType  = PosOfPttPasswdOver18 + 1
+	PosOfPttPasswdPager        = PosOfPttPasswdPagerUIType + 1
 	PosOfPttPasswdInvisible    = PosOfPttPasswdPager + 1
 	PosOfPttPasswdExMailBox    = PosOfPttPasswdInvisible + 1 + 2
 
@@ -96,7 +96,7 @@ type UserecGameScore struct {
 
 type Userec struct {
 	Version  uint32 // Magic Number
-	userId   string // 使用者帳號，或稱使用者 ID
+	userID   string // 使用者帳號，或稱使用者 ID
 	realName string // 真實姓名
 	nickname string // 暱稱
 	password string // 密碼，預設為 crypt, 不同版本實作可能不同
@@ -167,7 +167,7 @@ func (u *Userec) VerifyPassword(password string) error {
 	return nil
 }
 
-func (u *Userec) UserId() string { return u.userId }
+func (u *Userec) UserID() string { return u.userID }
 
 // Nickname return a string for user's nickname, this string may change
 // depend on user's mood, return empty string if this bbs system do not support
@@ -227,7 +227,7 @@ func OpenUserecFile(filename string) ([]*Userec, error) {
 func NewUserecWithByte(data []byte) (*Userec, error) {
 	user := &Userec{}
 	user.Version = binary.LittleEndian.Uint32(data[PosOfPttPasswdVersion : PosOfPttPasswdVersion+4])
-	user.userId = newStringFormCString(data[PosOfPttPasswdUserId : PosOfPttPasswdUserId+PTT_IDLEN+1])
+	user.userID = newStringFormCString(data[PosOfPttPasswdUserID : PosOfPttPasswdUserID+PTT_IDLEN+1])
 	user.realName = newStringFormBig5UAOCString(data[PosOfPttPasswdRealName : PosOfPttPasswdRealName+PTT_REALNAMESZ])
 	user.nickname = newStringFormBig5UAOCString(data[PosOfPttPasswdNickname : PosOfPttPasswdNickname+PTT_NICKNAMESZ])
 	user.password = newStringFormCString(data[PosOfPttPasswdPassword : PosOfPttPasswdPassword+PTT_PASSLEN])
@@ -247,7 +247,7 @@ func NewUserecWithByte(data []byte) (*Userec, error) {
 	user.Justify = newStringFormBig5UAOCString(data[PosOfPttPasswdJustify : PosOfPttPasswdJustify+PTT_REGLEN+1])
 
 	user.Over18 = data[PosOfPttPasswdOver18] != 0
-	user.PagerUIType = data[PosOfPttPasswdPagerUiType]
+	user.PagerUIType = data[PosOfPttPasswdPagerUIType]
 	user.Pager = data[PosOfPttPasswdPager]
 	user.Invisible = data[PosOfPttPasswdInvisible] != 0
 
@@ -300,7 +300,7 @@ func (r *Userec) MarshalToByte() ([]byte, error) {
 	ret := make([]byte, 512)
 
 	binary.LittleEndian.PutUint32(ret[PosOfPttPasswdVersion:PosOfPttPasswdVersion+4], r.Version)
-	copy(ret[PosOfPttPasswdUserId:PosOfPttPasswdUserId+PTT_IDLEN+1], utf8ToBig5UAOString(r.userId))
+	copy(ret[PosOfPttPasswdUserID:PosOfPttPasswdUserID+PTT_IDLEN+1], utf8ToBig5UAOString(r.userID))
 	copy(ret[PosOfPttPasswdRealName:PosOfPttPasswdRealName+PTT_IDLEN+1], utf8ToBig5UAOString(r.realName))
 	copy(ret[PosOfPttPasswdNickname:PosOfPttPasswdNickname+PTT_NICKNAMESZ], utf8ToBig5UAOString(r.nickname))
 	copy(ret[PosOfPttPasswdPassword:PosOfPttPasswdPassword+PTT_PASSLEN], utf8ToBig5UAOString(r.password))
@@ -324,7 +324,7 @@ func (r *Userec) MarshalToByte() ([]byte, error) {
 		ret[PosOfPttPasswdOver18] = 0
 	}
 
-	ret[PosOfPttPasswdPagerUiType] = r.PagerUIType
+	ret[PosOfPttPasswdPagerUIType] = r.PagerUIType
 	ret[PosOfPttPasswdPager] = r.Pager
 
 	if r.Invisible {

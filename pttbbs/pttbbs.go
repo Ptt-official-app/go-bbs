@@ -45,8 +45,8 @@ func (c *Connector) ReadUserRecordsFile(filename string) ([]bbs.UserRecord, erro
 	return ret, err
 }
 
-func (c *Connector) GetUserFavoriteRecordsPath(userId string) (string, error) {
-	return GetUserFavoritePath(c.home, userId)
+func (c *Connector) GetUserFavoriteRecordsPath(userID string) (string, error) {
+	return GetUserFavoritePath(c.home, userID)
 }
 
 func (c *Connector) ReadUserFavoriteRecordsFile(filename string) ([]bbs.FavoriteRecord, error) {
@@ -60,7 +60,7 @@ func (c *Connector) ReadUserFavoriteRecordsFile(filename string) ([]bbs.Favorite
 	if err != nil {
 		return nil, fmt.Errorf("pttbbs: ReadBoardRecordsFile error: %v", err)
 	}
-	appendBoardId(rec.Folder, br)
+	appendBoardID(rec.Folder, br)
 	ret := make([]bbs.FavoriteRecord, len(rec.Folder.FavItems))
 	for i, v := range rec.Folder.FavItems {
 		ret[i] = v
@@ -68,15 +68,15 @@ func (c *Connector) ReadUserFavoriteRecordsFile(filename string) ([]bbs.Favorite
 	return ret, err
 }
 
-func appendBoardId(folder *FavFolder, brd []*BoardHeader) {
+func appendBoardID(folder *FavFolder, brd []*BoardHeader) {
 	for _, item := range folder.FavItems {
 
 		switch item.Item.(type) {
 		case *FavBoardItem:
-			bid := item.Item.(*FavBoardItem).BoardId - 1
-			item.Item.(*FavBoardItem).boardId = brd[bid].BrdName
+			bid := item.Item.(*FavBoardItem).BoardID - 1
+			item.Item.(*FavBoardItem).boardID = brd[bid].BrdName
 		case *FavFolderItem:
-			appendBoardId(item.Item.(*FavFolderItem).ThisFolder, brd)
+			appendBoardID(item.Item.(*FavFolderItem).ThisFolder, brd)
 		case *FavLineItem:
 			break
 		default:
@@ -99,8 +99,8 @@ func (c *Connector) ReadBoardRecordsFile(path string) ([]bbs.BoardRecord, error)
 	return ret, err
 }
 
-func (c *Connector) GetBoardArticleRecordsPath(boardId string) (string, error) {
-	return GetBoardArticlesDirectoryPath(c.home, boardId)
+func (c *Connector) GetBoardArticleRecordsPath(boardID string) (string, error) {
+	return GetBoardArticlesDirectoryPath(c.home, boardID)
 }
 
 func (c *Connector) ReadArticleRecordsFile(filename string) ([]bbs.ArticleRecord, error) {
@@ -117,16 +117,16 @@ func (c *Connector) ReadArticleRecordsFile(filename string) ([]bbs.ArticleRecord
 	return ret, err
 }
 
-func (c *Connector) GetBoardTreasureRecordsPath(boardId string, treasureId []string) (string, error) {
-	return GetBoardTreasuresDirectoryPath(c.home, boardId, treasureId)
+func (c *Connector) GetBoardTreasureRecordsPath(boardID string, treasureID []string) (string, error) {
+	return GetBoardTreasuresDirectoryPath(c.home, boardID, treasureID)
 }
 
-func (c *Connector) GetBoardArticleFilePath(boardId string, filename string) (string, error) {
-	return GetBoardArticleFilePath(c.home, boardId, filename)
+func (c *Connector) GetBoardArticleFilePath(boardID string, filename string) (string, error) {
+	return GetBoardArticleFilePath(c.home, boardID, filename)
 }
 
-func (c *Connector) GetBoardTreasureFilePath(boardId string, treasureId []string, filename string) (string, error) {
-	return GetBoardTreasureFilePath(c.home, boardId, treasureId, filename)
+func (c *Connector) GetBoardTreasureFilePath(boardID string, treasureID []string, filename string) (string, error) {
+	return GetBoardTreasureFilePath(c.home, boardID, treasureID, filename)
 }
 
 // ReadBoardArticleFile returns raw file of specific filename article.

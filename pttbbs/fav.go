@@ -86,11 +86,11 @@ type FavItem struct {
 	Item    interface{} // This could be either FavBoardItem / FavFolderItem / FavLineItem
 }
 
-func (f *FavItem) BoardId() string {
+func (f *FavItem) BoardID() string {
 	if f.FavType != FavItemTypeBoard {
 		return ""
 	}
-	return f.Item.(*FavBoardItem).boardId
+	return f.Item.(*FavBoardItem).boardID
 }
 
 func (f *FavItem) Title() string {
@@ -166,29 +166,29 @@ type FavFolder struct {
 	NBoards  uint16
 	NLines   uint8
 	NFolders uint8
-	LineId   uint8
-	FolderId uint8
+	LineID   uint8
+	FolderID uint8
 	FavItems []*FavItem
 }
 
 // FavBoardItem represents a Board in FavFolder. FavBoardItem takes 12 bytes
 type FavBoardItem struct {
-	BoardId   uint32
+	BoardID   uint32
 	LastVisit time.Time
 	Attr      uint32
-	boardId   string
+	boardID   string
 }
 
 // FavFolderItem represents a Folder in FavFolder. FavFolderItem takes 50 bytes
 type FavFolderItem struct {
-	FolderId   uint8
+	FolderID   uint8
 	Title      string
 	ThisFolder *FavFolder
 }
 
 // FavLineItem represents a Line in FavFolder. FavLineItem takes 1 byte
 type FavLineItem struct {
-	LineId uint8
+	LineID uint8
 }
 
 // OpenFavFile reads a fav file
@@ -243,8 +243,8 @@ func NewFavFolder(data []byte, startIndex int) (*FavFolder, int, error) {
 
 	ret.DataTail = ret.getDataNumber()
 	ret.NAlloc = ret.DataTail + favPreAlloc
-	ret.LineId = 0
-	ret.FolderId = 0
+	ret.LineID = 0
+	ret.FolderID = 0
 
 	itemCount := ret.DataTail
 	ret.FavItems = make([]*FavItem, itemCount)
@@ -268,13 +268,13 @@ func NewFavFolder(data []byte, startIndex int) (*FavFolder, int, error) {
 			if err != nil {
 				return nil, c, err
 			}
-			ret.FolderId++
-			f.FolderId = ret.FolderId
+			ret.FolderID++
+			f.FolderID = ret.FolderID
 			f.ThisFolder = nextFolder
 		}
 		if f, ok := item.Item.(*FavLineItem); ok {
-			ret.LineId++
-			f.LineId = ret.LineId
+			ret.LineID++
+			f.LineID = ret.LineID
 		}
 	}
 
@@ -329,7 +329,7 @@ func NewFavBoardItem(data []byte, startIndex int) (*FavBoardItem, int, error) {
 	c := startIndex
 
 	size := 4
-	ret.BoardId = binary.LittleEndian.Uint32(data[c : c+size])
+	ret.BoardID = binary.LittleEndian.Uint32(data[c : c+size])
 	c += size
 
 	size = TIME4TBytes // use 4 bytes for time.Time
@@ -337,7 +337,7 @@ func NewFavBoardItem(data []byte, startIndex int) (*FavBoardItem, int, error) {
 	c += size
 
 	// This attr is a char in fav.h which should have been 1 byte. However, from the sample file
-	// we can see a Board takes 12 bytes, 4 bytes for BoardId, 4 bytes for LastVisit, so allocate the remaining
+	// we can see a Board takes 12 bytes, 4 bytes for BoardID, 4 bytes for LastVisit, so allocate the remaining
 	// 4 byte to attr. May need double check on this.
 	size = 4
 	ret.Attr = binary.LittleEndian.Uint32(data[c : c+size])
@@ -355,7 +355,7 @@ func NewFavFolderItem(data []byte, startIndex int) (*FavFolderItem, int, error) 
 	c := startIndex
 
 	size := 1
-	ret.FolderId = data[c]
+	ret.FolderID = data[c]
 	c += size
 
 	size = PTT_BTLEN + 1
@@ -373,7 +373,7 @@ func NewFavLineItem(data []byte, startIndex int) (*FavLineItem, int, error) {
 	ret := &FavLineItem{}
 	c := startIndex
 
-	ret.LineId = data[c]
+	ret.LineID = data[c]
 	c++
 	return ret, c, nil
 }
@@ -448,7 +448,7 @@ func (favbi *FavBoardItem) MarshalBinary() ([]byte, error) {
 	c := 0
 
 	size := 4
-	binary.LittleEndian.PutUint32(ret[c:c+size], favbi.BoardId)
+	binary.LittleEndian.PutUint32(ret[c:c+size], favbi.BoardID)
 	c += size
 
 	binary.LittleEndian.PutUint32(ret[c:c+size], uint32(favbi.LastVisit.Unix()))
@@ -461,7 +461,7 @@ func (favbi *FavBoardItem) MarshalBinary() ([]byte, error) {
 
 func (favfi *FavFolderItem) MarshalBinary() ([]byte, error) {
 	ret := make([]byte, sizeOfPttFavFolderBytes)
-	ret[0] = favfi.FolderId
+	ret[0] = favfi.FolderID
 
 	size := PTT_BTLEN + 1
 	copy(ret[1:1+size], utf8ToBig5UAOString(favfi.Title))
@@ -471,6 +471,6 @@ func (favfi *FavFolderItem) MarshalBinary() ([]byte, error) {
 
 func (favli *FavLineItem) MarshalBinary() ([]byte, error) {
 	ret := make([]byte, sizeOfPttFavLineBytes)
-	ret[0] = favli.LineId
+	ret[0] = favli.LineID
 	return ret, nil
 }

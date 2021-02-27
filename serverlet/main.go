@@ -69,12 +69,12 @@ func getClass(w http.ResponseWriter, r *http.Request) {
 
 	seg := strings.Split(r.URL.Path, "/")
 
-	classId := "0"
+	classID := "0"
 	if len(seg) > 2 {
-		classId = seg[3]
+		classID = seg[3]
 	}
 
-	log.Println("user get class:", classId)
+	log.Println("user get class:", classID)
 
 	list := []interface{}{}
 

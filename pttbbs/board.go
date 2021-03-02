@@ -66,8 +66,12 @@ type BoardHeader struct {
 	SRexpire           time.Time
 }
 
-func (b *BoardHeader) BoardId() string { return b.BrdName }
-func (b *BoardHeader) Title() string   { return b.title }
+func (b *BoardHeader) BoardId() string            { return b.BoardID() }
+func (b *BoardHeader) BoardID() string            { return b.BrdName }
+func (b *BoardHeader) SetBoardID(newValue string) { b.BrdName = newValue }
+
+func (b *BoardHeader) Title() string            { return b.title }
+func (b *BoardHeader) SetTitle(newValue string) { b.title = newValue }
 
 func (b *BoardHeader) IsClass() bool   { return b.IsGroupBoard() }
 func (b *BoardHeader) ClassId() string { return fmt.Sprintf("%v", b.Gid) }
@@ -145,6 +149,10 @@ const (
 
 	BoardHeaderRecordLength = 256
 )
+
+func NewBoardHeader() *BoardHeader {
+	return &BoardHeader{}
+}
 
 func OpenBoardHeaderFile(filename string) ([]*BoardHeader, error) {
 	file, err := os.Open(filename)

@@ -111,10 +111,10 @@ const (
 )
 
 const (
-	PosOfPTTBoardName       = 0
-	PosOfPTTBoardTitle      = PosOfPTTBoardName + IDLength + 1
-	PosOfPTTBM              = PosOfPTTBoardTitle + BoardTitleLength + 1
-	PosOfBrdAttr            = 3 + IDLength*3 + 3 + PosOfPTTBM
+	PosOfBoardName          = 0
+	PosOfBoardTitle         = PosOfBoardName + IDLength + 1
+	PosOfBM                 = PosOfBoardTitle + BoardTitleLength + 1
+	PosOfBrdAttr            = 3 + IDLength*3 + 3 + PosOfBM
 	PosOfChessCountry       = PosOfBrdAttr + 4
 	PosOfVoteLimitPosts     = PosOfChessCountry + 1
 	PosOfVoteLimitLogins    = PosOfVoteLimitPosts + 1
@@ -265,9 +265,9 @@ func RemoveBoardHeaderFileRecord(filename string, index int) error {
 func NewBoardHeaderWithByte(data []byte) (*BoardHeader, error) {
 	ret := BoardHeader{}
 
-	ret.BrdName = big5uaoToUTF8String(bytes.Split(data[PosOfPTTBoardName:PosOfPTTBoardName+IDLength+1], []byte("\x00"))[0])
-	ret.title = big5uaoToUTF8String(bytes.Split(data[PosOfPTTBoardTitle:PosOfPTTBoardTitle+BoardTitleLength+1], []byte("\x00"))[0]) // Be careful about C-string end char \0
-	ret.bm = string(bytes.Trim(data[PosOfPTTBM:PosOfPTTBM+IDLength*3+3], "\x00"))
+	ret.BrdName = big5uaoToUTF8String(bytes.Split(data[PosOfBoardName:PosOfBoardName+IDLength+1], []byte("\x00"))[0])
+	ret.title = big5uaoToUTF8String(bytes.Split(data[PosOfBoardTitle:PosOfBoardTitle+BoardTitleLength+1], []byte("\x00"))[0]) // Be careful about C-string end char \0
+	ret.bm = string(bytes.Trim(data[PosOfBM:PosOfBM+IDLength*3+3], "\x00"))
 	ret.Brdattr = binary.LittleEndian.Uint32(data[PosOfBrdAttr : PosOfBrdAttr+4])
 	ret.VoteLimitPosts = uint8(data[PosOfVoteLimitPosts])
 	ret.VoteLimitLogins = uint8(data[PosOfVoteLimitLogins])
@@ -309,12 +309,12 @@ func NewBoardHeaderWithByte(data []byte) (*BoardHeader, error) {
 func (b *BoardHeader) MarshalBinary() ([]byte, error) {
 	ret := make([]byte, BoardHeaderRecordLength)
 
-	// ret[PosOfPTTBoardName : PosOfPTTBoardName+IDLength+1]
+	// ret[PosOfBoardName : PosOfBoardName+IDLength+1]
 
-	// binary.LittleEndian.PutUint32(ret[PosOfPttPasswdVersion:PosOfPttPasswdVersion+4], b.Version)
+	// binary.LittleEndian.PutUint32(ret[PosOfPasswdVersion:PosOfPasswdVersion+4], b.Version)
 
-	copy(ret[PosOfPTTBoardName:PosOfPTTBoardName+IDLength+1], utf8ToBig5UAOString(b.BrdName))
-	copy(ret[PosOfPTTBoardTitle:PosOfPTTBoardTitle+IDLength+1], utf8ToBig5UAOString(b.title))
+	copy(ret[PosOfBoardName:PosOfBoardName+IDLength+1], utf8ToBig5UAOString(b.BrdName))
+	copy(ret[PosOfBoardTitle:PosOfBoardTitle+IDLength+1], utf8ToBig5UAOString(b.title))
 
 	// TODO fill other fileds
 

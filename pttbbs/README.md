@@ -110,16 +110,15 @@ P. BBSADM               Ｘ              5. 警察                 Ｘ
 
 目前因為為了要支援多套BBS版本的緣故，因此命名結構會是以下形式：
 
-`PosOfPttFileHeaderFilename`
+`PosOfFileHeaderFilename`
 
 * `PosOf` 開頭
-* `Ptt` 站點本身的 Code Name
 * `FileHeader` 哪個結構體名稱
 * `Filename` 欄位名稱
 
 預設省略版本號，如果需要新增版本號的範例如下
 
 
-`PosOfPttR5939FileHeaderFilename`
+`PosOfR5939FileHeaderFilename`
 
 * `R5939` 就是版本號

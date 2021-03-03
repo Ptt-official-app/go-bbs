@@ -358,7 +358,7 @@ func NewFavFolderItem(data []byte, startIndex int) (*FavFolderItem, int, error) 
 	ret.FolderID = data[c]
 	c += size
 
-	size = PTT_BTLEN + 1
+	size = BoardTitleLength + 1
 	ret.Title = big5uaoToUTF8String(bytes.Split(data[c:c+size], []byte("\x00"))[0])
 	c += size
 
@@ -463,7 +463,7 @@ func (favfi *FavFolderItem) MarshalBinary() ([]byte, error) {
 	ret := make([]byte, sizeOfPttFavFolderBytes)
 	ret[0] = favfi.FolderID
 
-	size := PTT_BTLEN + 1
+	size := BoardTitleLength + 1
 	copy(ret[1:1+size], utf8ToBig5UAOString(favfi.Title))
 
 	return ret, nil

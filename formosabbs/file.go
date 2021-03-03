@@ -98,7 +98,7 @@ func NewFomosaBBSFileHeaderWithByte(data []byte) (*FileHeader, error) {
 	// }
 
 	ret.Postno = int32(binary.LittleEndian.Uint32(data[PosOfFormosaBBSFileHeaderPostno : PosOfFormosaBBSFileHeaderPostno+4]))
-	// ret.Title = binary.LittleEndian.Uint8(data[PTT_FNLEN+5+PTT_IDLEN+2+6 : PTT_FNLEN+5+PTT_IDLEN+2+6+PTT_TTLEN+1])
+	// ret.Title = binary.LittleEndian.Uint8(data[FileNameLength+5+PTT_IDLEN+2+6 : FileNameLength+5+PTT_IDLEN+2+6+TitleLength+1])
 
 	return &ret, nil
 }

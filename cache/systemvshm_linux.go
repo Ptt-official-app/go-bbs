@@ -8,15 +8,19 @@ type gidT uint32
 type sizeT uint64
 type shmattT uint64
 
-type ShmidDs struct {
+type shmidDs struct {
 	x struct {
-		_key keyT
-		uid  uidT
-		gid  gidT
-		cuid uidT
-		cgid gidT
-		mode int16
-		_seq int16
+		_key              keyT
+		uid               uidT
+		gid               gidT
+		cuid              uidT
+		cgid              gidT  // 20
+		mode              int16 // 22
+		__pad1            uint16
+		_seq              int16  // 26
+		__pad2            uint16 // 32
+		__glibc_reserved1 uint64
+		__glibc_reserved2 uint64
 	}
 	ShmSegsz    sizeT
 	shmAtime    int64

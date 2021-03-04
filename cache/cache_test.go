@@ -51,6 +51,10 @@ func TestNewCacheWithSHM(t *testing.T) {
 		t.Logf("err should be nil, got: %v", err)
 	}
 
+	if len(cache.Bytes()) != 4 {
+		t.Errorf("cache buf length not correct, expected 4, got: %v", len(cache.Bytes()))
+	}
+
 	if cache.Bytes()[0] != 42 {
 		t.Errorf("cache buf should be %v, got %v", 42, cache.Bytes()[0])
 	}

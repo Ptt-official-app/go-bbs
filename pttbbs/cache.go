@@ -5,7 +5,7 @@ import (
 	"encoding/binary"
 	"fmt"
 
-	"github.com/PichuChen/go-bbs/cache"
+	"github.com/Ptt-official-app/go-bbs/cache"
 )
 
 type cachePos struct {

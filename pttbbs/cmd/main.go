@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/PichuChen/go-bbs/pttbbs"
+	"github.com/Ptt-official-app/go-bbs/pttbbs"
 )
 
 func main() {

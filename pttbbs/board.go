@@ -66,7 +66,6 @@ type BoardHeader struct {
 	SRexpire           time.Time
 }
 
-func (b *BoardHeader) BoardId() string            { return b.BoardID() }
 func (b *BoardHeader) BoardID() string            { return b.BrdName }
 func (b *BoardHeader) SetBoardID(newValue string) { b.BrdName = newValue }
 

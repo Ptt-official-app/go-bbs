@@ -28,26 +28,6 @@ func Shmctl(shmid int, cmd int, buf *ShmidDs) (int, error) {
 	return shmctl(shmid, cmd, buf)
 }
 
-type ShmidDs struct {
-	x struct {
-		uid  int32
-		gid  int32
-		cuid int32
-		cgid int32
-		mode int32
-		_seq int16
-		_key uint16
-	}
-	ShmSegsz    int32
-	ShmLpid     int32
-	ShmCpid     int32
-	ShmNattach  int16
-	shmAtime    int64
-	shmDtime    int64
-	shmCtime    int64
-	shmInternal int64
-}
-
 const (
 	IPCCreate = 00001000
 
@@ -80,7 +60,7 @@ func CreateKey(key int, size int) (*SHM, error) {
 		if err != nil {
 			return nil, fmt.Errorf("shmctl error: %w", err)
 		}
-		// fmt.Println(ds)
+		// fmt.Printf("%+v\n", ds)
 		size = int(ds.ShmSegsz)
 	}
 

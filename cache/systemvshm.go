@@ -109,13 +109,13 @@ func (s *SHM) Bytes() []byte {
 	return s.buf
 }
 
-func (m *SHM) Close() error {
-	hdr := (*reflect.SliceHeader)(unsafe.Pointer(&m.buf))
+func (s *SHM) Close() error {
+	hdr := (*reflect.SliceHeader)(unsafe.Pointer(&s.buf))
 	ptr := hdr.Data
 	_, err := Shmdt(ptr)
 
 	// release GC setting
-	runtime.SetFinalizer(m, nil)
+	runtime.SetFinalizer(s, nil)
 	if err != nil {
 		return fmt.Errorf("shmdt error: %w", err)
 	}

@@ -8,7 +8,7 @@ type gidT uint32
 type sizeT uint64
 type shmattT uint64
 
-type shmidDs struct {
+type ShmidDs struct {
 	x struct {
 		_key              keyT
 		uid               uidT
@@ -21,7 +21,7 @@ type shmidDs struct {
 		__pad2            uint16 // 32
 		__glibc_reserved1 uint64
 		__glibc_reserved2 uint64
-	}
+	} // the length is 48bytes
 	ShmSegsz    sizeT
 	shmAtime    int64
 	shmDtime    int64

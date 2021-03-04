@@ -12,13 +12,13 @@ import (
 )
 
 const (
-	FORMOSABBS_STRLEN = 80
+	StrLength = 80
 
-	PosOfFormosaBBSFileHeaderFilename = 0
-	PosOfFormosaBBSFileHeaderOwner    = FORMOSABBS_STRLEN
-	PosOfFormosaBBSFileHeaderPostno   = FORMOSABBS_STRLEN - 8
-	PosOfFormosaBBSFileHeaderModified = PosOfFormosaBBSFileHeaderOwner + FORMOSABBS_STRLEN - 8
-	PosOfFormosaBBSFileHeaderTitle    = PosOfFormosaBBSFileHeaderOwner + FORMOSABBS_STRLEN
+	PosOfFileHeaderFilename = 0
+	PosOfFileHeaderOwner    = StrLength
+	PosOfFileHeaderPostno   = StrLength - 8
+	PosOfFileHeaderModified = PosOfFileHeaderOwner + StrLength - 8
+	PosOfFileHeaderTitle    = PosOfFileHeaderOwner + StrLength
 )
 
 type FileHeader struct {
@@ -73,16 +73,16 @@ func OpenFormosaBBSFileHeaderFile(filename string) ([]*FileHeader, error) {
 func NewFomosaBBSFileHeaderWithByte(data []byte) (*FileHeader, error) {
 
 	ret := FileHeader{}
-	ret.Filename = string(bytes.Trim(data[PosOfFormosaBBSFileHeaderFilename:+PosOfFormosaBBSFileHeaderFilename+44], "\x00"))
+	ret.Filename = string(bytes.Trim(data[PosOfFileHeaderFilename:+PosOfFileHeaderFilename+44], "\x00"))
 
-	modifiedInt := binary.LittleEndian.Uint32(data[PosOfFormosaBBSFileHeaderModified : PosOfFormosaBBSFileHeaderModified+4])
-	// log.Println("modifiedInt:", modifiedInt, PosOfFormosaBBSModified)
+	modifiedInt := binary.LittleEndian.Uint32(data[PosOfFileHeaderModified : PosOfFileHeaderModified+4])
+	// log.Println("modifiedInt:", modifiedInt, PosOfModified)
 	ret.Modified = time.Unix(int64(modifiedInt), 0)
 
 	// ret.Recommend = int8(data[PosOfRecommend])
-	ret.Owner = string(bytes.Trim(data[PosOfFormosaBBSFileHeaderOwner:PosOfFormosaBBSFileHeaderOwner+72], "\x00"))
+	ret.Owner = string(bytes.Trim(data[PosOfFileHeaderOwner:PosOfFileHeaderOwner+72], "\x00"))
 	// ret.Date = string(bytes.Trim(data[PosOfDate:PosOfDate+6], "\x00"))
-	ret.Title = bbs.Big5ToUtf8(bytes.Trim(data[PosOfFormosaBBSFileHeaderTitle:PosOfFormosaBBSFileHeaderTitle+67], "\x00"))
+	ret.Title = bbs.Big5ToUtf8(bytes.Trim(data[PosOfFileHeaderTitle:PosOfFileHeaderTitle+67], "\x00"))
 	// // log.Println("PosOfUnionMulti:", PosOfUnionMulti, data[PosOfUnionMulti])
 
 	// ret.Money = int(binary.LittleEndian.Uint32(data[PosOfUnionMulti : PosOfUnionMulti+4]))
@@ -97,7 +97,7 @@ func NewFomosaBBSFileHeaderWithByte(data []byte) (*FileHeader, error) {
 	// 	ret.VoteLimits.Badpost = data[PosOfUnionMulti+3]
 	// }
 
-	ret.Postno = int32(binary.LittleEndian.Uint32(data[PosOfFormosaBBSFileHeaderPostno : PosOfFormosaBBSFileHeaderPostno+4]))
+	ret.Postno = int32(binary.LittleEndian.Uint32(data[PosOfFileHeaderPostno : PosOfFileHeaderPostno+4]))
 	// ret.Title = binary.LittleEndian.Uint8(data[FileNameLength+5+PTT_IDLEN+2+6 : FileNameLength+5+PTT_IDLEN+2+6+TitleLength+1])
 
 	return &ret, nil

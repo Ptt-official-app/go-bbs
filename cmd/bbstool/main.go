@@ -156,10 +156,10 @@ func showuserlist() {
 	}
 
 	for _, r := range records {
-		if r.UserId() == "" {
+		if r.UserID() == "" {
 			continue
 		}
-		fmt.Println("user id:", r.UserId())
+		fmt.Println("user id:", r.UserID())
 	}
 
 }

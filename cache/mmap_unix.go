@@ -1,4 +1,4 @@
-// +build unix darwin
+// +build linux unix darwin
 
 package cache
 

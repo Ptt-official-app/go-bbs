@@ -275,7 +275,6 @@ func NewCache(connectionString string, settings *MemoryMappingSetting) (*Cache, 
 	if err != nil {
 		return nil, fmt.Errorf("cache open error: %v", err)
 	}
-	return nil, fmt.Errorf("unsupport connectionString")
 
 	ret := Cache{
 		Cache:                c,

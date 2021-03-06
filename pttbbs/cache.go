@@ -22,8 +22,8 @@ type cachePos struct {
 	posOfUserLoaded int
 
 	// utmpshm
-	posOfUInfo  int
-	posOfSorted int
+	posOfUserInfo int
+	posOfSorted   int
 
 	posOfCurrentSorted int
 	posOfUTMPUptime    int
@@ -66,6 +66,10 @@ type cachePos struct {
 	posOfBusyState int
 }
 
+type cacheLen struct {
+	lenOfUserInfo int
+}
+
 // MemoryMappingSetting provides parameters for calculating the memory position of
 //  the relevant fields.
 type MemoryMappingSetting struct {
@@ -83,6 +87,7 @@ type Cache struct {
 	cache.Cache
 	*MemoryMappingSetting
 	cachePos
+	cacheLen
 }
 
 // UserInfoCache is `userinfo_t` in pttstruct.h, all of those object will be store in shared memory
@@ -121,7 +126,7 @@ func (c *Cache) caculatePos() {
 	c.posOfUserNumber = c.posOfHashHead + (1<<c.HashBits)*4 + 4 // + gap_5
 	c.posOfUserLoaded = c.posOfUserNumber + 4
 
-	c.posOfUInfo = c.posOfUserLoaded + 4
+	c.posOfUserInfo = c.posOfUserLoaded + 4
 
 	// TODO: other pos value
 	// 	c.posOfCooldownTime int
@@ -323,4 +328,9 @@ func (c *Cache) Money(uid int) int32 {
 	// TODO: Check if it is out of range
 	s := c.posOfMoney + 4*uid
 	return int32(binary.LittleEndian.Uint32(c.Bytes()[s : s+4]))
+}
+
+func (c *Cache) UserInfo(uid int) UserInfoCache {
+	// TODO: Check if it is out of range
+	return UserInfoCache(c.Bytes()[c.posOfUserInfo+c.lenOfUserInfo*uid : c.posOfUserInfo+c.lenOfUserInfo*(uid+1)])
 }

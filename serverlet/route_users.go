@@ -20,28 +20,28 @@ func routeUsers(w http.ResponseWriter, r *http.Request) {
 }
 
 func getUsers(w http.ResponseWriter, r *http.Request) {
-	userId, item, err := parseUserPath(r.URL.Path)
+	userID, item, err := parseUserPath(r.URL.Path)
 
 	if item == "information" {
-		getUserInformation(w, r, userId)
+		getUserInformation(w, r, userID)
 		return
 	} else if item == "favorites" {
-		getUserFavorites(w, r, userId)
+		getUserFavorites(w, r, userID)
 		return
 	}
 	// else
 
-	log.Println(userId, item, err)
+	log.Println(userID, item, err)
 
 	w.WriteHeader(http.StatusNotFound)
 }
 
-func getUserInformation(w http.ResponseWriter, r *http.Request, userId string) {
+func getUserInformation(w http.ResponseWriter, r *http.Request, userID string) {
 	token := getTokenFromRequest(r)
 	err := checkTokenPermission(token,
 		[]permission{PermissionReadUserInformation},
 		map[string]string{
-			"user_id": userId,
+			"user_id": userID,
 		})
 
 	if err != nil {
@@ -50,14 +50,14 @@ func getUserInformation(w http.ResponseWriter, r *http.Request, userId string) {
 		return
 	}
 
-	userrec, err := findUserecById(userId)
+	userrec, err := findUserecByID(userID)
 	if err != nil {
 		// TODO: record error
 
 		w.WriteHeader(http.StatusInternalServerError)
 		m := map[string]string{
 			"error":             "find_userrec_error",
-			"error_description": "get userrec for " + userId + " failed",
+			"error_description": "get userrec for " + userID + " failed",
 		}
 		b, _ := json.MarshalIndent(m, "", "  ")
 		w.Write(b)
@@ -67,7 +67,7 @@ func getUserInformation(w http.ResponseWriter, r *http.Request, userId string) {
 	// TODO: Check Etag or Not-Modified for cache
 
 	dataMap := map[string]interface{}{
-		"user_id":              userrec.UserId(),
+		"user_id":              userrec.UserID(),
 		"nickname":             userrec.Nickname(),
 		"realname":             userrec.RealName(),
 		"number_of_login_days": fmt.Sprintf("%d", userrec.NumLoginDays()),
@@ -90,11 +90,11 @@ func getUserInformation(w http.ResponseWriter, r *http.Request, userId string) {
 
 	w.Write(responseByte)
 }
-func getUserFavorites(w http.ResponseWriter, r *http.Request, userId string) {
+func getUserFavorites(w http.ResponseWriter, r *http.Request, userID string) {
 	w.WriteHeader(http.StatusNotImplemented)
 }
 
-func parseUserPath(path string) (userId string, item string, err error) {
+func parseUserPath(path string) (userID string, item string, err error) {
 	pathSegment := strings.Split(path, "/")
 	// /{{version}}/users/{{user_id}}/{{item}}
 	if len(pathSegment) == 4 {

@@ -11,7 +11,7 @@ import (
 type cachePos struct {
 	posOfVersion    int
 	posOfSize       int
-	posOfUserId     int
+	posOfUserID     int
 	posOfNextInHash int
 	posOfMoney      int
 
@@ -106,9 +106,9 @@ func (c *Cache) caculatePos() {
 
 	c.posOfVersion = 0
 	c.posOfSize = c.posOfVersion + 4
-	c.posOfUserId = c.posOfSize + 4
+	c.posOfUserID = c.posOfSize + 4
 
-	c.posOfNextInHash = c.posOfUserId + c.MaxUsers*(c.IDLen+1) + (c.IDLen + 1)
+	c.posOfNextInHash = c.posOfUserID + c.MaxUsers*(c.IDLen+1) + (c.IDLen + 1)
 	// Align
 	if c.posOfNextInHash%c.AlignmentBytes != 0 {
 		padding := c.AlignmentBytes - c.posOfNextInHash%c.AlignmentBytes
@@ -315,11 +315,11 @@ func (c *Cache) Version() uint32 {
 	return binary.LittleEndian.Uint32(c.Bytes()[c.posOfVersion : c.posOfVersion+4])
 }
 
-// UserId returns userId string with specific uid, such as "SYSOP",
+// UserID returns userId string with specific uid, such as "SYSOP",
 // uid means the index in PASSWD file, start with 0.
-func (c *Cache) UserId(uid int) string {
+func (c *Cache) UserID(uid int) string {
 	// TODO: Check if it is out of range
-	s := c.posOfUserId + (c.IDLen+1)*uid
+	s := c.posOfUserID + (c.IDLen+1)*uid
 	return string(bytes.Split(c.Bytes()[s:s+c.IDLen+1], []byte("\x00"))[0])
 }
 

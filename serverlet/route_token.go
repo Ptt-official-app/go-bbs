@@ -3,11 +3,12 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/Ptt-official-app/go-bbs"
-	"github.com/dgrijalva/jwt-go"
 	"log"
 	"net/http"
 	"strings"
+
+	"github.com/Ptt-official-app/go-bbs"
+	"github.com/dgrijalva/jwt-go"
 )
 
 func routeToken(w http.ResponseWriter, r *http.Request) {
@@ -25,7 +26,7 @@ func postToken(w http.ResponseWriter, r *http.Request) {
 	username := r.FormValue("username")
 	password := r.FormValue("password")
 
-	userec, err := findUserecById(username)
+	userec, err := findUserecByID(username)
 	if err != nil {
 		m := map[string]string{
 			"error":             "grant_error",
@@ -65,9 +66,9 @@ func postToken(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func findUserecById(userid string) (bbs.UserRecord, error) {
+func findUserecByID(userid string) (bbs.UserRecord, error) {
 	for _, it := range userRecs {
-		if userid == it.UserId() {
+		if userid == it.UserID() {
 			return it, nil
 		}
 	}

@@ -37,7 +37,7 @@ func TestParseFileHeader(t *testing.T) {
 			title:     "[閒聊] 自己的文章自己寫",
 
 			money:   0,
-			AnnoUid: 0,
+			AnnoUID: 0,
 			VoteLimits: VoteLimits{
 				Posts:   0,
 				Logins:  0,
@@ -57,7 +57,7 @@ func TestParseFileHeader(t *testing.T) {
 			title:     "[討論] 賞大稻埕煙火遠離人潮！",
 
 			money:   0,
-			AnnoUid: 0,
+			AnnoUID: 0,
 			VoteLimits: VoteLimits{
 				Posts:   0,
 				Logins:  0,
@@ -77,7 +77,7 @@ func TestParseFileHeader(t *testing.T) {
 			title:     "[公告] 何不？ 五大寬容",
 
 			money:   0,
-			AnnoUid: 0,
+			AnnoUID: 0,
 			VoteLimits: VoteLimits{
 				Posts:   0,
 				Logins:  0,
@@ -111,7 +111,7 @@ func TestParseFileHeader02(t *testing.T) {
 			title:     "[問題] test",
 
 			money:   0,
-			AnnoUid: 0,
+			AnnoUID: 0,
 			VoteLimits: VoteLimits{
 				Posts:   0,
 				Logins:  0,
@@ -144,7 +144,7 @@ func TestParsePttFileHeaderTreasures(t *testing.T) {
 			title:     "◆ Folder 1.1.1.1",
 
 			money:   0,
-			AnnoUid: 0,
+			AnnoUID: 0,
 			VoteLimits: VoteLimits{
 				Posts:   0,
 				Logins:  0,
@@ -188,8 +188,8 @@ func CheckPttFileHeader(t *testing.T, index int, actual *FileHeader, expected *F
 	if actual.money != expected.money {
 		t.Errorf("money not match in index %d, expected: %q, got: %q", index, expected.money, actual.money)
 	}
-	if actual.AnnoUid != expected.AnnoUid {
-		t.Errorf("AnnoUid not match in index %d, expected: %q, got: %q", index, expected.AnnoUid, actual.AnnoUid)
+	if actual.AnnoUID != expected.AnnoUID {
+		t.Errorf("AnnoUID not match in index %d, expected: %q, got: %q", index, expected.AnnoUID, actual.AnnoUID)
 	}
 	if actual.VoteLimits != expected.VoteLimits {
 		t.Errorf("VoteLimits not match in index %d, expected: %q, got: %q", index, expected.VoteLimits, actual.VoteLimits)
@@ -219,7 +219,7 @@ func TestEncodingFileHeader(t *testing.T) {
 				title:     "[閒聊] 自己的文章自己寫",
 
 				money:   0,
-				AnnoUid: 0,
+				AnnoUID: 0,
 				VoteLimits: VoteLimits{
 					Posts:   0,
 					Logins:  0,
@@ -251,7 +251,7 @@ func TestEncodingFileHeader(t *testing.T) {
 				title:     "[討論] 賞大稻埕煙火遠離人潮！",
 
 				money:   0,
-				AnnoUid: 0,
+				AnnoUID: 0,
 				VoteLimits: VoteLimits{
 					Posts:   0,
 					Logins:  0,
@@ -283,7 +283,7 @@ e9a1 4900 0000 0000 0000 0000 0000 0000
 				title:     "[公告] 何不？ 五大寬容",
 
 				money:   0,
-				AnnoUid: 0,
+				AnnoUID: 0,
 				VoteLimits: VoteLimits{
 					Posts:   0,
 					Logins:  0,

@@ -66,7 +66,6 @@ type BoardHeader struct {
 	SRexpire           time.Time
 }
 
-func (b *BoardHeader) BoardId() string            { return b.BoardID() }
 func (b *BoardHeader) BoardID() string            { return b.BrdName }
 func (b *BoardHeader) SetBoardID(newValue string) { b.BrdName = newValue }
 
@@ -74,11 +73,11 @@ func (b *BoardHeader) Title() string            { return b.title }
 func (b *BoardHeader) SetTitle(newValue string) { b.title = newValue }
 
 func (b *BoardHeader) IsClass() bool   { return b.IsGroupBoard() }
-func (b *BoardHeader) ClassId() string { return fmt.Sprintf("%v", b.Gid) }
+func (b *BoardHeader) ClassID() string { return fmt.Sprintf("%v", b.Gid) }
 
 func (b *BoardHeader) IsNoCount() bool          { return b.Brdattr&0x00000002 != 0 }
 func (b *BoardHeader) IsGroupBoard() bool       { return b.Brdattr&0x00000008 != 0 } // Class
-func (b *BoardHeader) IsHide() bool             { return b.Brdattr&0x00000010 != 0 } // Hide board or friend only
+func (b *BoardHeader) IsHide() bool             { return b.Brdattr&0x00000010 != 0 } // BoardHide board or friend only
 func (b *BoardHeader) IsPostMask() bool         { return b.Brdattr&0x00000020 != 0 } // Has Post or Reading Limition
 func (b *BoardHeader) IsAnonymous() bool        { return b.Brdattr&0x00000040 != 0 }
 func (b *BoardHeader) IsDefaultAnonymous() bool { return b.Brdattr&0x00000080 != 0 }
@@ -106,14 +105,15 @@ func (b *BoardHeader) IsBMMaskContent() bool    { return b.Brdattr&0x10000000 !=
 func (b *BoardHeader) BM() []string { return strings.Split(b.bm, "/") }
 
 const (
-	PTT_BTLEN = 48
+	// BoardTitleLength https://github.com/ptt/pttbbs/blob/master/include/pttstruct.h#L165
+	BoardTitleLength = 48
 )
 
 const (
-	PosOfPTTBoardName       = 0
-	PosOfPTTBoardTitle      = PosOfPTTBoardName + PTT_IDLEN + 1
-	PosOfPTTBM              = PosOfPTTBoardTitle + PTT_BTLEN + 1
-	PosOfBrdAttr            = 3 + PTT_IDLEN*3 + 3 + PosOfPTTBM
+	PosOfBoardName          = 0
+	PosOfBoardTitle         = PosOfBoardName + IDLength + 1
+	PosOfBM                 = PosOfBoardTitle + BoardTitleLength + 1
+	PosOfBrdAttr            = 3 + IDLength*3 + 3 + PosOfBM
 	PosOfChessCountry       = PosOfBrdAttr + 4
 	PosOfVoteLimitPosts     = PosOfChessCountry + 1
 	PosOfVoteLimitLogins    = PosOfVoteLimitPosts + 1
@@ -141,11 +141,16 @@ const (
 )
 
 const (
-	PTT_BRD_POSTMASK   = 0x00000020
-	PTT_BRD_GROUPBOARD = 0x00000008
-	PTT_PERM_SYSOP     = 000000040000
-	PTT_PERM_BM        = 000000002000
-	PTT_BRD_HIDE       = 0x00000010
+	// BoardPostMask https://github.com/ptt/pttbbs/blob/master/include/pttstruct.h#L211
+	BoardPostMask = 0x00000020
+	// BoardGroupBoard https://github.com/ptt/pttbbs/blob/master/include/pttstruct.h#L209
+	BoardGroupBoard = 0x00000008
+	// PermSYSOP https://github.com/ptt/pttbbs/blob/master/include/perm.h#L22
+	PermSYSOP = 000000040000
+	// PermBM https://github.com/ptt/pttbbs/blob/master/include/perm.h#L18
+	PermBM = 000000002000
+	// BoardHide https://github.com/ptt/pttbbs/blob/master/include/pttstruct.h#L210
+	BoardHide = 0x00000010
 
 	BoardHeaderRecordLength = 256
 )
@@ -259,9 +264,9 @@ func RemoveBoardHeaderFileRecord(filename string, index int) error {
 func NewBoardHeaderWithByte(data []byte) (*BoardHeader, error) {
 	ret := BoardHeader{}
 
-	ret.BrdName = big5uaoToUTF8String(bytes.Split(data[PosOfPTTBoardName:PosOfPTTBoardName+PTT_IDLEN+1], []byte("\x00"))[0])
-	ret.title = big5uaoToUTF8String(bytes.Split(data[PosOfPTTBoardTitle:PosOfPTTBoardTitle+PTT_BTLEN+1], []byte("\x00"))[0]) // Be careful about C-string end char \0
-	ret.bm = string(bytes.Trim(data[PosOfPTTBM:PosOfPTTBM+PTT_IDLEN*3+3], "\x00"))
+	ret.BrdName = big5uaoToUTF8String(bytes.Split(data[PosOfBoardName:PosOfBoardName+IDLength+1], []byte("\x00"))[0])
+	ret.title = big5uaoToUTF8String(bytes.Split(data[PosOfBoardTitle:PosOfBoardTitle+BoardTitleLength+1], []byte("\x00"))[0]) // Be careful about C-string end char \0
+	ret.bm = string(bytes.Trim(data[PosOfBM:PosOfBM+IDLength*3+3], "\x00"))
 	ret.Brdattr = binary.LittleEndian.Uint32(data[PosOfBrdAttr : PosOfBrdAttr+4])
 	ret.VoteLimitPosts = uint8(data[PosOfVoteLimitPosts])
 	ret.VoteLimitLogins = uint8(data[PosOfVoteLimitLogins])
@@ -300,15 +305,15 @@ func NewBoardHeaderWithByte(data []byte) (*BoardHeader, error) {
 	return &ret, nil
 }
 
-func (r *BoardHeader) MarshalBinary() ([]byte, error) {
+func (b *BoardHeader) MarshalBinary() ([]byte, error) {
 	ret := make([]byte, BoardHeaderRecordLength)
 
-	// ret[PosOfPTTBoardName : PosOfPTTBoardName+PTT_IDLEN+1]
+	// ret[PosOfBoardName : PosOfBoardName+IDLength+1]
 
-	// binary.LittleEndian.PutUint32(ret[PosOfPttPasswdVersion:PosOfPttPasswdVersion+4], r.Version)
+	// binary.LittleEndian.PutUint32(ret[PosOfPasswdVersion:PosOfPasswdVersion+4], b.Version)
 
-	copy(ret[PosOfPTTBoardName:PosOfPTTBoardName+PTT_IDLEN+1], utf8ToBig5UAOString(r.BrdName))
-	copy(ret[PosOfPTTBoardTitle:PosOfPTTBoardTitle+PTT_IDLEN+1], utf8ToBig5UAOString(r.title))
+	copy(ret[PosOfBoardName:PosOfBoardName+IDLength+1], utf8ToBig5UAOString(b.BrdName))
+	copy(ret[PosOfBoardTitle:PosOfBoardTitle+IDLength+1], utf8ToBig5UAOString(b.title))
 
 	// TODO fill other fileds
 

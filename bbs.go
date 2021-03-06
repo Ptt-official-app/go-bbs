@@ -9,9 +9,9 @@ import (
 // UserRecord mapping to `userec` in most system, it records uesr's
 // basical data
 type UserRecord interface {
-	// UserId return user's identification string, and it is userid in
+	// UserID return user's identification string, and it is userid in
 	// mostly bbs system
-	UserId() string
+	UserID() string
 	// HashedPassword return user hashed password, it only for debug,
 	// If you want to check is user password correct, please use
 	// VerifyPassword insteaded.
@@ -51,7 +51,7 @@ type LastCountryUserRecord interface {
 }
 
 // MailboxUserRecord return UserRecord interface which support MailboxDescription
-type MailboxyUserRecord interface {
+type MailboxUserRecord interface {
 	// MailboxDescription will return the mailbox description with this user
 	MailboxDescription() string
 }
@@ -68,20 +68,20 @@ const (
 type FavoriteRecord interface {
 	Title() string
 	Type() FavoriteType
-	BoardId() string
+	BoardID() string
 
 	// Records is FavoriteTypeFolder only.
 	Records() []FavoriteRecord
 }
 
 type BoardRecord interface {
-	BoardId() string
+	BoardID() string
 
 	Title() string
 
 	IsClass() bool
-	// ClassId should return the class id to which this board/class belongs.
-	ClassId() string
+	// ClassID should return the class id to which this board/class belongs.
+	ClassID() string
 
 	BM() []string
 }
@@ -112,26 +112,26 @@ type Connector interface {
 	// ReadUserRecordsFile should return UserRecord list in the file called name
 	ReadUserRecordsFile(name string) ([]UserRecord, error)
 	// GetUserFavoriteRecordsPath should return the user favorite records file path
-	// for specific user, eg: BBSHOME/home/{{u}}/{{userId}}/.fav
-	GetUserFavoriteRecordsPath(userId string) (string, error)
+	// for specific user, eg: BBSHOME/home/{{u}}/{{userID}}/.fav
+	GetUserFavoriteRecordsPath(userID string) (string, error)
 	// ReadUserFavoriteRecordsFile should return FavoriteRecord list in the file called name
 	ReadUserFavoriteRecordsFile(name string) ([]FavoriteRecord, error)
 	// GetBoardRecordsPath should return the board headers file path, eg: BBSHome/.BRD
 	GetBoardRecordsPath() (string, error)
 	// ReadBoardRecordsFile shoule return BoardRecord list in file, name is the file name
 	ReadBoardRecordsFile(name string) ([]BoardRecord, error)
-	// GetBoardArticleRecordsPath should return the article records file path, boardId is the board id,
-	// eg: BBSHome/boards/{{b}}/{{boardId}}/.DIR
-	GetBoardArticleRecordsPath(boardId string) (string, error)
-	// GetBoardArticleRecordsPath should return the treasure records file path, boardId is the board id,
-	// eg: BBSHome/man/boards/{{b}}/{{boardId}}/{{treasureId}}/.DIR
-	GetBoardTreasureRecordsPath(boardId string, treasureId []string) (string, error)
+	// GetBoardArticleRecordsPath should return the article records file path, boardID is the board id,
+	// eg: BBSHome/boards/{{b}}/{{boardID}}/.DIR
+	GetBoardArticleRecordsPath(boardID string) (string, error)
+	// GetBoardArticleRecordsPath should return the treasure records file path, boardID is the board id,
+	// eg: BBSHome/man/boards/{{b}}/{{boardID}}/{{treasureID}}/.DIR
+	GetBoardTreasureRecordsPath(boardID string, treasureID []string) (string, error)
 	// ReadArticleRecordsFile returns ArticleRecord list in file, name is the file name
 	ReadArticleRecordsFile(name string) ([]ArticleRecord, error)
-	// GetBoardArticleFilePath return file path for specific boardId and filename
-	GetBoardArticleFilePath(boardId string, filename string) (string, error)
-	// GetBoardTreasureFilePath return file path for specific boardId, treasureId and filename
-	GetBoardTreasureFilePath(boardId string, treasureId []string, name string) (string, error)
+	// GetBoardArticleFilePath return file path for specific boardID and filename
+	GetBoardArticleFilePath(boardID string, filename string) (string, error)
+	// GetBoardTreasureFilePath return file path for specific boardID, treasureID and filename
+	GetBoardTreasureFilePath(boardID string, treasureID []string, name string) (string, error)
 	// ReadBoardArticleFile should returns raw file of specific file name
 	ReadBoardArticleFile(name string) ([]byte, error)
 }
@@ -200,10 +200,10 @@ func (db *DB) ReadUserRecords() ([]UserRecord, error) {
 	return userRecs, nil
 }
 
-// ReadUserFavoriteRecords returns the FavoriteRecord for specific userId
-func (db *DB) ReadUserFavoriteRecords(userId string) ([]FavoriteRecord, error) {
+// ReadUserFavoriteRecords returns the FavoriteRecord for specific userID
+func (db *DB) ReadUserFavoriteRecords(userID string) ([]FavoriteRecord, error) {
 
-	path, err := db.connector.GetUserFavoriteRecordsPath(userId)
+	path, err := db.connector.GetUserFavoriteRecordsPath(userID)
 	if err != nil {
 		log.Println("bbs: get user favorite records path error:", err)
 		return nil, err
@@ -216,8 +216,6 @@ func (db *DB) ReadUserFavoriteRecords(userId string) ([]FavoriteRecord, error) {
 		return nil, err
 	}
 	return recs, nil
-
-	return nil, err
 
 }
 
@@ -239,9 +237,9 @@ func (db *DB) ReadBoardRecords() ([]BoardRecord, error) {
 	return recs, nil
 }
 
-func (db *DB) ReadBoardArticleRecordsFile(boardId string) ([]ArticleRecord, error) {
+func (db *DB) ReadBoardArticleRecordsFile(boardID string) ([]ArticleRecord, error) {
 
-	path, err := db.connector.GetBoardArticleRecordsPath(boardId)
+	path, err := db.connector.GetBoardArticleRecordsPath(boardID)
 	if err != nil {
 		log.Println("bbs: open file error:", err)
 		return nil, err
@@ -257,9 +255,9 @@ func (db *DB) ReadBoardArticleRecordsFile(boardId string) ([]ArticleRecord, erro
 
 }
 
-func (db *DB) ReadBoardTreasureRecordsFile(boardId string, treasureId []string) ([]ArticleRecord, error) {
+func (db *DB) ReadBoardTreasureRecordsFile(boardID string, treasureID []string) ([]ArticleRecord, error) {
 
-	path, err := db.connector.GetBoardTreasureRecordsPath(boardId, treasureId)
+	path, err := db.connector.GetBoardTreasureRecordsPath(boardID, treasureID)
 	if err != nil {
 		log.Println("bbs: open file error:", err)
 		return nil, err
@@ -274,9 +272,9 @@ func (db *DB) ReadBoardTreasureRecordsFile(boardId string, treasureId []string) 
 	return recs, nil
 }
 
-func (db *DB) ReadBoardArticleFile(boardId string, filename string) ([]byte, error) {
+func (db *DB) ReadBoardArticleFile(boardID string, filename string) ([]byte, error) {
 
-	path, err := db.connector.GetBoardArticleFilePath(boardId, filename)
+	path, err := db.connector.GetBoardArticleFilePath(boardID, filename)
 	if err != nil {
 		log.Println("bbs: open file error:", err)
 		return nil, err
@@ -291,9 +289,9 @@ func (db *DB) ReadBoardArticleFile(boardId string, filename string) ([]byte, err
 	return recs, nil
 }
 
-func (db *DB) ReadBoardTreasureFile(boardId string, treasuresId []string, filename string) ([]byte, error) {
+func (db *DB) ReadBoardTreasureFile(boardID string, treasuresID []string, filename string) ([]byte, error) {
 
-	path, err := db.connector.GetBoardTreasureFilePath(boardId, treasuresId, filename)
+	path, err := db.connector.GetBoardTreasureFilePath(boardID, treasuresID, filename)
 	if err != nil {
 		log.Println("bbs: open file error:", err)
 		return nil, err

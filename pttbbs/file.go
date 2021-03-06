@@ -36,15 +36,15 @@ import (
 )
 
 const (
-	PosOfPttFileHeaderFilename  = 0
-	PosOfPttFileHeaderModified  = PosOfPttFileHeaderFilename + PTT_FNLEN
-	PosOfPttFileHeaderRecommend = 1 + PosOfPttFileHeaderModified + 4
-	PosOfPttFileHeaderOwner     = PosOfPttFileHeaderRecommend + 1
-	PosOfPttFileHeaderDate      = PosOfPttFileHeaderOwner + PTT_IDLEN + 2
-	PosOfPttFileHeaderTitle     = PosOfPttFileHeaderDate + 6
+	PosOfFileHeaderFilename  = 0
+	PosOfFileHeaderModified  = PosOfFileHeaderFilename + FileNameLength
+	PosOfFileHeaderRecommend = 1 + PosOfFileHeaderModified + 4
+	PosOfFileHeaderOwner     = PosOfFileHeaderRecommend + 1
+	PosOfFileHeaderDate      = PosOfFileHeaderOwner + IDLength + 2
+	PosOfFileHeaderTitle     = PosOfFileHeaderDate + 6
 
-	PosOfPttFileHeaderUnionMulti = 1 + PosOfPttFileHeaderTitle + PTT_TTLEN + 1
-	PosOfPttFileHeaderFilemode   = PosOfPttFileHeaderUnionMulti + 4
+	PosOfFileHeaderUnionMulti = 1 + PosOfFileHeaderTitle + TitleLength + 1
+	PosOfFileHeaderFilemode   = PosOfFileHeaderUnionMulti + 4
 )
 
 // VoteLimits shows the limitation of a vote post.
@@ -65,7 +65,7 @@ type FileHeader struct {
 	title     string
 
 	money   int
-	AnnoUid int
+	AnnoUID int
 	VoteLimits
 	ReferRef  uint // 至底公告？
 	ReferFlag bool // 至底公告？
@@ -116,50 +116,50 @@ func OpenFileHeaderFile(filename string) ([]*FileHeader, error) {
 func NewFileHeaderWithByte(data []byte) (*FileHeader, error) {
 
 	ret := FileHeader{}
-	ret.filename = string(bytes.Trim(data[PosOfPttFileHeaderFilename:+PosOfPttFileHeaderFilename+PTT_FNLEN], "\x00"))
+	ret.filename = string(bytes.Trim(data[PosOfFileHeaderFilename:+PosOfFileHeaderFilename+FileNameLength], "\x00"))
 
-	modifiedInt := binary.LittleEndian.Uint32(data[PosOfPttFileHeaderModified : PosOfPttFileHeaderModified+4])
+	modifiedInt := binary.LittleEndian.Uint32(data[PosOfFileHeaderModified : PosOfFileHeaderModified+4])
 	ret.modified = time.Unix(int64(modifiedInt), 0)
 
-	ret.recommend = int8(data[PosOfPttFileHeaderRecommend])
-	ret.owner = string(bytes.Trim(data[PosOfPttFileHeaderOwner:PosOfPttFileHeaderOwner+PTT_IDLEN+2], "\x00"))
-	ret.date = string(bytes.Trim(data[PosOfPttFileHeaderDate:PosOfPttFileHeaderDate+6], "\x00"))
-	ret.title = big5uaoToUTF8String(bytes.Trim(data[PosOfPttFileHeaderTitle:PosOfPttFileHeaderTitle+PTT_TTLEN+1], "\x00"))
+	ret.recommend = int8(data[PosOfFileHeaderRecommend])
+	ret.owner = string(bytes.Trim(data[PosOfFileHeaderOwner:PosOfFileHeaderOwner+IDLength+2], "\x00"))
+	ret.date = string(bytes.Trim(data[PosOfFileHeaderDate:PosOfFileHeaderDate+6], "\x00"))
+	ret.title = big5uaoToUTF8String(bytes.Trim(data[PosOfFileHeaderTitle:PosOfFileHeaderTitle+TitleLength+1], "\x00"))
 	// log.Println("PosOfUnionMulti:", PosOfUnionMulti, data[PosOfUnionMulti])
 
-	ret.money = int(binary.LittleEndian.Uint32(data[PosOfPttFileHeaderUnionMulti : PosOfPttFileHeaderUnionMulti+4]))
-	ret.AnnoUid = int(binary.LittleEndian.Uint32(data[PosOfPttFileHeaderUnionMulti : PosOfPttFileHeaderUnionMulti+4]))
+	ret.money = int(binary.LittleEndian.Uint32(data[PosOfFileHeaderUnionMulti : PosOfFileHeaderUnionMulti+4]))
+	ret.AnnoUID = int(binary.LittleEndian.Uint32(data[PosOfFileHeaderUnionMulti : PosOfFileHeaderUnionMulti+4]))
 
-	ret.Filemode = uint8(data[PosOfPttFileHeaderFilemode])
+	ret.Filemode = uint8(data[PosOfFileHeaderFilemode])
 
 	if ret.IsVotePost() {
-		ret.VoteLimits.Posts = data[PosOfPttFileHeaderUnionMulti+0]
-		ret.VoteLimits.Logins = data[PosOfPttFileHeaderUnionMulti+1]
-		ret.VoteLimits.Regtime = data[PosOfPttFileHeaderUnionMulti+2]
-		ret.VoteLimits.Badpost = data[PosOfPttFileHeaderUnionMulti+3]
+		ret.VoteLimits.Posts = data[PosOfFileHeaderUnionMulti+0]
+		ret.VoteLimits.Logins = data[PosOfFileHeaderUnionMulti+1]
+		ret.VoteLimits.Regtime = data[PosOfFileHeaderUnionMulti+2]
+		ret.VoteLimits.Badpost = data[PosOfFileHeaderUnionMulti+3]
 	}
 
-	// ret.title = binary.LittleEndian.Uint8(data[PTT_FNLEN+5+PTT_IDLEN+2+6 : PTT_FNLEN+5+PTT_IDLEN+2+6+PTT_TTLEN+1])
+	// ret.title = binary.LittleEndian.Uint8(data[FileNameLength+5+IDLength+2+6 : FileNameLength+5+IDLength+2+6+TitleLength+1])
 
 	return &ret, nil
 }
 
-func (h *FileHeader) MarshalToByte() ([]byte, error) {
+func (f *FileHeader) MarshalToByte() ([]byte, error) {
 	ret := make([]byte, 128)
 
-	copy(ret[PosOfPttFileHeaderFilename:PosOfPttFileHeaderFilename+PTT_FNLEN], h.filename)
-	binary.LittleEndian.PutUint32(ret[PosOfPttFileHeaderModified:PosOfPttFileHeaderModified+4], uint32(h.modified.Unix()))
+	copy(ret[PosOfFileHeaderFilename:PosOfFileHeaderFilename+FileNameLength], f.filename)
+	binary.LittleEndian.PutUint32(ret[PosOfFileHeaderModified:PosOfFileHeaderModified+4], uint32(f.modified.Unix()))
 
-	ret[PosOfPttFileHeaderRecommend] = byte(h.recommend)
-	copy(ret[PosOfPttFileHeaderOwner:PosOfPttFileHeaderOwner+PTT_IDLEN+2], h.owner)
-	copy(ret[PosOfPttFileHeaderDate:PosOfPttFileHeaderDate+6], h.date)
-	copy(ret[PosOfPttFileHeaderTitle:PosOfPttFileHeaderTitle+PTT_TTLEN+1], utf8ToBig5UAOString(h.title))
+	ret[PosOfFileHeaderRecommend] = byte(f.recommend)
+	copy(ret[PosOfFileHeaderOwner:PosOfFileHeaderOwner+IDLength+2], f.owner)
+	copy(ret[PosOfFileHeaderDate:PosOfFileHeaderDate+6], f.date)
+	copy(ret[PosOfFileHeaderTitle:PosOfFileHeaderTitle+TitleLength+1], utf8ToBig5UAOString(f.title))
 
-	// TODO: Check file mode for set Money or AnnoUid ... etc
+	// TODO: Check file mode for set Money or AnnoUID ... etc
 
 	return ret, nil
 }
 
-func (h *FileHeader) IsVotePost() bool {
-	return h.Filemode&PTT_FILE_VOTE != 0
+func (f *FileHeader) IsVotePost() bool {
+	return f.Filemode&FileVote != 0
 }

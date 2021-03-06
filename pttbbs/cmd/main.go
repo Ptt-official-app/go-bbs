@@ -16,6 +16,6 @@ func main() {
 		return
 	}
 	fmt.Println("version", c.Version())
-	fmt.Println("userid, 0:", c.UserId(0))
+	fmt.Println("userid, 0:", c.UserID(0))
 	fmt.Println("money, 0:", c.Money(0))
 }

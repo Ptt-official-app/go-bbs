@@ -47,16 +47,16 @@ func CreateKey(key int, size int) (*SHM, error) {
 		flag = IPCCreate | 0600
 	}
 
-	shmId, err := Shmget(key, size, flag)
+	shmID, err := Shmget(key, size, flag)
 	if err != nil {
 		return nil, fmt.Errorf("shmget error: %w", err)
 	}
-	// fmt.Println("shmid", shmId)
+	// fmt.Println("shmid", shmID)
 	// size = 4
 	if size == 0 {
 
 		ds := ShmidDs{}
-		_, err = Shmctl(shmId, IPCStat, &ds)
+		_, err = Shmctl(shmID, IPCStat, &ds)
 		if err != nil {
 			return nil, fmt.Errorf("shmctl error: %w", err)
 		}
@@ -66,7 +66,7 @@ func CreateKey(key int, size int) (*SHM, error) {
 
 	// v := 0
 
-	ptr, err := Shmat(shmId, uintptr(0), 0)
+	ptr, err := Shmat(shmID, uintptr(0), 0)
 	if err != nil {
 		return nil, fmt.Errorf("shmat error: %w", err)
 	}
@@ -92,13 +92,13 @@ func OpenKey(key int) (*SHM, error) {
 	return CreateKey(key, 0)
 }
 func RemoveKey(key int) error {
-	shmId, err := Shmget(key, 0, 0)
+	shmID, err := Shmget(key, 0, 0)
 	if err != nil {
 		return fmt.Errorf("shmget error: %w", err)
 	}
 
 	// ds := ShmidDs{}
-	_, err = Shmctl(shmId, IPCRMID, nil)
+	_, err = Shmctl(shmID, IPCRMID, nil)
 	if err != nil {
 		return fmt.Errorf("shmctl error: %w", err)
 	}
@@ -109,13 +109,13 @@ func (s *SHM) Bytes() []byte {
 	return s.buf
 }
 
-func (m *SHM) Close() error {
-	hdr := (*reflect.SliceHeader)(unsafe.Pointer(&m.buf))
+func (s *SHM) Close() error {
+	hdr := (*reflect.SliceHeader)(unsafe.Pointer(&s.buf))
 	ptr := hdr.Data
 	_, err := Shmdt(ptr)
 
 	// release GC setting
-	runtime.SetFinalizer(m, nil)
+	runtime.SetFinalizer(s, nil)
 	if err != nil {
 		return fmt.Errorf("shmdt error: %w", err)
 	}

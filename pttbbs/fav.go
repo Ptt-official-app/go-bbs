@@ -57,8 +57,8 @@ const (
 )
 
 var (
-	InvalidFavTypeError  = errors.New("invalid Favorite type")
-	IndexOutOfBoundError = errors.New("index out of range, file format invalid")
+	ErrInvalidFavType  = errors.New("invalid Favorite type")
+	ErrIndexOutOfBound = errors.New("index out of range, file format invalid")
 )
 
 type FavItemType uint8
@@ -86,25 +86,25 @@ type FavItem struct {
 	Item    interface{} // This could be either FavBoardItem / FavFolderItem / FavLineItem
 }
 
-func (f *FavItem) BoardId() string {
-	if f.FavType != FavItemTypeBoard {
+func (favi *FavItem) BoardID() string {
+	if favi.FavType != FavItemTypeBoard {
 		return ""
 	}
-	return f.Item.(*FavBoardItem).boardId
+	return favi.Item.(*FavBoardItem).boardID
 }
 
-func (f *FavItem) Title() string {
-	if f.FavType == FavItemTypeLine {
+func (favi *FavItem) Title() string {
+	if favi.FavType == FavItemTypeLine {
 		return "------------------------------------------"
 	}
-	if f.FavType == FavItemTypeFolder {
-		return f.Item.(*FavFolderItem).Title
+	if favi.FavType == FavItemTypeFolder {
+		return favi.Item.(*FavFolderItem).Title
 	}
 	return ""
 }
 
-func (f *FavItem) Type() bbs.FavoriteType {
-	switch f.FavType {
+func (favi *FavItem) Type() bbs.FavoriteType {
+	switch favi.FavType {
 	case FavItemTypeBoard:
 		return bbs.FavoriteTypeBoard
 	case FavItemTypeFolder:
@@ -116,11 +116,11 @@ func (f *FavItem) Type() bbs.FavoriteType {
 
 }
 
-func (f *FavItem) Records() []bbs.FavoriteRecord {
-	if f.FavType != FavItemTypeFolder {
+func (favi *FavItem) Records() []bbs.FavoriteRecord {
+	if favi.FavType != FavItemTypeFolder {
 		return nil
 	}
-	rec := f.Item.(*FavFolderItem).ThisFolder.FavItems
+	rec := favi.Item.(*FavFolderItem).ThisFolder.FavItems
 	ret := make([]bbs.FavoriteRecord, len(rec))
 	for i, v := range rec {
 		ret[i] = v
@@ -129,24 +129,24 @@ func (f *FavItem) Records() []bbs.FavoriteRecord {
 }
 
 // GetBoard tries to cast Item to FavBoardItem; return nil if it is not
-func (favt *FavItem) GetBoard() *FavBoardItem {
-	if ret, ok := favt.Item.(*FavBoardItem); ok {
+func (favi *FavItem) GetBoard() *FavBoardItem {
+	if ret, ok := favi.Item.(*FavBoardItem); ok {
 		return ret
 	}
 	return nil
 }
 
 // GetFolder tries to cast Item to FavFolderItem; return nil if it is not
-func (favt *FavItem) GetFolder() *FavFolderItem {
-	if ret, ok := favt.Item.(*FavFolderItem); ok {
+func (favi *FavItem) GetFolder() *FavFolderItem {
+	if ret, ok := favi.Item.(*FavFolderItem); ok {
 		return ret
 	}
 	return nil
 }
 
 // GetLine tries to cast Item to FavLineItem; return nil if it is not
-func (favt *FavItem) GetLine() *FavLineItem {
-	if ret, ok := favt.Item.(*FavLineItem); ok {
+func (favi *FavItem) GetLine() *FavLineItem {
+	if ret, ok := favi.Item.(*FavLineItem); ok {
 		return ret
 	}
 	return nil
@@ -166,29 +166,29 @@ type FavFolder struct {
 	NBoards  uint16
 	NLines   uint8
 	NFolders uint8
-	LineId   uint8
-	FolderId uint8
+	LineID   uint8
+	FolderID uint8
 	FavItems []*FavItem
 }
 
 // FavBoardItem represents a Board in FavFolder. FavBoardItem takes 12 bytes
 type FavBoardItem struct {
-	BoardId   uint32
+	BoardID   uint32
 	LastVisit time.Time
 	Attr      uint32
-	boardId   string
+	boardID   string
 }
 
 // FavFolderItem represents a Folder in FavFolder. FavFolderItem takes 50 bytes
 type FavFolderItem struct {
-	FolderId   uint8
+	FolderID   uint8
 	Title      string
 	ThisFolder *FavFolder
 }
 
 // FavLineItem represents a Line in FavFolder. FavLineItem takes 1 byte
 type FavLineItem struct {
-	LineId uint8
+	LineID uint8
 }
 
 // OpenFavFile reads a fav file
@@ -215,8 +215,8 @@ func NewFavFile(data []byte) (*FavFile, error) {
 }
 
 // getDataNumber returns the count of total items in FavFolder
-func (f *FavFolder) getDataNumber() uint16 {
-	return f.NBoards + uint16(f.NFolders) + uint16(f.NLines)
+func (favf *FavFolder) getDataNumber() uint16 {
+	return favf.NBoards + uint16(favf.NFolders) + uint16(favf.NLines)
 }
 
 // NewFavFolder takes a []byte, parse it starting with startIndex, return an instance of FavFolder, endIndex
@@ -224,7 +224,7 @@ func (f *FavFolder) getDataNumber() uint16 {
 func NewFavFolder(data []byte, startIndex int) (*FavFolder, int, error) {
 	// data must at least has 4 bytes for a new FavFolder
 	if len(data) < startIndex+4 {
-		return nil, startIndex, IndexOutOfBoundError
+		return nil, startIndex, ErrIndexOutOfBound
 	}
 	ret := &FavFolder{}
 	c := startIndex // current index
@@ -243,8 +243,8 @@ func NewFavFolder(data []byte, startIndex int) (*FavFolder, int, error) {
 
 	ret.DataTail = ret.getDataNumber()
 	ret.NAlloc = ret.DataTail + favPreAlloc
-	ret.LineId = 0
-	ret.FolderId = 0
+	ret.LineID = 0
+	ret.FolderID = 0
 
 	itemCount := ret.DataTail
 	ret.FavItems = make([]*FavItem, itemCount)
@@ -268,13 +268,13 @@ func NewFavFolder(data []byte, startIndex int) (*FavFolder, int, error) {
 			if err != nil {
 				return nil, c, err
 			}
-			ret.FolderId++
-			f.FolderId = ret.FolderId
+			ret.FolderID++
+			f.FolderID = ret.FolderID
 			f.ThisFolder = nextFolder
 		}
 		if f, ok := item.Item.(*FavLineItem); ok {
-			ret.LineId++
-			f.LineId = ret.LineId
+			ret.LineID++
+			f.LineID = ret.LineID
 		}
 	}
 
@@ -286,7 +286,7 @@ func NewFavFolder(data []byte, startIndex int) (*FavFolder, int, error) {
 func NewFavItem(data []byte, startIndex int) (*FavItem, int, error) {
 	// data at least must have 2 bytes for a new FavItem
 	if len(data) < startIndex+2 {
-		return nil, startIndex, IndexOutOfBoundError
+		return nil, startIndex, ErrIndexOutOfBound
 	}
 	ret := &FavItem{}
 	c := startIndex // current index
@@ -310,7 +310,7 @@ func NewFavItem(data []byte, startIndex int) (*FavItem, int, error) {
 	case FavItemTypeFolder:
 		item, c, err = NewFavFolderItem(data, c)
 	default:
-		err = InvalidFavTypeError
+		err = ErrInvalidFavType
 	}
 	if err != nil {
 		return nil, c, err
@@ -323,13 +323,13 @@ func NewFavItem(data []byte, startIndex int) (*FavItem, int, error) {
 // NewFavBoardItem takes a []byte and parse it starting from startIndex, return FavBoardItem, end index and error
 func NewFavBoardItem(data []byte, startIndex int) (*FavBoardItem, int, error) {
 	if len(data) < startIndex+sizeOfPttFavBoardBytes {
-		return nil, startIndex, IndexOutOfBoundError
+		return nil, startIndex, ErrIndexOutOfBound
 	}
 	ret := &FavBoardItem{}
 	c := startIndex
 
 	size := 4
-	ret.BoardId = binary.LittleEndian.Uint32(data[c : c+size])
+	ret.BoardID = binary.LittleEndian.Uint32(data[c : c+size])
 	c += size
 
 	size = TIME4TBytes // use 4 bytes for time.Time
@@ -337,7 +337,7 @@ func NewFavBoardItem(data []byte, startIndex int) (*FavBoardItem, int, error) {
 	c += size
 
 	// This attr is a char in fav.h which should have been 1 byte. However, from the sample file
-	// we can see a Board takes 12 bytes, 4 bytes for BoardId, 4 bytes for LastVisit, so allocate the remaining
+	// we can see a Board takes 12 bytes, 4 bytes for BoardID, 4 bytes for LastVisit, so allocate the remaining
 	// 4 byte to attr. May need double check on this.
 	size = 4
 	ret.Attr = binary.LittleEndian.Uint32(data[c : c+size])
@@ -349,16 +349,16 @@ func NewFavBoardItem(data []byte, startIndex int) (*FavBoardItem, int, error) {
 // NewFavFolderItem takes a []byte and parse it starting from startIndex, return FavFolderItem, end index and error
 func NewFavFolderItem(data []byte, startIndex int) (*FavFolderItem, int, error) {
 	if len(data) < startIndex+sizeOfPttFavFolderBytes {
-		return nil, startIndex, IndexOutOfBoundError
+		return nil, startIndex, ErrIndexOutOfBound
 	}
 	ret := &FavFolderItem{}
 	c := startIndex
 
 	size := 1
-	ret.FolderId = data[c]
+	ret.FolderID = data[c]
 	c += size
 
-	size = PTT_BTLEN + 1
+	size = BoardTitleLength + 1
 	ret.Title = big5uaoToUTF8String(bytes.Split(data[c:c+size], []byte("\x00"))[0])
 	c += size
 
@@ -368,12 +368,12 @@ func NewFavFolderItem(data []byte, startIndex int) (*FavFolderItem, int, error) 
 // NewFavLineItem takes a []byte and parse it starting from startIndex, return FavLineItem, end index and error
 func NewFavLineItem(data []byte, startIndex int) (*FavLineItem, int, error) {
 	if len(data) < startIndex+sizeOfPttFavLineBytes {
-		return nil, startIndex, IndexOutOfBoundError
+		return nil, startIndex, ErrIndexOutOfBound
 	}
 	ret := &FavLineItem{}
 	c := startIndex
 
-	ret.LineId = data[c]
+	ret.LineID = data[c]
 	c++
 	return ret, c, nil
 }
@@ -400,7 +400,7 @@ func (favf *FavFolder) MarshalBinary() ([]byte, error) {
 	c += size
 
 	ret[c] = favf.NLines
-	c += 1
+	c++
 
 	ret[c] = favf.NFolders
 
@@ -448,7 +448,7 @@ func (favbi *FavBoardItem) MarshalBinary() ([]byte, error) {
 	c := 0
 
 	size := 4
-	binary.LittleEndian.PutUint32(ret[c:c+size], favbi.BoardId)
+	binary.LittleEndian.PutUint32(ret[c:c+size], favbi.BoardID)
 	c += size
 
 	binary.LittleEndian.PutUint32(ret[c:c+size], uint32(favbi.LastVisit.Unix()))
@@ -461,9 +461,9 @@ func (favbi *FavBoardItem) MarshalBinary() ([]byte, error) {
 
 func (favfi *FavFolderItem) MarshalBinary() ([]byte, error) {
 	ret := make([]byte, sizeOfPttFavFolderBytes)
-	ret[0] = favfi.FolderId
+	ret[0] = favfi.FolderID
 
-	size := PTT_BTLEN + 1
+	size := BoardTitleLength + 1
 	copy(ret[1:1+size], utf8ToBig5UAOString(favfi.Title))
 
 	return ret, nil
@@ -471,6 +471,6 @@ func (favfi *FavFolderItem) MarshalBinary() ([]byte, error) {
 
 func (favli *FavLineItem) MarshalBinary() ([]byte, error) {
 	ret := make([]byte, sizeOfPttFavLineBytes)
-	ret[0] = favli.LineId
+	ret[0] = favli.LineID
 	return ret, nil
 }

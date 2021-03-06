@@ -30,7 +30,7 @@ func TestOpenUserecFile(t *testing.T) {
 	expected := []Userec{
 		{
 			Version:       4194,
-			userId:        "SYSOP",
+			userID:        "SYSOP",
 			realName:      "CodingMan",
 			nickname:      "神",
 			password:      "bhwvOJtfT1TAI",
@@ -85,7 +85,7 @@ func TestOpenUserecFile(t *testing.T) {
 		},
 		{
 			Version:       4194,
-			userId:        "CodingMan",
+			userID:        "CodingMan",
 			realName:      "朱元璋",
 			nickname:      "程式俠",
 			password:      "u8mLG.ktfOk3w",
@@ -140,7 +140,7 @@ func TestOpenUserecFile(t *testing.T) {
 		},
 		{
 			Version:       4194,
-			userId:        "pichu",
+			userID:        "pichu",
 			realName:      "Pichu",
 			nickname:      "Pichu",
 			password:      "KO27TyME.3/tw",
@@ -195,7 +195,7 @@ func TestOpenUserecFile(t *testing.T) {
 		},
 		{
 			Version:       4194,
-			userId:        "Kahou",
+			userID:        "Kahou",
 			realName:      "林嘉豪",
 			nickname:      "Kahou",
 			password:      "V3nkaYTLnDPUA",
@@ -250,7 +250,7 @@ func TestOpenUserecFile(t *testing.T) {
 		},
 		{
 			Version:       4194,
-			userId:        "Kahou2",
+			userID:        "Kahou2",
 			realName:      "Kahou",
 			nickname:      "kahou",
 			password:      "R7shIAOZgQCKs",
@@ -318,8 +318,8 @@ func TestOpenUserecFile(t *testing.T) {
 			t.Errorf("Version not match with index %d, expected: %v, got: %v", index, expected.Version, actual.Version)
 		}
 
-		if actual.userId != expected.userId {
-			t.Errorf("UserId not match with index %d, expected: %v, got: %v", index, expected.userId, actual.userId)
+		if actual.userID != expected.userID {
+			t.Errorf("UserID not match with index %d, expected: %v, got: %v", index, expected.userID, actual.userID)
 		}
 
 		if actual.realName != expected.realName {
@@ -536,7 +536,7 @@ func TestEncodingUserec(t *testing.T) {
 		{
 			Input: Userec{
 				Version:       4194,
-				userId:        "SYSOP",
+				userID:        "SYSOP",
 				realName:      "CodingMan",
 				nickname:      "神",
 				password:      "bhwvOJtfT1TAI",

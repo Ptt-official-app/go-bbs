@@ -11,11 +11,11 @@ import (
 )
 
 type MockUserRecord struct {
-	userId string
+	userID string
 }
 
-func NewMockUserRecord(userId string) *MockUserRecord { return &MockUserRecord{userId: userId} }
-func (u *MockUserRecord) UserId() string              { return u.userId }
+func NewMockUserRecord(userID string) *MockUserRecord { return &MockUserRecord{userID: userID} }
+func (u *MockUserRecord) UserID() string              { return u.userID }
 
 // HashedPassword return user hashed password, it only for debug,
 // If you want to check is user password correct, please use
@@ -63,7 +63,7 @@ func TestGetUserInformation(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	token := newAccessTokenWithUsername(expected.UserId())
+	token := newAccessTokenWithUsername(expected.UserID())
 	t.Logf("testing token: %v", token)
 	req.Header.Add("Authorization", "bearer "+token)
 
@@ -81,9 +81,9 @@ func TestGetUserInformation(t *testing.T) {
 	json.Unmarshal(rr.Body.Bytes(), &responsedMap)
 	t.Logf("got response %v", rr.Body.String())
 	responsedData := responsedMap["data"].(map[string]interface{})
-	if responsedData["user_id"] != expected.UserId() {
-		t.Errorf("handler returned unexpected body, user_id not match: got %v want userId %v",
-			rr.Body.String(), expected.UserId())
+	if responsedData["user_id"] != expected.UserID() {
+		t.Errorf("handler returned unexpected body, user_id not match: got %v want userID %v",
+			rr.Body.String(), expected.UserID())
 
 	}
 
@@ -93,40 +93,40 @@ func TestParseUserPath(t *testing.T) {
 
 	type TestCase struct {
 		input         string
-		expectdUserId string
+		expectdUserID string
 		expectdItem   string
 	}
 
 	cases := []TestCase{
 		{
 			input:         "/v1/users/Pichu/information",
-			expectdUserId: "Pichu",
+			expectdUserID: "Pichu",
 			expectdItem:   "information",
 		},
 		{
 			input:         "/v1/users/Pichu/",
-			expectdUserId: "Pichu",
+			expectdUserID: "Pichu",
 			expectdItem:   "",
 		},
 		{
 			input:         "/v1/users/Pichu",
-			expectdUserId: "Pichu",
+			expectdUserID: "Pichu",
 			expectdItem:   "",
 		},
 	}
 
 	for index, c := range cases {
 		input := c.input
-		expectdUserId := c.expectdUserId
+		expectdUserID := c.expectdUserID
 		expectdItem := c.expectdItem
-		actualUserId, actualItem, err := parseUserPath(input)
+		actualUserID, actualItem, err := parseUserPath(input)
 		if err != nil {
 			t.Errorf("error on index %d, got: %v", index, err)
 
 		}
 
-		if actualUserId != expectdUserId {
-			t.Errorf("userId not match on index %d, expected: %v, got: %v", index, expectdUserId, actualUserId)
+		if actualUserID != expectdUserID {
+			t.Errorf("userID not match on index %d, expected: %v, got: %v", index, expectdUserID, actualUserID)
 		}
 
 		if actualItem != expectdItem {

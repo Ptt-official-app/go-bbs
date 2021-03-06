@@ -17,7 +17,7 @@ type cachePos struct {
 
 	posOfCooldownTime int
 
-	posOfHashHeader int
+	posOfHashHead   int
 	posOfUserNumber int
 	posOfUserLoaded int
 
@@ -71,8 +71,10 @@ type cachePos struct {
 type MemoryMappingSetting struct {
 	AlignmentBytes int // 1, 2, 4 or 8, 1 for no aligment
 
-	MaxUsers int
-	IDLen    int
+	MaxUsers    int
+	IDLen       int
+	UseCoolDown bool
+	HashBits    int
 }
 
 // Cache provides an IPC(inter-process communication) bridge with process-based
@@ -102,7 +104,15 @@ func (c *Cache) caculatePos() {
 		c.posOfNextInHash += padding
 	}
 	fmt.Println("c.posOfNextInHash", c.posOfNextInHash)
-	c.posOfMoney = c.posOfNextInHash + c.MaxUsers*4 + 4
+	c.posOfMoney = c.posOfNextInHash + c.MaxUsers*4 + 4 // + gap_2
+	if c.UseCoolDown {
+		c.posOfCooldownTime = c.posOfMoney + c.MaxUsers*4 + 4    // + gap_3
+		c.posOfHashHead = c.posOfCooldownTime + c.MaxUsers*4 + 4 // time4_t + gap_4
+	} else {
+		c.posOfHashHead = c.posOfMoney + c.MaxUsers*4 + 4 + 4 // + gap_3 + gap_4
+	}
+
+	c.posOfUserNumber = c.posOfHashHead + (1<<c.HashBits)*4 + 4 // + gap_5
 
 	// TODO: other pos value
 	// 	c.posOfCooldownTime int

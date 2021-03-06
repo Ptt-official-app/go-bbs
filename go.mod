@@ -4,6 +4,8 @@ go 1.14
 
 require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
-	golang.org/x/sys v0.0.0-20210124154548-22da62e12c0c
+	github.com/stretchr/testify v1.7.0
+	golang.org/x/exp v0.0.0-20210212053707-62dc52270d37
+	golang.org/x/sys v0.0.0-20191001151750-bb3f8db39f24
 	golang.org/x/text v0.3.3
 )

@@ -85,6 +85,12 @@ type Cache struct {
 	cachePos
 }
 
+// UserInfoCache is `userinfo_t` in pttstruct.h, all of those object will be store in shared memory
+type UserInfoCache []byte
+
+// MessageQueueCache is `msgque_t` in pttstruct.h, all of those object will be store in shared memory
+type MessageQueueCache []byte
+
 // cacluatePos find out posOf values on runtime with MemoryMappingSetting
 // notice that, different compiler option will result in different
 // align padding, it may cause bugs.
@@ -113,6 +119,9 @@ func (c *Cache) caculatePos() {
 	}
 
 	c.posOfUserNumber = c.posOfHashHead + (1<<c.HashBits)*4 + 4 // + gap_5
+	c.posOfUserLoaded = c.posOfUserNumber + 4
+
+	c.posOfUInfo = c.posOfUserLoaded + 4
 
 	// TODO: other pos value
 	// 	c.posOfCooldownTime int

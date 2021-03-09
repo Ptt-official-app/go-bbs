@@ -19,10 +19,50 @@ import (
 	"testing"
 
 	_ "github.com/mattn/go-sqlite3"
+	"github.com/thomasjungblut/go-sstables/recordio"
 	"google.golang.org/protobuf/proto"
 )
 
 var recordN = 1000
+
+func BenchmarkSSTableProtobufWrite(b *testing.B) {
+	a := ProtobufUserArticle{
+		BoardID:   "Soft_Job",
+		ArticleID: "M.1610976994.A.2C8",
+	}
+	for i := 0; i < b.N; i++ {
+		// buf := []byte{}
+		tmpfile, _ := ioutil.TempFile("./", "test_proto_buf")
+		tmpfile.Close()
+
+		writer, err := recordio.NewCompressedProtoWriterWithPath(tmpfile.Name(), recordio.CompressionTypeSnappy)
+		if err != nil {
+			b.Errorf("error: %v", err)
+		}
+
+		err = writer.Open()
+		if err != nil {
+			b.Errorf("error: %v", err)
+		}
+
+		for j := 0; j < recordN; j++ {
+
+			_, err := writer.Write(&a)
+			if err != nil {
+				b.Errorf("error: %v", err)
+			}
+			// b.Logf("wrote a record at offset of %d bytes", recordOffset)
+		}
+
+		err = writer.Close()
+		if err != nil {
+			b.Errorf("error: %v", err)
+		}
+		// fi, _ := os.Stat(tmpfile.Name())
+		// b.Logf("filesize: %v", fi.Size())
+		os.Remove(tmpfile.Name())
+	}
+}
 
 func BenchmarkProtobufWrite(b *testing.B) {
 	a := ProtobufUserArticle{

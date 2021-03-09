@@ -1,0 +1,19 @@
+
+// To generate user_article.pb.go: protoc --go_out=./ user_article.proto
+
+syntax = "proto3";
+
+package bbs;
+
+option go_package =  ".;bbs";
+
+message ProtobufUserArticle {
+	 string BoardID = 1;
+	 string ArticleID = 2;
+}
+
+
+message ProtobufUserArticleList {
+	repeated ProtobufUserArticle Items = 1;
+}
+

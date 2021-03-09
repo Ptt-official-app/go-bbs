@@ -32,120 +32,62 @@ import (
 	"testing"
 
 	_ "github.com/mattn/go-sqlite3"
-	"github.com/thomasjungblut/go-sstables/recordio"
+	"github.com/eclesh/recordio"
 	"google.golang.org/protobuf/proto"
 )
 
 var recordN = 1000
 
-func BenchmarkSSTableProtobufWrite(b *testing.B) {
+func BenchmarkRecordIOProtobufWrite(b *testing.B) {
 	a := ProtobufUserArticle{
 		BoardID:   "Soft_Job",
 		ArticleID: "M.1610976994.A.2C8",
 	}
 	for i := 0; i < b.N; i++ {
-		// buf := []byte{}
 		tmpfile, _ := ioutil.TempFile("./", "test_proto_buf")
-		tmpfile.Close()
 
-		writer, err := recordio.NewCompressedProtoWriterWithPath(tmpfile.Name(), recordio.CompressionTypeSnappy)
-		if err != nil {
-			b.Errorf("error: %v", err)
-		}
-
-		err = writer.Open()
-		if err != nil {
-			b.Errorf("error: %v", err)
-		}
+		writer := recordio.NewWriter(tmpfile)
 
 		for j := 0; j < recordN; j++ {
-
-			_, err := writer.Write(&a)
+			out, err := proto.Marshal(&a)
 			if err != nil {
-				b.Errorf("error: %v", err)
+				b.Errorf("%v", err)
+				return
 			}
-			// b.Logf("wrote a record at offset of %d bytes", recordOffset)
+			writer.Write(out)
 		}
-
-		err = writer.Close()
-		if err != nil {
-			b.Errorf("error: %v", err)
-		}
-		// fi, _ := os.Stat(tmpfile.Name())
-		// b.Logf("filesize: %v", fi.Size())
+		tmpfile.Close()
 		os.Remove(tmpfile.Name())
 	}
 }
 
-// func BenchmarkSSTableProtobufAppend(b *testing.B) {
-// 	a := ProtobufUserArticle{
-// 		BoardID:   "Soft_Job",
-// 		ArticleID: "M.1610976994.A.2C8",
-// 	}
-// 	for i := 0; i < b.N; i++ {
-// 		// buf := []byte{}
-// 		tmpfile, _ := ioutil.TempFile("./", "test_proto_buf")
-// 		tmpfile.Close()
+func BenchmarkRecordIOProtobufAppend(b *testing.B) {
+	a := ProtobufUserArticle{
+		BoardID:   "Soft_Job",
+		ArticleID: "M.1610976994.A.2C8",
+	}
+	for i := 0; i < b.N; i++ {
+		tmpfile, _ := ioutil.TempFile("./", "test_proto_buf")
+		tmpfile.Close()
 
-// 		for j := 0; j < recordN; j++ {
-// 			reader, err := recordio.NewProtoReaderWithPath(tmpfile.Name())
-// 			if err != nil {
-// 				b.Errorf("error: %v", err)
-// 			}
-// 			err = reader.Open()
-// 			if err != nil {
-// 				b.Errorf("error: %v", err)
-// 			}
-
-// 			list := []*ProtobufUserArticle{}
-// 			if err != io.EOF {
-// 				for {
-// 					r := ProtobufUserArticle{}
-// 					_, err := reader.ReadNext(&r)
-// 					if err != nil {
-// 						b.Errorf("error: %v", err)
-// 					}
-// 					if err == io.EOF {
-// 						break
-// 					}
-// 					// fmt.Printf(".%v", err)
-// 					list = append(list, &r)
-// 				}
-// 				reader.Close()
-// 			}
-// 			os.Truncate(tmpfile.Name(), 0)
-
-// 			list = append(list, &a)
-
-// 			writer, err := recordio.NewCompressedProtoWriterWithPath(tmpfile.Name(), recordio.CompressionTypeSnappy)
-// 			if err != nil {
-// 				b.Errorf("error: %v", err)
-// 			}
-
-// 			err = writer.Open()
-// 			if err != nil {
-// 				b.Errorf("error: %v", err)
-// 			}
-
-// 			for _, item := range list {
-// 				_, err = writer.Write(item)
-// 				if err != nil {
-// 					b.Errorf("error: %v", err)
-// 				}
-// 			}
-// 			// b.Logf("wrote a record at offset of %d bytes", recordOffset)
-
-// 			err = writer.Close()
-// 			if err != nil {
-// 				b.Errorf("error: %v", err)
-// 			}
-// 		}
-
-// 		// fi, _ := os.Stat(tmpfile.Name())
-// 		// b.Logf("filesize: %v", fi.Size())
-// 		os.Remove(tmpfile.Name())
-// 	}
-// }
+		for j := 0; j < recordN; j++ {
+			file, err := os.OpenFile(tmpfile.Name(), os.O_APPEND|os.O_WRONLY, 0600)
+			if err != nil {
+				b.Errorf("%v", err)
+				return
+			}
+			writer := recordio.NewWriter(file)
+			out, err := proto.Marshal(&a)
+			if err != nil {
+				b.Errorf("%v", err)
+				return
+			}
+			writer.Write(out)
+			file.Close()
+		}
+		os.Remove(tmpfile.Name())
+	}
+}
 
 func BenchmarkProtobufWrite(b *testing.B) {
 	a := ProtobufUserArticle{

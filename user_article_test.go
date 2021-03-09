@@ -6,11 +6,13 @@ $ go test -bench=.
 goos: darwin
 goarch: amd64
 pkg: github.com/Ptt-official-app/go-bbs
-BenchmarkProtobufWrite-4        	     100	  12488268 ns/op
-BenchmarkProtobufArrayWrite-4   	     667	   1519035 ns/op
-BenchmarkSqliteWrite-4          	      79	  16020372 ns/op
+BenchmarkSSTableProtobufWrite-4   	      48	  33028588 ns/op
+BenchmarkProtobufWrite-4          	     100	  16207969 ns/op
+BenchmarkProtobufBufWrite-4       	     710	   2152707 ns/op
+BenchmarkProtobufArrayWrite-4     	     825	   1801981 ns/op
+BenchmarkSqliteWrite-4            	      72	  17835609 ns/op
 PASS
-ok  	github.com/Ptt-official-app/go-bbs	4.517s
+ok  	github.com/Ptt-official-app/go-bbs	10.021s
 */
 import (
 	"database/sql"
@@ -83,6 +85,33 @@ func BenchmarkProtobufWrite(b *testing.B) {
 			}
 			tmpfile.Write(out)
 		}
+		tmpfile.Close()
+		// fi, _ := os.Stat(tmpfile.Name())
+		// b.Logf("filesize: %v", fi.Size())
+		os.Remove(tmpfile.Name())
+	}
+}
+
+func BenchmarkProtobufBufWrite(b *testing.B) {
+	a := ProtobufUserArticle{
+		BoardID:   "Soft_Job",
+		ArticleID: "M.1610976994.A.2C8",
+	}
+	for i := 0; i < b.N; i++ {
+		buf := []byte{}
+		tmpfile, _ := ioutil.TempFile("./", "test_proto_buf")
+
+		recordN := 1000
+		for j := 0; j < recordN; j++ {
+
+			out, err := proto.Marshal(&a)
+			if err != nil {
+				b.Errorf("%v", err)
+				return
+			}
+			buf = append(buf, out...)
+		}
+		tmpfile.Write(buf)
 		tmpfile.Close()
 		// fi, _ := os.Stat(tmpfile.Name())
 		// b.Logf("filesize: %v", fi.Size())

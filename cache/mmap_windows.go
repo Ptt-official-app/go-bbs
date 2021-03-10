@@ -7,10 +7,10 @@ import (
 )
 
 func openMmap(fd int, size int) ([]byte, error) {
-	return nil, fmt.Errorf("windows do not implement shmget")
+	return nil, fmt.Errorf("TODO: implement open mmap")
 
 }
 
 func closeMmap(buf []byte) error {
-	return fmt.Errorf("windows do not implement shmget")
+	return fmt.Errorf("TODO: implement close mmap")
 }

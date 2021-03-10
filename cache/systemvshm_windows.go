@@ -26,7 +26,3 @@ func shmdt(shmaddr uintptr) (int, error) {
 func shmctl(shmid int, cmd int, buf *ShmidDs) (int, error) {
 	return 0, fmt.Errorf("windows do not implement shmctl")
 }
-
-func ShmSegsz(shmid int, cmd int, buf *ShmidDs) (int, error) {
-	return 0, fmt.Errorf("windows do not implement ShmSegsz")
-}

@@ -8,8 +8,8 @@ import (
 
 type sizeT uint64
 
-type ShmidDs struct{
-	ShmSegsz    sizeT
+type ShmidDs struct {
+	ShmSegsz sizeT
 }
 
 func shmget(key int, size int, flag int) (int, error) {

@@ -6,7 +6,11 @@ import (
 	"fmt"
 )
 
-type ShmidDs struct{}
+type sizeT uint64
+
+type ShmidDs struct{
+	ShmSegsz    sizeT
+}
 
 func shmget(key int, size int, flag int) (int, error) {
 	return 0, fmt.Errorf("windows do not implement shmget")

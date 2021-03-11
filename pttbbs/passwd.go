@@ -301,7 +301,7 @@ func (u *Userec) MarshalBinary() ([]byte, error) {
 
 	binary.LittleEndian.PutUint32(ret[PosOfPasswdVersion:PosOfPasswdVersion+4], u.Version)
 	copy(ret[PosOfPasswdUserID:PosOfPasswdUserID+IDLength+1], utf8ToBig5UAOString(u.userID))
-	copy(ret[PosOfPasswdRealName:PosOfPasswdRealName+IDLength+1], utf8ToBig5UAOString(u.realName))
+	copy(ret[PosOfPasswdRealName:PosOfPasswdRealName+RealNameSize], utf8ToBig5UAOString(u.realName))
 	copy(ret[PosOfPasswdNickname:PosOfPasswdNickname+NicknameSize], utf8ToBig5UAOString(u.nickname))
 	copy(ret[PosOfPasswdPassword:PosOfPasswdPassword+PasswordLength], utf8ToBig5UAOString(u.password))
 

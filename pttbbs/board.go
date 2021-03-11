@@ -308,14 +308,45 @@ func NewBoardHeaderWithByte(data []byte) (*BoardHeader, error) {
 func (b *BoardHeader) MarshalBinary() ([]byte, error) {
 	ret := make([]byte, BoardHeaderRecordLength)
 
-	// ret[PosOfBoardName : PosOfBoardName+IDLength+1]
-
-	// binary.LittleEndian.PutUint32(ret[PosOfPasswdVersion:PosOfPasswdVersion+4], b.Version)
-
 	copy(ret[PosOfBoardName:PosOfBoardName+IDLength+1], utf8ToBig5UAOString(b.BrdName))
-	copy(ret[PosOfBoardTitle:PosOfBoardTitle+IDLength+1], utf8ToBig5UAOString(b.title))
+	copy(ret[PosOfBoardTitle:PosOfBoardTitle+BoardTitleLength+1], utf8ToBig5UAOString(b.title))
+	copy(ret[PosOfBM:PosOfBM+IDLength*3+3], b.bm)
+	binary.LittleEndian.PutUint32(ret[PosOfBrdAttr:PosOfBrdAttr+4], b.Brdattr)
+	ret[PosOfVoteLimitPosts] = b.VoteLimitPosts
+	ret[PosOfVoteLimitLogins] = b.VoteLimitLogins
+	copy(ret[PosOfChessCountry:PosOfChessCountry+1], b.ChessCountry)
+	binary.LittleEndian.PutUint32(ret[PosOfBUpdate:PosOfBUpdate+4], uint32(b.BUpdate.Unix()))
+	ret[PosOfPostLimitPosts] = b.PostLimitPosts
+	ret[PosOfPostLimitLogins] = b.PostLimitLogins
+	ret[PosOfBVote] = b.BVote
+	binary.LittleEndian.PutUint32(ret[PosOfVTime:PosOfVTime+4], uint32(b.VTime.Unix()))
+	binary.LittleEndian.PutUint32(ret[PosOfLevel:PosOfLevel+4], b.Level)
+	binary.LittleEndian.PutUint32(ret[PosOfPermReload:PosOfPermReload+4], uint32(b.PermReload.Unix()))
+	binary.LittleEndian.PutUint32(ret[PosOfGid:PosOfGid+4], uint32(b.Gid))
 
-	// TODO fill other fileds
+	if len(b.Next) == 2 {
+		binary.LittleEndian.PutUint32(ret[PosOfNext:PosOfNext+4], uint32(b.Next[0]))
+		binary.LittleEndian.PutUint32(ret[PosOfNext+4:PosOfNext+8], uint32(b.Next[1]))
+	}
+
+	if len(b.FirstChild) == 2 {
+		binary.LittleEndian.PutUint32(ret[PosOfFirstChild:PosOfFirstChild+4], uint32(b.FirstChild[0]))
+		binary.LittleEndian.PutUint32(ret[PosOfFirstChild+4:PosOfFirstChild+8], uint32(b.FirstChild[1]))
+	}
+
+	binary.LittleEndian.PutUint32(ret[PosOfParent:PosOfParent+4], uint32(b.Parent))
+	binary.LittleEndian.PutUint32(ret[PosOfChildCount:PosOfChildCount+4], uint32(b.ChildCount))
+
+	binary.LittleEndian.PutUint32(ret[PosOfNuser:PosOfNuser+4], uint32(b.Nuser))
+	binary.LittleEndian.PutUint32(ret[PosOfPostExpire:PosOfPostExpire+4], uint32(b.PostExpire))
+	binary.LittleEndian.PutUint32(ret[PosOfEndGamble:PosOfEndGamble+4], uint32(b.EndGamble.Unix()))
+	copy(ret[PosOfPostType:PosOfPostType+33], utf8ToBig5UAOString(b.PostType))
+	copy(ret[PosOfPostTypeF:PosOfPostTypeF+1], utf8ToBig5UAOString(b.PostTypeF))
+
+	ret[PosOfFastRecommendPause] = b.FastRecommendPause
+	ret[PosOfVoteLimitBadPost] = b.VoteLimitBadPost
+	ret[PosOfPostLimitBadPost] = b.PostLimitBadPost
+	binary.LittleEndian.PutUint32(ret[PosOfSRExpire:PosOfSRExpire+4], uint32(b.SRexpire.Unix()))
 
 	return ret, nil
 

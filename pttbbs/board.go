@@ -176,7 +176,7 @@ func OpenBoardHeaderFile(filename string) ([]*BoardHeader, error) {
 			break
 		}
 
-		f, err := NewBoardHeaderWithByte(hdr)
+		f, err := UnmarshalBoardHeader(hdr)
 		if err != nil {
 			return nil, err
 		}
@@ -261,7 +261,7 @@ func RemoveBoardHeaderFileRecord(filename string, index int) error {
 
 }
 
-func NewBoardHeaderWithByte(data []byte) (*BoardHeader, error) {
+func UnmarshalBoardHeader(data []byte) (*BoardHeader, error) {
 	ret := BoardHeader{}
 
 	ret.BrdName = big5uaoToUTF8String(bytes.Split(data[PosOfBoardName:PosOfBoardName+IDLength+1], []byte("\x00"))[0])

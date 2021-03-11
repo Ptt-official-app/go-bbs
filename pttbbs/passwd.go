@@ -211,7 +211,7 @@ func OpenUserecFile(filename string) ([]*Userec, error) {
 			break
 		}
 
-		f, err := NewUserecWithByte(buf)
+		f, err := UnmarshalUserec(buf)
 		if err != nil {
 			return nil, err
 		}
@@ -224,7 +224,7 @@ func OpenUserecFile(filename string) ([]*Userec, error) {
 
 }
 
-func NewUserecWithByte(data []byte) (*Userec, error) {
+func UnmarshalUserec(data []byte) (*Userec, error) {
 	user := &Userec{}
 	user.Version = binary.LittleEndian.Uint32(data[PosOfPasswdVersion : PosOfPasswdVersion+4])
 	user.userID = newStringFormCString(data[PosOfPasswdUserID : PosOfPasswdUserID+IDLength+1])
@@ -296,7 +296,7 @@ func NewUserecWithByte(data []byte) (*Userec, error) {
 	return user, nil
 }
 
-func (u *Userec) MarshalToByte() ([]byte, error) {
+func (u *Userec) MarshalBinary() ([]byte, error) {
 	ret := make([]byte, 512)
 
 	binary.LittleEndian.PutUint32(ret[PosOfPasswdVersion:PosOfPasswdVersion+4], u.Version)

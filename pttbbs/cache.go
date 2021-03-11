@@ -108,22 +108,22 @@ func (c *Cache) caculatePos() {
 	c.posOfSize = c.posOfVersion + 4
 	c.posOfUserID = c.posOfSize + 4
 
-	c.posOfNextInHash = c.posOfUserID + c.MaxUsers*(c.IDLen+1) + (c.IDLen + 1)
+	c.posOfNextInHash = (c.IDLen + 1) + c.posOfUserID + c.MaxUsers*(c.IDLen+1)
 	// Align
 	if c.posOfNextInHash%c.AlignmentBytes != 0 {
 		padding := c.AlignmentBytes - c.posOfNextInHash%c.AlignmentBytes
 		c.posOfNextInHash += padding
 	}
 	fmt.Println("c.posOfNextInHash", c.posOfNextInHash)
-	c.posOfMoney = c.posOfNextInHash + c.MaxUsers*4 + 4 // + gap_2
+	c.posOfMoney = 4 + c.posOfNextInHash + c.MaxUsers*4 // + gap_2
 	if c.UseCoolDown {
-		c.posOfCooldownTime = c.posOfMoney + c.MaxUsers*4 + 4    // + gap_3
-		c.posOfHashHead = c.posOfCooldownTime + c.MaxUsers*4 + 4 // time4_t + gap_4
+		c.posOfCooldownTime = 4 + c.posOfMoney + c.MaxUsers*4    // + gap_3
+		c.posOfHashHead = 4 + c.posOfCooldownTime + c.MaxUsers*4 // + gap_4
 	} else {
-		c.posOfHashHead = c.posOfMoney + c.MaxUsers*4 + 4 + 4 // + gap_3 + gap_4
+		c.posOfHashHead = 4 + 4 + c.posOfMoney + c.MaxUsers*4 // + gap_3 + gap_4
 	}
 
-	c.posOfUserNumber = c.posOfHashHead + (1<<c.HashBits)*4 + 4 // + gap_5
+	c.posOfUserNumber = 4 + c.posOfHashHead + (1<<c.HashBits)*4 // + gap_5
 	c.posOfUserLoaded = c.posOfUserNumber + 4
 
 	c.posOfUserInfo = c.posOfUserLoaded + 4

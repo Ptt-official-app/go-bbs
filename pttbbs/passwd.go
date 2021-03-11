@@ -32,25 +32,25 @@ const (
 	PosOfPasswdRealName     = PosOfPasswdUserID + IDLength + 1
 	PosOfPasswdNickname     = PosOfPasswdRealName + RealNameSize
 	PosOfPasswdPassword     = PosOfPasswdNickname + NicknameSize
-	PosOfPasswdUserFlag     = PosOfPasswdPassword + PasswordLength + 1
-	PosOfPasswdUserLevel    = PosOfPasswdUserFlag + 4 + 4
+	PosOfPasswdUserFlag     = 1 + PosOfPasswdPassword + PasswordLength
+	PosOfPasswdUserLevel    = 4 + PosOfPasswdUserFlag + 4
 	PosOfPasswdNumLoginDays = PosOfPasswdUserLevel + 4
 	PosOfPasswdNumPosts     = PosOfPasswdNumLoginDays + 4
 	PosOfPasswdFirstLogin   = PosOfPasswdNumPosts + 4
 	PosOfPasswdLastLogin    = PosOfPasswdFirstLogin + 4
 	PosOfPasswdLastHost     = PosOfPasswdLastLogin + 4
 	PosOfPasswdMoney        = PosOfPasswdLastHost + IPV4Length + 1
-	PosOfPasswdEmail        = PosOfPasswdMoney + 4 + 4
+	PosOfPasswdEmail        = 4 + PosOfPasswdMoney + 4
 	PosOfPasswdAddress      = PosOfPasswdEmail + EmailSize
 	PosOfPasswdJustify      = PosOfPasswdAddress + AddressSize
-	PosOfPasswdOver18       = PosOfPasswdJustify + RegistrationLength + 1 + 3
+	PosOfPasswdOver18       = 3 + PosOfPasswdJustify + RegistrationLength + 1
 	PosOfPasswdPagerUIType  = PosOfPasswdOver18 + 1
 	PosOfPasswdPager        = PosOfPasswdPagerUIType + 1
 	PosOfPasswdInvisible    = PosOfPasswdPager + 1
-	PosOfPasswdExMailBox    = PosOfPasswdInvisible + 1 + 2
+	PosOfPasswdExMailBox    = 2 + PosOfPasswdInvisible + 1
 
-	PosOfPasswdCareer        = PosOfPasswdExMailBox + 4 + 4
-	PosOfPasswdRole          = PosOfPasswdCareer + CareerSize + 20 + 4 + 44
+	PosOfPasswdCareer        = 4 + PosOfPasswdExMailBox + 4
+	PosOfPasswdRole          = 20 + 4 + 44 + PosOfPasswdCareer + CareerSize
 	PosOfPasswdLastSeen      = PosOfPasswdRole + 4
 	PosOfPasswdTimeSetAngel  = PosOfPasswdLastSeen + 4
 	PosOfPasswdTimePlayAngel = PosOfPasswdTimeSetAngel + 4
@@ -58,7 +58,7 @@ const (
 	PosOfPasswdLastSong  = PosOfPasswdTimePlayAngel + 4
 	PosOfPasswdLoginView = PosOfPasswdLastSong + 4
 
-	PosOfPasswdLawCounter = PosOfPasswdLoginView + 4 + 2
+	PosOfPasswdLawCounter = 1 + 1 + PosOfPasswdLoginView + 4
 	PosOfPasswdFiveWin    = PosOfPasswdLawCounter + 2
 	PosOfPasswdFiveLose   = PosOfPasswdFiveWin + 2
 	PosOfPasswdFiveTie    = PosOfPasswdFiveLose + 2
@@ -68,7 +68,7 @@ const (
 	PosOfPasswdConn6Win   = PosOfPasswdChcTie + 2
 	PosOfPasswdConn6Lose  = PosOfPasswdConn6Win + 2
 	PosOfPasswdConn6Tie   = PosOfPasswdConn6Lose + 2
-	PosOfPasswdGoWin      = PosOfPasswdConn6Tie + 2 + 2
+	PosOfPasswdGoWin      = 2 + PosOfPasswdConn6Tie + 2
 	PosOfPasswdGoLose     = PosOfPasswdGoWin + 2
 	PosOfPasswdGoTie      = PosOfPasswdGoLose + 2
 	PosOfPasswdDarkWin    = PosOfPasswdGoTie + 2
@@ -76,11 +76,11 @@ const (
 	PosOfPasswdUaVersion  = PosOfPasswdDarkLose + 2
 
 	PosOfPasswdSignature = PosOfPasswdUaVersion + 1
-	PosOfPasswdBadPost   = PosOfPasswdSignature + 1 + 1
+	PosOfPasswdBadPost   = 1 + PosOfPasswdSignature + 1
 	PosOfPasswdDarkTie   = PosOfPasswdBadPost + 1
 	PosOfPasswdMyAngel   = PosOfPasswdDarkTie + 2
 
-	PosOfPasswdChessEloRating    = PosOfPasswdMyAngel + IDLength + 1 + 1
+	PosOfPasswdChessEloRating    = 1 + PosOfPasswdMyAngel + IDLength + 1
 	PosOfPasswdWithMe            = PosOfPasswdChessEloRating + 2
 	PosOfPasswdTimeRemoveBadPost = PosOfPasswdWithMe + 4
 	PosOfPasswdTimeViolateLaw    = PosOfPasswdTimeRemoveBadPost + 4

@@ -113,7 +113,7 @@ const (
 	PosOfBoardName          = 0
 	PosOfBoardTitle         = PosOfBoardName + IDLength + 1
 	PosOfBM                 = PosOfBoardTitle + BoardTitleLength + 1
-	PosOfBrdAttr            = 3 + IDLength*3 + 3 + PosOfBM
+	PosOfBrdAttr            = 3 + PosOfBM + IDLength*3 + 3
 	PosOfChessCountry       = PosOfBrdAttr + 4
 	PosOfVoteLimitPosts     = PosOfChessCountry + 1
 	PosOfVoteLimitLogins    = PosOfVoteLimitPosts + 1
@@ -126,8 +126,8 @@ const (
 	PosOfPermReload         = PosOfLevel + 4
 	PosOfGid                = PosOfPermReload + 4
 	PosOfNext               = PosOfGid + 4
-	PosOfFirstChild         = PosOfNext + 8
-	PosOfParent             = PosOfFirstChild + 8
+	PosOfFirstChild         = PosOfNext + 4*2
+	PosOfParent             = PosOfFirstChild + 4*2
 	PosOfChildCount         = PosOfParent + 4
 	PosOfNuser              = PosOfChildCount + 4
 	PosOfPostExpire         = PosOfNuser + 4

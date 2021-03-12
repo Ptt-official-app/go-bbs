@@ -526,7 +526,7 @@ func TestOpenUserecFile(t *testing.T) {
 
 }
 
-func TestEncodingUserec(t *testing.T) {
+func TestMarshalBinaryUserec(t *testing.T) {
 	type TestCase struct {
 		Input    Userec
 		Expected []byte
@@ -627,7 +627,7 @@ b36e c5e9 0000 0000 0000 0000 0000 0000
 	}
 
 	for index, c := range testcase {
-		b, err := c.Input.MarshalToByte()
+		b, err := c.Input.MarshalBinary()
 		t.Logf("log: %q, %q", b, err)
 		if hex.Dump(b) != hex.Dump(c.Expected) {
 			t.Errorf("Expected byte not match in index %d, expected: \n%s\n, got: \n%s", index, hex.Dump(c.Expected), hex.Dump(b))

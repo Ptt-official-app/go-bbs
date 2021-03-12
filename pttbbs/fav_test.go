@@ -26,9 +26,9 @@ import (
 
 var time0 = time.Unix(int64(0), 0)
 
-func TestNewFavLineItem(t *testing.T) {
+func TestUnmarshalFavItem(t *testing.T) {
 	data := []byte{3, 1, 2}
-	item, _, err := NewFavItem(data, 0)
+	item, _, err := UnmarshalFavItem(data, 0)
 	if err != nil || item == nil {
 		t.Fatal("Failed to parse Line")
 	}

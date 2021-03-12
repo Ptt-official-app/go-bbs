@@ -113,7 +113,7 @@ const (
 	PosOfBoardName          = 0
 	PosOfBoardTitle         = PosOfBoardName + IDLength + 1
 	PosOfBM                 = PosOfBoardTitle + BoardTitleLength + 1
-	PosOfBrdAttr            = 3 + IDLength*3 + 3 + PosOfBM
+	PosOfBrdAttr            = 3 + PosOfBM + IDLength*3 + 3
 	PosOfChessCountry       = PosOfBrdAttr + 4
 	PosOfVoteLimitPosts     = PosOfChessCountry + 1
 	PosOfVoteLimitLogins    = PosOfVoteLimitPosts + 1
@@ -126,8 +126,8 @@ const (
 	PosOfPermReload         = PosOfLevel + 4
 	PosOfGid                = PosOfPermReload + 4
 	PosOfNext               = PosOfGid + 4
-	PosOfFirstChild         = PosOfNext + 8
-	PosOfParent             = PosOfFirstChild + 8
+	PosOfFirstChild         = PosOfNext + 4*2
+	PosOfParent             = PosOfFirstChild + 4*2
 	PosOfChildCount         = PosOfParent + 4
 	PosOfNuser              = PosOfChildCount + 4
 	PosOfPostExpire         = PosOfNuser + 4
@@ -176,7 +176,7 @@ func OpenBoardHeaderFile(filename string) ([]*BoardHeader, error) {
 			break
 		}
 
-		f, err := NewBoardHeaderWithByte(hdr)
+		f, err := UnmarshalBoardHeader(hdr)
 		if err != nil {
 			return nil, err
 		}
@@ -261,7 +261,7 @@ func RemoveBoardHeaderFileRecord(filename string, index int) error {
 
 }
 
-func NewBoardHeaderWithByte(data []byte) (*BoardHeader, error) {
+func UnmarshalBoardHeader(data []byte) (*BoardHeader, error) {
 	ret := BoardHeader{}
 
 	ret.BrdName = big5uaoToUTF8String(bytes.Split(data[PosOfBoardName:PosOfBoardName+IDLength+1], []byte("\x00"))[0])

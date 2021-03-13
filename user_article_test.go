@@ -3,24 +3,27 @@ package bbs
 // benchmark with go test -bench=.
 /*
 $ go test -bench=.
-goos: darwin
+goos: linux
 goarch: amd64
 pkg: github.com/Ptt-official-app/go-bbs
-BenchmarkSSTableProtobufWrite-4   	     100	  62030975 ns/op
-BenchmarkProtobufWrite-4          	      76	  35507473 ns/op
-BenchmarkProtobufAppend-4         	       7	 146766586 ns/op
-BenchmarkProtobufBufWrite-4       	      37	  49721741 ns/op
-BenchmarkProtobufArrayWrite-4     	     908	   1639579 ns/op
-BenchmarkProtobufArrayAppend-4    	       2	 535421312 ns/op
-BenchmarkJSONStreamWrite-4        	     100	  14779489 ns/op
-BenchmarkJSONStreamBufWrite-4     	     469	   2836098 ns/op
-BenchmarkJSONStreamAppend-4       	       6	 223996055 ns/op
-BenchmarkJSONArrayWrite-4         	     100	  59582955 ns/op
-BenchmarkJSONArrayAppend-4        	       1	1353481958 ns/op
-BenchmarkSqliteWrite-4            	      66	  20464509 ns/op
-BenchmarkSqliteAppend-4           	       1	4681380500 ns/op
+cpu: Intel(R) Core(TM) i7-7500U CPU @ 2.70GHz
+BenchmarkLevelDBAppend-4                      64          17167994 ns/op
+BenchmarkRecordIOProtobufWrite-4             667           1821572 ns/op
+BenchmarkRecordIOProtobufAppend-4            201           5656839 ns/op
+BenchmarkProtobufWrite-4                     715           1970847 ns/op
+BenchmarkProtobufAppend-4                    158           7869925 ns/op
+BenchmarkProtobufBufWrite-4                  344           3447253 ns/op
+BenchmarkProtobufArrayWrite-4               8366            148526 ns/op
+BenchmarkProtobufArrayAppend-4                 5         221438740 ns/op
+BenchmarkJSONStreamWrite-4                   562           2027456 ns/op
+BenchmarkJSONStreamBufWrite-4               2785            451461 ns/op
+BenchmarkJSONStreamAppend-4                  196           5495245 ns/op
+BenchmarkJSONArrayWrite-4                    100          10640510 ns/op
+BenchmarkJSONArrayAppend-4                     2        1415491800 ns/op
+BenchmarkSqliteWrite-4                        54          19211187 ns/op
+BenchmarkSqliteAppend-4                        1        8262016300 ns/op
 PASS
-ok  	github.com/Ptt-official-app/go-bbs	37.165s
+ok      github.com/Ptt-official-app/go-bbs      34.153s
 */
 import (
 	"database/sql"
@@ -29,16 +32,58 @@ import (
 	// "io"
 	"io/ioutil"
 	"os"
+	"strconv"
 	"testing"
 
-	_ "github.com/mattn/go-sqlite3"
 	"github.com/eclesh/recordio"
+	_ "github.com/mattn/go-sqlite3"
+	"github.com/syndtr/goleveldb/leveldb"
 	"google.golang.org/protobuf/proto"
 )
 
 var recordN = 1000
 
+func BenchmarkLevelDBAppend(b *testing.B) {
+	// LevelDB is the memory store backed by SSTable
+	// It is useful in faster write and read
+	// However, it is not good for close/reopen the db everytime
+	a := ProtobufUserArticle{
+		BoardID:   "Soft_Job",
+		ArticleID: "M.1610976994.A.2C8",
+	}
+	for i := 0; i < b.N; i++ {
+		dir, err := ioutil.TempDir("", "leveldb")
+		if err != nil {
+			b.Errorf("%v", err)
+			return
+		}
+
+		db, err := leveldb.OpenFile(dir, nil)
+		if err != nil {
+			b.Errorf("%v", err)
+			return
+		}
+
+		for j := 0; j < recordN; j++ {
+			out, err := proto.Marshal(&a)
+			if err != nil {
+				b.Errorf("%v", err)
+				return
+			}
+			err = db.Put([]byte(strconv.Itoa(j)), out, nil)
+			if err != nil {
+				b.Errorf("%v", err)
+				return
+			}
+		}
+		db.Close()
+		os.RemoveAll(dir)
+	}
+}
+
 func BenchmarkRecordIOProtobufWrite(b *testing.B) {
+	// RecordIO is an append only data format
+	// It is designed for faster sequential read/write
 	a := ProtobufUserArticle{
 		BoardID:   "Soft_Job",
 		ArticleID: "M.1610976994.A.2C8",

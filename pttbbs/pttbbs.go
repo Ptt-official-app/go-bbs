@@ -51,6 +51,9 @@ func (c *Connector) GetUserFavoriteRecordsPath(userID string) (string, error) {
 
 func (c *Connector) ReadUserFavoriteRecordsFile(filename string) ([]bbs.FavoriteRecord, error) {
 	rec, err := OpenFavFile(filename)
+	if err != nil {
+		return nil, fmt.Errorf("pttbbs: OpenFavFile error: %v", err)
+	}
 
 	bPath, err := c.GetBoardRecordsPath()
 	if err != nil {

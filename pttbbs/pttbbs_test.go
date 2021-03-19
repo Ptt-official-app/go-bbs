@@ -1,8 +1,8 @@
 package pttbbs
 
 import (
-	"testing"
 	"strings"
+	"testing"
 )
 
 func TestReadUserFavoriteRecordsFileNoFile(t *testing.T) {

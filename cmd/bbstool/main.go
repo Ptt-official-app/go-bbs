@@ -35,6 +35,10 @@ func main() {
 	case "showuserlist":
 		showuserlist()
 		return
+	case "showuserarticlelist":
+		// Example: go run ./  --bbshome=../../home/bbs showuserarticlelist --user_id pichu
+		showuserarticlelist()
+		return
 	}
 
 }
@@ -160,6 +164,36 @@ func showuserlist() {
 			continue
 		}
 		fmt.Println("user id:", r.UserID())
+	}
+
+}
+
+func showuserarticlelist() {
+	err := chkIsDir(bbshome)
+	if err != nil {
+		fmt.Printf("showuserarticlelist: error: %v\n", err)
+		return
+	}
+
+	bbsDB, err := bbs.Open(driverName, "file://"+bbshome)
+	if err != nil {
+		fmt.Printf("showuserarticlelist: open db: %v\n", err)
+		return
+	}
+
+	args := parseArgsToMap(flag.Args())
+
+	records, err := bbsDB.GetUserArticleRecordFile(args["user_id"].(string))
+	if err != nil {
+		fmt.Printf("showuserarticlelist: ReadUserRecords: %v\n", err)
+		return
+	}
+
+	for _, r := range records {
+		// if r.UserID() == "" {
+		// 	continue
+		// }
+		fmt.Println("titlex:", r.Title())
 	}
 
 }

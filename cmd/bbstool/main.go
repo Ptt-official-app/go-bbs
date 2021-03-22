@@ -171,13 +171,13 @@ func showuserlist() {
 func showuserarticlelist() {
 	err := chkIsDir(bbshome)
 	if err != nil {
-		fmt.Printf("showuserarticlelist: error: %w\n", err)
+		fmt.Printf("showuserarticlelist: error: %v\n", err)
 		return
 	}
 
 	bbsDB, err := bbs.Open(driverName, "file://"+bbshome)
 	if err != nil {
-		fmt.Printf("showuserarticlelist: open db: %w\n", err)
+		fmt.Printf("showuserarticlelist: open db: %v\n", err)
 		return
 	}
 
@@ -185,7 +185,7 @@ func showuserarticlelist() {
 
 	records, err := bbsDB.GetUserArticleRecordFile(args["user_id"].(string))
 	if err != nil {
-		fmt.Printf("showuserarticlelist: ReadUserRecords: %w\n", err)
+		fmt.Printf("showuserarticlelist: ReadUserRecords: %v\n", err)
 		return
 	}
 

@@ -51,14 +51,17 @@ func (c *Connector) GetUserFavoriteRecordsPath(userID string) (string, error) {
 
 func (c *Connector) ReadUserFavoriteRecordsFile(filename string) ([]bbs.FavoriteRecord, error) {
 	rec, err := OpenFavFile(filename)
+	if err != nil {
+		return nil, fmt.Errorf("pttbbs: OpenFavFile error: %w", err)
+	}
 
 	bPath, err := c.GetBoardRecordsPath()
 	if err != nil {
-		return nil, fmt.Errorf("pttbbs: GetBoardRecordsPath error: %v", err)
+		return nil, fmt.Errorf("pttbbs: GetBoardRecordsPath error: %w", err)
 	}
 	br, err := OpenBoardHeaderFile(bPath)
 	if err != nil {
-		return nil, fmt.Errorf("pttbbs: ReadBoardRecordsFile error: %v", err)
+		return nil, fmt.Errorf("pttbbs: ReadBoardRecordsFile error: %w", err)
 	}
 	appendBoardID(rec.Folder, br)
 	ret := make([]bbs.FavoriteRecord, len(rec.Folder.FavItems))

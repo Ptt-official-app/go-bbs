@@ -1,5 +1,3 @@
 package bbs
 
-import (
 // "time"
-)

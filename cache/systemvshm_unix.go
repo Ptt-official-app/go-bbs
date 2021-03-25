@@ -3,8 +3,9 @@
 package cache
 
 import (
-	syscall "golang.org/x/sys/unix"
 	"unsafe"
+
+	syscall "golang.org/x/sys/unix"
 )
 
 func shmget(key int, size int, flag int) (int, error) {

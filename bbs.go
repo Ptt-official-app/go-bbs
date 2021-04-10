@@ -3,6 +3,7 @@ package bbs
 import (
 	"fmt"
 	"log"
+	"strings"
 	"time"
 )
 
@@ -157,6 +158,22 @@ type WriteBoardConnector interface {
 	RemoveBoardRecordFileRecord(name string, index uint) error
 }
 
+// UserArticleConnector is a connector for bbs who support cached user article records
+type UserArticleConnector interface {
+
+	// GetUserArticleRecordsPath should return the file path which user article record stores.
+	GetUserArticleRecordsPath(userID string) (string, error)
+
+	// ReadUserArticleRecordFile should return the article record in file.
+	ReadUserArticleRecordFile(name string) ([]UserArticleRecord, error)
+
+	// WriteUserArticleRecordFile write user article records into file.
+	WriteUserArticleRecordFile(name string, records []UserArticleRecord) error
+
+	// AppendUserArticleRecordFile append user article records into file.
+	AppendUserArticleRecordFile(name string, record UserArticleRecord) error
+}
+
 var drivers = make(map[string]Connector)
 
 func Register(drivername string, connector Connector) {
@@ -248,7 +265,10 @@ func (db *DB) ReadBoardArticleRecordsFile(boardID string) ([]ArticleRecord, erro
 
 	recs, err := db.connector.ReadArticleRecordsFile(path)
 	if err != nil {
-		log.Println("bbs: get user rec error:", err)
+		if strings.Contains(err.Error(), "no such file or directory") {
+			return []ArticleRecord{}, nil
+		}
+		log.Println("bbs: ReadArticleRecordsFile error:", err)
 		return nil, err
 	}
 	return recs, nil
@@ -341,4 +361,69 @@ func (db *DB) ReadBoardRecord(index uint) (*BoardRecord, error) {
 // RemoveBoardRecordFileRecord remove boardRecord brd on index in record file.
 func (db *DB) RemoveBoardRecord(index uint) error {
 	return fmt.Errorf("not implement")
+}
+
+// GetUserArticleRecordFile returns aritcle file which user posted.
+func (db *DB) GetUserArticleRecordFile(userID string) ([]UserArticleRecord, error) {
+
+	recs := []UserArticleRecord{}
+	uac, ok := db.connector.(UserArticleConnector)
+	if ok {
+
+		path, err := uac.GetUserArticleRecordsPath(userID)
+		if err != nil {
+			log.Println("bbs: open file error:", err)
+			return nil, err
+		}
+		log.Println("path:", path)
+
+		recs, err = uac.ReadUserArticleRecordFile(path)
+		if err != nil {
+			log.Println("bbs: ReadUserArticleRecordFile error:", err)
+			return nil, err
+		}
+		if len(recs) != 0 {
+			return recs, nil
+		}
+
+	}
+
+	boardRecords, err := db.ReadBoardRecords()
+	if err != nil {
+		log.Println("bbs: ReadBoardRecords error:", err)
+		return nil, err
+	}
+
+	shouldSkip := func(boardID string) bool {
+		if boardID == "ALLPOST" {
+			return true
+		}
+		return false
+	}
+
+	for _, r := range boardRecords {
+		if shouldSkip(r.BoardID()) {
+			continue
+		}
+
+		ars, err := db.ReadBoardArticleRecordsFile(r.BoardID())
+		if err != nil {
+			log.Println("bbs: ReadBoardArticleRecordsFile error:", err)
+			return nil, err
+		}
+		for _, ar := range ars {
+			if ar.Owner() == userID {
+				log.Println("board: ", r.BoardID(), len(recs))
+				r := userArticleRecord{
+					"board_id":   r.BoardID(),
+					"title":      ar.Title(),
+					"owner":      ar.Owner(),
+					"article_id": ar.Filename(),
+				}
+				recs = append(recs, r)
+			}
+		}
+	}
+
+	return recs, nil
 }

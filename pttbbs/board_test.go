@@ -521,6 +521,58 @@ func TestBoardHeader(t *testing.T) {
 
 }
 
+func TestInfoAndSettings(t *testing.T) {
+	headers, err := OpenBoardHeaderFile("testcase/board/01.BRD")
+	if err != nil {
+		t.Error(err)
+	}
+
+	settingKeys := []string{
+		"hide",
+		"restricted_post_or_read_permission",
+		"anonymous",
+		"default_anonymous",
+		"no_money",
+		"vote_board",
+		"warnel",
+		"top",
+		"no_comment",
+		"angel_anonymous",
+		"bm_count",
+		"no_boo",
+		"allow_list_post_only",
+		"guest_post_only",
+		"cooldown",
+		"cross_post_log",
+		"no_fast_comment",
+		"log_ip_when_comment",
+		"over18",
+		"no_reply",
+		"aligned_comment",
+		"no_self_delete_post",
+		"bm_mask_content",
+	}
+
+	expected := testBoardHeaders
+	for index, header := range headers[0:11] {
+		infoAndSettings := header.InfoAndSettings()
+		if infoAndSettings["posts"] != expected[index].PostLimitPosts {
+			t.Errorf("posts not match in index %d, expected: %d, got: %d", index, expected[index].PostLimitPosts, infoAndSettings["posts"])
+		}
+		if infoAndSettings["logins"] != expected[index].PostLimitLogins {
+			t.Errorf("logins not match in index %d, expected: %d, got: %d", index, expected[index].PostLimitLogins, infoAndSettings["logins"])
+		}
+		if infoAndSettings["badpost"] != expected[index].PostLimitBadPost {
+			t.Errorf("badpost not match in index %d, expected: %d, got: %d", index, expected[index].PostLimitBadPost, infoAndSettings["badpost"])
+		}
+		for _, key := range settingKeys {
+			if infoAndSettings[key] != expected[index].InfoAndSettings()[key] {
+				t.Errorf("%s not match in index %d, expected: %v, got: %v", key, index, expected[index].InfoAndSettings()[key], infoAndSettings[key])
+			}
+		}
+	}
+}
+
 func TestAppendAndRemoveBoardRecord(t *testing.T) {
 
 	tmpfile, err := ioutil.TempFile("", "board_test_*")

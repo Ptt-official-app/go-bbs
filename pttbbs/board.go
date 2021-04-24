@@ -104,6 +104,37 @@ func (b *BoardHeader) IsBMMaskContent() bool    { return b.Brdattr&0x10000000 !=
 
 func (b *BoardHeader) BM() []string { return strings.Split(b.bm, "/") }
 
+func (b *BoardHeader) InfoAndSettings() map[string]interface{} {
+	return map[string]interface{}{
+		"posts":                              b.PostLimitPosts,
+		"logins":                             b.PostLimitLogins,
+		"badpost":                            b.PostLimitBadPost,
+		"hide":                               b.IsHide(),
+		"restricted_post_or_read_permission": b.IsPostMask(),
+		"anonymous":                          b.IsAnonymous(),
+		"default_anonymous":                  b.IsDefaultAnonymous(),
+		"no_money":                           b.IsNoCredit(),
+		"vote_board":                         b.IsVoteBoard(),
+		"warnel":                             b.IsWarnEL(),
+		"top":                                b.IsTop(),
+		"no_comment":                         b.IsNoRecommend(),
+		"angel_anonymous":                    b.IsAngelAnonymous(),
+		"bm_count":                           b.IsBMCount(),
+		"no_boo":                             b.IsNoBoo(),
+		"allow_list_post_only":               b.IsRestrictedPost(),
+		"guest_post_only":                    b.IsGuestPost(),
+		"cooldown":                           b.IsCooldown(),
+		"cross_post_log":                     b.IsCPLog(),
+		"no_fast_comment":                    b.IsNoFastRecommend(),
+		"log_ip_when_comment":                b.IsIPLogRecommend(),
+		"over18":                             b.IsOver18(),
+		"no_reply":                           b.IsNoReply(),
+		"aligned_comment":                    b.IsAlignedComment(),
+		"no_self_delete_post":                b.IsNoSelfDeletePost(),
+		"bm_mask_content":                    b.IsBMMaskContent(),
+	}
+}
+
 const (
 	// BoardTitleLength https://github.com/ptt/pttbbs/blob/master/include/pttstruct.h#L165
 	BoardTitleLength = 48

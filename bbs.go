@@ -85,6 +85,8 @@ type BoardRecord interface {
 	ClassID() string
 
 	BM() []string
+
+	InfoAndSettings() map[string]interface{}
 }
 
 type ArticleRecord interface {

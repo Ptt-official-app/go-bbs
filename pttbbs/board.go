@@ -102,8 +102,8 @@ func (b *BoardHeader) IsAlignedComment() bool   { return b.Brdattr&0x04000000 !=
 func (b *BoardHeader) IsNoSelfDeletePost() bool { return b.Brdattr&0x08000000 != 0 }
 func (b *BoardHeader) IsBMMaskContent() bool    { return b.Brdattr&0x10000000 != 0 }
 
-func (b *BoardHeader) GetPostLimitPosts() uint8 { return b.PostLimitPosts }
-func (b *BoardHeader) GetPostLimitLogins() uint8 { return b.PostLimitLogins }
+func (b *BoardHeader) GetPostLimitPosts() uint8   { return b.PostLimitPosts }
+func (b *BoardHeader) GetPostLimitLogins() uint8  { return b.PostLimitLogins }
 func (b *BoardHeader) GetPostLimitBadPost() uint8 { return b.PostLimitBadPost }
 
 func (b *BoardHeader) BM() []string { return strings.Split(b.bm, "/") }

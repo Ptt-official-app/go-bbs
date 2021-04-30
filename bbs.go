@@ -85,8 +85,38 @@ type BoardRecord interface {
 	ClassID() string
 
 	BM() []string
+}
 
-	InfoAndSettings() map[string]interface{}
+type BoardRecordSettings interface {
+	IsHide() bool
+	IsPostMask() bool
+	IsAnonymous() bool
+	IsDefaultAnonymous() bool
+	IsNoCredit() bool
+	IsVoteBoard() bool
+	IsWarnEL() bool
+	IsTop() bool
+	IsNoRecommend() bool
+	IsAngelAnonymous() bool
+	IsBMCount() bool
+	IsNoBoo() bool
+	IsRestrictedPost() bool
+	IsGuestPost() bool
+	IsCooldown() bool
+	IsCPLog() bool
+	IsNoFastRecommend() bool
+	IsIPLogRecommend() bool
+	IsOver18() bool
+	IsNoReply() bool
+	IsAlignedComment() bool
+	IsNoSelfDeletePost() bool
+	IsBMMaskContent() bool
+}
+
+type BoardRecordInfo interface {
+	GetPostLimitPosts() uint8
+	GetPostLimitLogins() uint8
+	GetPostLimitBadPost() uint8
 }
 
 type ArticleRecord interface {

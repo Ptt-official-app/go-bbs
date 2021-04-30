@@ -20,6 +20,8 @@ import (
 	"os"
 	"testing"
 	"time"
+
+	"github.com/Ptt-official-app/go-bbs"
 )
 
 var testBoardHeaders = []BoardHeader{
@@ -521,54 +523,104 @@ func TestBoardHeader(t *testing.T) {
 
 }
 
-func TestInfoAndSettings(t *testing.T) {
+func TestBoardHeaderInfo(t *testing.T) {
 	headers, err := OpenBoardHeaderFile("testcase/board/01.BRD")
 	if err != nil {
 		t.Error(err)
 	}
 
-	settingKeys := []string{
-		"hide",
-		"restricted_post_or_read_permission",
-		"anonymous",
-		"default_anonymous",
-		"no_money",
-		"vote_board",
-		"warnel",
-		"top",
-		"no_comment",
-		"angel_anonymous",
-		"bm_count",
-		"no_boo",
-		"allow_list_post_only",
-		"guest_post_only",
-		"cooldown",
-		"cross_post_log",
-		"no_fast_comment",
-		"log_ip_when_comment",
-		"over18",
-		"no_reply",
-		"aligned_comment",
-		"no_self_delete_post",
-		"bm_mask_content",
+	expected := testBoardHeaders
+	for index, header := range headers[0:11] {
+		info := bbs.BoardRecordInfo(header)
+		if info.GetPostLimitPosts() != expected[index].PostLimitPosts {
+			t.Errorf("posts not match in index %d, expected: %d, got: %d", index, expected[index].PostLimitPosts, info.GetPostLimitPosts())
+		}
+		if info.GetPostLimitLogins() != expected[index].PostLimitLogins {
+			t.Errorf("logins not match in index %d, expected: %d, got: %d", index, expected[index].PostLimitLogins, info.GetPostLimitLogins())
+		}
+		if info.GetPostLimitBadPost() != expected[index].PostLimitBadPost {
+			t.Errorf("badpost not match in index %d, expected: %d, got: %d", index, expected[index].PostLimitBadPost, info.GetPostLimitBadPost())
+		}
+	}
+}
+
+func TestBoardHeaderSettings(t *testing.T) {
+	headers, err := OpenBoardHeaderFile("testcase/board/01.BRD")
+	if err != nil {
+		t.Error(err)
 	}
 
 	expected := testBoardHeaders
 	for index, header := range headers[0:11] {
-		infoAndSettings := header.InfoAndSettings()
-		if infoAndSettings["posts"] != expected[index].PostLimitPosts {
-			t.Errorf("posts not match in index %d, expected: %d, got: %d", index, expected[index].PostLimitPosts, infoAndSettings["posts"])
+		settings := bbs.BoardRecordSettings(header)
+		if settings.IsHide() != expected[index].IsHide() {
+			t.Errorf("IsHide not match in index %d, expected: %v, got: %v", index, expected[index].IsHide(), settings.IsHide())
 		}
-		if infoAndSettings["logins"] != expected[index].PostLimitLogins {
-			t.Errorf("logins not match in index %d, expected: %d, got: %d", index, expected[index].PostLimitLogins, infoAndSettings["logins"])
+		if settings.IsPostMask() != expected[index].IsPostMask() {
+			t.Errorf("IsPostMask not match in index %d, expected: %v, got: %v", index, expected[index].IsPostMask(), settings.IsPostMask())
 		}
-		if infoAndSettings["badpost"] != expected[index].PostLimitBadPost {
-			t.Errorf("badpost not match in index %d, expected: %d, got: %d", index, expected[index].PostLimitBadPost, infoAndSettings["badpost"])
+		if settings.IsAnonymous() != expected[index].IsAnonymous() {
+			t.Errorf("IsAnonymous not match in index %d, expected: %v, got: %v", index, expected[index].IsAnonymous(), settings.IsAnonymous())
 		}
-		for _, key := range settingKeys {
-			if infoAndSettings[key] != expected[index].InfoAndSettings()[key] {
-				t.Errorf("%s not match in index %d, expected: %v, got: %v", key, index, expected[index].InfoAndSettings()[key], infoAndSettings[key])
-			}
+		if settings.IsDefaultAnonymous() != expected[index].IsDefaultAnonymous() {
+			t.Errorf("IsDefaultAnonymous not match in index %d, expected: %v, got: %v", index, expected[index].IsDefaultAnonymous(), settings.IsDefaultAnonymous())
+		}
+		if settings.IsNoCredit() != expected[index].IsNoCredit() {
+			t.Errorf("IsNoCredit not match in index %d, expected: %v, got: %v", index, expected[index].IsNoCredit(), settings.IsNoCredit())
+		}
+		if settings.IsVoteBoard() != expected[index].IsVoteBoard() {
+			t.Errorf("IsVoteBoard not match in index %d, expected: %v, got: %v", index, expected[index].IsVoteBoard(), settings.IsVoteBoard())
+		}
+		if settings.IsWarnEL() != expected[index].IsWarnEL() {
+			t.Errorf("IsWarnEL not match in index %d, expected: %v, got: %v", index, expected[index].IsWarnEL(), settings.IsWarnEL())
+		}
+		if settings.IsTop() != expected[index].IsTop() {
+			t.Errorf("IsTop not match in index %d, expected: %v, got: %v", index, expected[index].IsTop(), settings.IsTop())
+		}
+		if settings.IsNoRecommend() != expected[index].IsNoRecommend() {
+			t.Errorf("IsNoRecommend not match in index %d, expected: %v, got: %v", index, expected[index].IsNoRecommend(), settings.IsNoRecommend())
+		}
+		if settings.IsAngelAnonymous() != expected[index].IsAngelAnonymous() {
+			t.Errorf("IsAngelAnonymous not match in index %d, expected: %v, got: %v", index, expected[index].IsAngelAnonymous(), settings.IsAngelAnonymous())
+		}
+		if settings.IsBMCount() != expected[index].IsBMCount() {
+			t.Errorf("IsBMCount not match in index %d, expected: %v, got: %v", index, expected[index].IsBMCount(), settings.IsBMCount())
+		}
+		if settings.IsNoBoo() != expected[index].IsNoBoo() {
+			t.Errorf("IsNoBoo not match in index %d, expected: %v, got: %v", index, expected[index].IsNoBoo(), settings.IsNoBoo())
+		}
+		if settings.IsRestrictedPost() != expected[index].IsRestrictedPost() {
+			t.Errorf("IsRestrictedPost not match in index %d, expected: %v, got: %v", index, expected[index].IsRestrictedPost(), settings.IsRestrictedPost())
+		}
+		if settings.IsGuestPost() != expected[index].IsGuestPost() {
+			t.Errorf("IsGuestPost not match in index %d, expected: %v, got: %v", index, expected[index].IsGuestPost(), settings.IsGuestPost())
+		}
+		if settings.IsCooldown() != expected[index].IsCooldown() {
+			t.Errorf("IsCooldown not match in index %d, expected: %v, got: %v", index, expected[index].IsCooldown(), settings.IsCooldown())
+		}
+		if settings.IsCPLog() != expected[index].IsCPLog() {
+			t.Errorf("IsCPLog not match in index %d, expected: %v, got: %v", index, expected[index].IsCPLog(), settings.IsCPLog())
+		}
+		if settings.IsNoFastRecommend() != expected[index].IsNoFastRecommend() {
+			t.Errorf("IsNoFastRecommend not match in index %d, expected: %v, got: %v", index, expected[index].IsNoFastRecommend(), settings.IsNoFastRecommend())
+		}
+		if settings.IsIPLogRecommend() != expected[index].IsIPLogRecommend() {
+			t.Errorf("IsIPLogRecommend not match in index %d, expected: %v, got: %v", index, expected[index].IsIPLogRecommend(), settings.IsIPLogRecommend())
+		}
+		if settings.IsOver18() != expected[index].IsOver18() {
+			t.Errorf("IsOver18 not match in index %d, expected: %v, got: %v", index, expected[index].IsOver18(), settings.IsOver18())
+		}
+		if settings.IsNoReply() != expected[index].IsNoReply() {
+			t.Errorf("IsNoReply not match in index %d, expected: %v, got: %v", index, expected[index].IsNoReply(), settings.IsNoReply())
+		}
+		if settings.IsAlignedComment() != expected[index].IsAlignedComment() {
+			t.Errorf("IsAlignedComment not match in index %d, expected: %v, got: %v", index, expected[index].IsAlignedComment(), settings.IsAlignedComment())
+		}
+		if settings.IsNoSelfDeletePost() != expected[index].IsNoSelfDeletePost() {
+			t.Errorf("IsNoSelfDeletePost not match in index %d, expected: %v, got: %v", index, expected[index].IsNoSelfDeletePost(), settings.IsNoSelfDeletePost())
+		}
+		if settings.IsBMMaskContent() != expected[index].IsBMMaskContent() {
+			t.Errorf("IsBMMaskContent not match in index %d, expected: %v, got: %v", index, expected[index].IsBMMaskContent(), settings.IsBMMaskContent())
 		}
 	}
 }

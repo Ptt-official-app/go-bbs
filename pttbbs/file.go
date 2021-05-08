@@ -146,7 +146,7 @@ func AppendFileHeaderFileRecord(filename string, newFileHeader *FileHeader) erro
 
 	dirs := strings.Split(filename, "/")
 	newFilename := filename[:len(filename)-len(dirs[len(dirs)-1])] + newFileHeader.Filename()
-	
+
 	if _, err := os.Stat(newFilename); err == nil {
 		return errors.New("repeated filename")
 	}

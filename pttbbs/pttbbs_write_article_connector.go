@@ -10,7 +10,7 @@ import (
 )
 
 func (c *Connector) NewArticleRecord(args map[string]interface{}) (bbs.ArticleRecord, error) {
-	
+
 	record := NewFileHeader()
 
 	boardID, ok := args["board_id"].(string)

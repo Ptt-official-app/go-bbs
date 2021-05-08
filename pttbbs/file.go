@@ -29,10 +29,14 @@ package pttbbs
 import (
 	"bytes"
 	"encoding/binary"
+	"errors"
 	"io"
 	"log"
 	"os"
+	"strings"
 	"time"
+
+	"github.com/Ptt-official-app/go-bbs/filelock"
 )
 
 const (
@@ -73,13 +77,26 @@ type FileHeader struct {
 	Filemode uint8
 }
 
-func (f *FileHeader) Filename() string    { return f.filename }
+func (f *FileHeader) Filename() string            { return f.filename }
+func (f *FileHeader) SetFilename(newValue string) { f.filename = newValue }
+
 func (f *FileHeader) Modified() time.Time { return f.modified }
 func (f *FileHeader) Recommend() int      { return int(f.recommend) }
-func (f *FileHeader) Owner() string       { return f.owner }
-func (f *FileHeader) Date() string        { return f.date }
-func (f *FileHeader) Title() string       { return f.title }
-func (f *FileHeader) Money() int          { return f.money }
+
+func (f *FileHeader) Owner() string            { return f.owner }
+func (f *FileHeader) SetOwner(newValue string) { f.owner = newValue }
+
+func (f *FileHeader) Date() string            { return f.date }
+func (f *FileHeader) SetDate(newValue string) { f.date = newValue }
+
+func (f *FileHeader) Title() string            { return f.title }
+func (f *FileHeader) SetTitle(newValue string) { f.title = newValue }
+
+func (f *FileHeader) Money() int { return f.money }
+
+func NewFileHeader() *FileHeader {
+	return &FileHeader{}
+}
 
 // OpenFileHeaderFile function open a .DIR file in board directory.
 // It returns slice of FileHeader.
@@ -111,6 +128,76 @@ func OpenFileHeaderFile(filename string) ([]*FileHeader, error) {
 
 	return ret, nil
 
+}
+
+func AppendFileHeaderFileRecord(filename string, newFileHeader *FileHeader) error {
+
+	f, err := os.OpenFile(filename, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+
+	err = filelock.Lock(f)
+	if err != nil {
+		// File is locked
+		return err
+	}
+
+	dirs := strings.Split(filename, "/")
+	newFilename := filename[:len(filename)-len(dirs[len(dirs)-1])] + newFileHeader.Filename()
+	
+	if _, err := os.Stat(newFilename); err == nil {
+		return errors.New("repeated filename")
+	}
+
+	if err = NewFileRecord(newFilename, newFileHeader); err != nil {
+		return err
+	}
+
+	data, err := newFileHeader.MarshalToByte()
+	if err != nil {
+		// TODO: Delete the created file record.
+		return err
+	}
+
+	if _, err := f.Write(data); err != nil {
+		// TODO: Delete the created file record.
+		return err
+	}
+
+	filelock.Unlock(f)
+
+	// TODO: update BoardHeader ?
+	// https://github.com/ptt/pttbbs/blob/4d56e77f264960e43e060b77e442e166e5706417/mbbsd/syspost.c#L35
+
+	return nil
+}
+
+func NewFileRecord(name string, fileHeader *FileHeader) error {
+
+	f, err := os.OpenFile(name, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+
+	err = filelock.Lock(f)
+	if err != nil {
+		// File is locked
+		return err
+	}
+
+	// TODO: append msg to data
+	data := []byte{}
+
+	if _, err := f.Write(data); err != nil {
+		return err
+	}
+
+	filelock.Unlock(f)
+
+	return nil
 }
 
 func NewFileHeaderWithByte(data []byte) (*FileHeader, error) {

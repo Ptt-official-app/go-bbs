@@ -172,7 +172,7 @@ type Connector interface {
 // Driver which implement WriteBoardConnector supports modify board record file.
 type WriteBoardConnector interface {
 
-	// NewBoardRecord return BoardRecord object in this driver with arugments
+	// NewBoardRecord return BoardRecord object in this driver with arguments
 	NewBoardRecord(args map[string]interface{}) (BoardRecord, error)
 
 	// AddBoardRecordFileRecord given record file name and new record, should append
@@ -188,6 +188,15 @@ type WriteBoardConnector interface {
 
 	// RemoveBoardRecordFileRecord remove boardRecord brd on index in record file.
 	RemoveBoardRecordFileRecord(name string, index uint) error
+}
+
+type WriteArticleConnector interface {
+
+	// NewArticleRecord return ArticleRecord object in this driver with arguments
+	NewArticleRecord(args map[string]interface{}) (ArticleRecord, error)
+	// AddArticleRecordFileRecord given record file name and new record, should append
+	// file record in that file.
+	AddArticleRecordFileRecord(name string, article ArticleRecord) error
 }
 
 // UserArticleConnector is a connector for bbs who support cached user article records
@@ -393,6 +402,22 @@ func (db *DB) ReadBoardRecord(index uint) (*BoardRecord, error) {
 // RemoveBoardRecordFileRecord remove boardRecord brd on index in record file.
 func (db *DB) RemoveBoardRecord(index uint) error {
 	return fmt.Errorf("not implement")
+}
+
+func (db *DB) NewArticleRecord(args map[string]interface{}) (ArticleRecord, error) {
+	return db.connector.(WriteArticleConnector).NewArticleRecord(args)
+}
+
+func (db *DB) AddArticleRecordFileRecord(boardID string, article ArticleRecord) error {
+
+	path, err := db.connector.GetBoardArticleRecordsPath(boardID)
+	if err != nil {
+		log.Println("bbs: open file error:", err)
+		return err
+	}
+	log.Println("path:", path)
+
+	return db.connector.(WriteArticleConnector).AddArticleRecordFileRecord(path, article)
 }
 
 // GetUserArticleRecordFile returns aritcle file which user posted.

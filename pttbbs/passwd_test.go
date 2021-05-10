@@ -34,7 +34,7 @@ func TestOpenUserecFile(t *testing.T) {
 			realName:      "CodingMan",
 			nickname:      "神",
 			password:      "bhwvOJtfT1TAI",
-			UserFlag:      0x02000A60,
+			userFlag:      0x02000A60,
 			UserLevel:     0x20000407,
 			numLoginDays:  2,
 			numPosts:      0,
@@ -89,7 +89,7 @@ func TestOpenUserecFile(t *testing.T) {
 			realName:      "朱元璋",
 			nickname:      "程式俠",
 			password:      "u8mLG.ktfOk3w",
-			UserFlag:      0x02000AE0,
+			userFlag:      0x02000AE0,
 			UserLevel:     0x0000001F,
 			numLoginDays:  1,
 			numPosts:      0,
@@ -144,7 +144,7 @@ func TestOpenUserecFile(t *testing.T) {
 			realName:      "Pichu",
 			nickname:      "Pichu",
 			password:      "KO27TyME.3/tw",
-			UserFlag:      0x02000AE0,
+			userFlag:      0x02000AE0,
 			UserLevel:     0x00000007,
 			numLoginDays:  1,
 			numPosts:      0,
@@ -199,7 +199,7 @@ func TestOpenUserecFile(t *testing.T) {
 			realName:      "林嘉豪",
 			nickname:      "Kahou",
 			password:      "V3nkaYTLnDPUA",
-			UserFlag:      0x02000AE0,
+			userFlag:      0x02000AE0,
 			UserLevel:     0x00000007,
 			numLoginDays:  1,
 			numPosts:      0,
@@ -254,7 +254,7 @@ func TestOpenUserecFile(t *testing.T) {
 			realName:      "Kahou",
 			nickname:      "kahou",
 			password:      "R7shIAOZgQCKs",
-			UserFlag:      0x02000AE0,
+			userFlag:      0x02000AE0,
 			UserLevel:     0x0000001F,
 			numLoginDays:  1,
 			numPosts:      0,
@@ -334,8 +334,8 @@ func TestOpenUserecFile(t *testing.T) {
 			t.Errorf("Password not match with index %d, expected: %v, got: %v", index, expected.password, actual.password)
 		}
 
-		if actual.UserFlag != expected.UserFlag {
-			t.Errorf("UserFlag not match with index %d, expected: 0x%08X, got: 0x%08X", index, expected.UserFlag, actual.UserFlag)
+		if actual.userFlag != expected.userFlag {
+			t.Errorf("userFlag not match with index %d, expected: 0x%08X, got: 0x%08X", index, expected.userFlag, actual.userFlag)
 		}
 
 		if actual.UserLevel != expected.UserLevel {
@@ -540,7 +540,7 @@ func TestMarshalBinaryUserec(t *testing.T) {
 				realName:      "CodingMan",
 				nickname:      "神",
 				password:      "bhwvOJtfT1TAI",
-				UserFlag:      0x02000A60,
+				userFlag:      0x02000A60,
 				UserLevel:     0x20000407,
 				numLoginDays:  2,
 				numPosts:      0,

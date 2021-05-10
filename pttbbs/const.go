@@ -82,3 +82,42 @@ const (
 	// FileAnonymous https://github.com/ptt/pttbbs/blob/master/include/pttstruct.h#L304
 	FileAnonymous = 0x80 /* anonymous file */
 )
+
+const (
+	////////////
+	// uflags.h
+	// (https://github.com/ptt/pttbbs/blob/master/include/uflags.h)
+	////////////
+	UF_FAV_NOHILIGHT uint32 = 0x00000001 /* false if hilight favorite */
+	UF_FAV_ADDNEW    uint32 = 0x00000002 /* true to add new board into one's fav */
+	// UF_PAGER uint32 = 0x00000004 /* deprecated by cuser.pager: true if pager was OFF last session */
+	// UF_CLOAK uint32 = 0x00000008 /* deprecated by cuser.invisible: true if cloak was ON last session */
+	UF_FRIEND         uint32 = 0x00000010 /* true if show friends only */
+	UF_BRDSORT        uint32 = 0x00000020 /* true if the boards sorted alphabetical */
+	UF_ADBANNER       uint32 = 0x00000040 /* (was: MOVIE_FLAG, true if show advertisement banner */
+	UF_ADBANNER_USONG uint32 = 0x00000080 /* true if show user songs in banner */
+	// UF_MIND uint32 = 0x00000100 /* deprecated: true if mind search mode open <-Heat */
+	UF_DBCS_AWARE       uint32 = 0x00000200 /* true if DBCS-aware enabled */
+	UF_DBCS_NOINTRESC   uint32 = 0x00000400 /* no Escapes interupting DBCS characters */
+	UF_DBCS_DROP_REPEAT uint32 = 0x00000800 /* detect and drop repeated input from evil clients */
+	UF_NO_MODMARK       uint32 = 0x00001000 /* true if modified files are NOT marked */
+	UF_COLORED_MODMARK  uint32 = 0x00002000 /* true if mod-mark is coloured */
+	// UF_MODMARK_??? uint32 = 0x00004000 /* reserved */
+	// UF_MODMARK_??? uint32 = 0x00008000 /* reserved */
+	UF_DEFBACKUP       uint32 = 0x00010000 /* true if user defaults to backup */
+	UF_NEW_ANGEL_PAGER uint32 = 0x00020000 /* true if user (angel) wants the new pager */
+	UF_REJ_OUTTAMAIL   uint32 = 0x00040000 /* true if don't accept outside mails */
+	UF_SECURE_LOGIN    uint32 = 0x00080000 /* true if login from insecure (ex, telnet) connection will be rejected */
+	UF_FOREIGN         uint32 = 0x00100000 /* true if a foreign */
+	UF_LIVERIGHT       uint32 = 0x00200000 /* true if get "liveright" already */
+	// UF_COUNTRY_??? uint32 = 0x00400000 /* reserved */
+	// UF_COUNTRY_??? uint32 = 0x00800000 /* reserved */
+	UF_MENU_LIGHTBAR uint32 = 0x01000000 /* true to use lightbar-based menu */
+	UF_CURSOR_ASCII  uint32 = 0x02000000 /* true to enable ASCII-safe cursor */
+	// UF_??? uint32 = 0x04000000 /* reserved */
+	// UF_??? uint32 = 0x08000000 /* reserved */
+	// UF_??? uint32 = 0x10000000 /* reserved */
+	// UF_??? uint32 = 0x20000000 /* reserved */
+	// UF_??? uint32 = 0x40000000 /* reserved */
+	// UF_??? uint32 = 0x80000000 /* reserved */
+)

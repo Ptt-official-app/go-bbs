@@ -101,7 +101,7 @@ type Userec struct {
 	nickname string // 暱稱
 	password string // 密碼，預設為 crypt, 不同版本實作可能不同
 
-	UserFlag     uint32
+	userFlag     uint32 // 習慣
 	UserLevel    uint32 // 權限
 	numLoginDays uint32
 	numPosts     uint32
@@ -194,6 +194,12 @@ func (u *Userec) LastHost() string {
 	return u.lastHost
 }
 
+// UserFlag return user setting.
+// uint32, see https://github.com/ptt/pttbbs/blob/master/include/uflags.h
+func (u *Userec) UserFlag() uint32 {
+	return u.userFlag
+}
+
 func OpenUserecFile(filename string) ([]*Userec, error) {
 	file, err := os.Open(filename)
 	if err != nil {
@@ -232,7 +238,7 @@ func UnmarshalUserec(data []byte) (*Userec, error) {
 	user.nickname = newStringFormBig5UAOCString(data[PosOfPasswdNickname : PosOfPasswdNickname+NicknameSize])
 	user.password = newStringFormCString(data[PosOfPasswdPassword : PosOfPasswdPassword+PasswordLength])
 
-	user.UserFlag = binary.LittleEndian.Uint32(data[PosOfPasswdUserFlag : PosOfPasswdUserFlag+4])
+	user.userFlag = binary.LittleEndian.Uint32(data[PosOfPasswdUserFlag : PosOfPasswdUserFlag+4])
 	user.UserLevel = binary.LittleEndian.Uint32(data[PosOfPasswdUserLevel : PosOfPasswdUserLevel+4])
 	user.numLoginDays = binary.LittleEndian.Uint32(data[PosOfPasswdNumLoginDays : PosOfPasswdNumLoginDays+4])
 	user.numPosts = binary.LittleEndian.Uint32(data[PosOfPasswdNumPosts : PosOfPasswdNumPosts+4])
@@ -305,7 +311,7 @@ func (u *Userec) MarshalBinary() ([]byte, error) {
 	copy(ret[PosOfPasswdNickname:PosOfPasswdNickname+NicknameSize], utf8ToBig5UAOString(u.nickname))
 	copy(ret[PosOfPasswdPassword:PosOfPasswdPassword+PasswordLength], utf8ToBig5UAOString(u.password))
 
-	binary.LittleEndian.PutUint32(ret[PosOfPasswdUserFlag:PosOfPasswdUserFlag+4], u.UserFlag)
+	binary.LittleEndian.PutUint32(ret[PosOfPasswdUserFlag:PosOfPasswdUserFlag+4], u.userFlag)
 	binary.LittleEndian.PutUint32(ret[PosOfPasswdUserLevel:PosOfPasswdUserLevel+4], u.UserLevel)
 	binary.LittleEndian.PutUint32(ret[PosOfPasswdNumLoginDays:PosOfPasswdNumLoginDays+4], u.numLoginDays)
 	binary.LittleEndian.PutUint32(ret[PosOfPasswdNumPosts:PosOfPasswdNumPosts+4], u.numPosts)

@@ -50,6 +50,10 @@ func (u *MockUserRecord) LastLogin() time.Time { return time.Now() }
 // could be domain name or IPv6 address.
 func (u *MockUserRecord) LastHost() string { return "" }
 
+// UserFlag return user setting.
+// uint32, see https://github.com/ptt/pttbbs/blob/master/include/uflags.h
+func (u *MockUserRecord) UserFlag() uint32 { return 0x00000001 }
+
 func TestGetUserInformation(t *testing.T) {
 
 	expected := NewMockUserRecord("SYSOP")

@@ -104,6 +104,7 @@ func OpenFileHeaderFile(filename string) ([]*FileHeader, error) {
 		log.Println(err)
 		return nil, err
 	}
+	defer file.Close()
 
 	ret := []*FileHeader{}
 

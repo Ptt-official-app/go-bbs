@@ -29,11 +29,9 @@ package pttbbs
 import (
 	"bytes"
 	"encoding/binary"
-	"errors"
 	"io"
 	"log"
 	"os"
-	"strings"
 	"time"
 
 	"github.com/Ptt-official-app/go-bbs/filelock"
@@ -144,25 +142,12 @@ func AppendFileHeaderFileRecord(filename string, newFileHeader *FileHeader) erro
 		return err
 	}
 
-	dirs := strings.Split(filename, "/")
-	newFilename := filename[:len(filename)-len(dirs[len(dirs)-1])] + newFileHeader.Filename()
-
-	if _, err := os.Stat(newFilename); err == nil {
-		return errors.New("repeated filename")
-	}
-
-	if err = NewFileRecord(newFilename, newFileHeader); err != nil {
-		return err
-	}
-
 	data, err := newFileHeader.MarshalToByte()
 	if err != nil {
-		// TODO: Delete the created file record.
 		return err
 	}
 
 	if _, err := f.Write(data); err != nil {
-		// TODO: Delete the created file record.
 		return err
 	}
 
@@ -170,32 +155,6 @@ func AppendFileHeaderFileRecord(filename string, newFileHeader *FileHeader) erro
 
 	// TODO: update BoardHeader ?
 	// https://github.com/ptt/pttbbs/blob/4d56e77f264960e43e060b77e442e166e5706417/mbbsd/syspost.c#L35
-
-	return nil
-}
-
-func NewFileRecord(name string, fileHeader *FileHeader) error {
-
-	f, err := os.OpenFile(name, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-	if err != nil {
-		return err
-	}
-	defer f.Close()
-
-	err = filelock.Lock(f)
-	if err != nil {
-		// File is locked
-		return err
-	}
-
-	// TODO: append msg to data
-	data := []byte{}
-
-	if _, err := f.Write(data); err != nil {
-		return err
-	}
-
-	filelock.Unlock(f)
 
 	return nil
 }

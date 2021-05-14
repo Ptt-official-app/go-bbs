@@ -9,7 +9,7 @@ import (
 
 func TestNewArticleRecord(t *testing.T) {
 
-	c := Connector{"../home/bbs"}
+	c := Connector{"./testcase"}
 
 	input := map[string]interface{}{
 		"board_id": "SYSOP",
@@ -41,7 +41,7 @@ func TestNewArticleRecord(t *testing.T) {
 		t.Errorf("title not match, expected: %s, got: %s", expected.Title(), actual.Title())
 	}
 
-	err = os.Remove("../home/bbs/boards/S/SYSOP/" + actual.Filename())
+	err = os.Remove("./testcase/boards/S/SYSOP/" + actual.Filename())
 	if err != nil {
 		t.Error(err)
 	}

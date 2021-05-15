@@ -142,6 +142,7 @@ func AppendFileHeaderFileRecord(filename string, newFileHeader *FileHeader) erro
 		// File is locked
 		return err
 	}
+	defer filelock.Unlock(f)
 
 	data, err := newFileHeader.MarshalToByte()
 	if err != nil {
@@ -151,8 +152,6 @@ func AppendFileHeaderFileRecord(filename string, newFileHeader *FileHeader) erro
 	if _, err := f.Write(data); err != nil {
 		return err
 	}
-
-	filelock.Unlock(f)
 
 	// TODO: update BoardHeader ?
 	// https://github.com/ptt/pttbbs/blob/4d56e77f264960e43e060b77e442e166e5706417/mbbsd/syspost.c#L35

@@ -63,6 +63,7 @@ func (c *Connector) NewArticleRecord(args map[string]interface{}) (bbs.ArticleRe
 		// File is locked
 		return nil, err
 	}
+	defer filelock.Unlock(f)
 
 	data := fmt.Sprintf("作者: %s 看板: %s\n標題: %s \n時間: %s\n",
 		owner, boardID, title, date)
@@ -70,8 +71,6 @@ func (c *Connector) NewArticleRecord(args map[string]interface{}) (bbs.ArticleRe
 	if _, err := f.Write([]byte(data)); err != nil {
 		return nil, err
 	}
-
-	filelock.Unlock(f)
 
 	return record, nil
 }

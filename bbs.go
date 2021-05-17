@@ -1,6 +1,8 @@
 package bbs
 
 import (
+	"bufio"
+	"errors"
 	"fmt"
 	"log"
 	"strings"
@@ -204,6 +206,19 @@ type UserArticleConnector interface {
 
 	// AppendUserArticleRecordFile append user article records into file.
 	AppendUserArticleRecordFile(name string, record UserArticleRecord) error
+}
+
+// UserCommentConnector is a connector for bbs to access the cached user
+//  comment records.
+type UserCommentConnector interface {
+
+	// GetUserCommentRecordsPath should return the file path where storing the
+	//  user comment records.
+	GetUserCommentRecordsPath(userID string) (string, error)
+
+	// ReadUserCommentRecordFile should return the use comment records from the
+	//  file.
+	ReadUserCommentRecordFile(name string) ([]UserCommentRecord, error)
 }
 
 var drivers = make(map[string]Connector)
@@ -458,4 +473,121 @@ func (db *DB) GetUserArticleRecordFile(userID string) ([]UserArticleRecord, erro
 	}
 
 	return recs, nil
+}
+
+// GetUserCommentRecordFile returns the comment records of the specific user
+//  from all boards and all articles.
+func (db *DB) GetUserCommentRecordFile(userID string) ([]UserCommentRecord, error) {
+
+	recs := []UserCommentRecord{}
+	ucc, ok := db.connector.(UserCommentConnector)
+	if ok {
+		path, err := ucc.GetUserCommentRecordsPath(userID)
+		if err != nil {
+			log.Println("bbs: open file error:", err)
+			return nil, err
+		}
+		log.Println("path:", path)
+
+		recs, err = ucc.ReadUserCommentRecordFile(path)
+		if err != nil {
+			log.Println("bbs: ReadUserCommentRecordFile error:", err)
+			return nil, err
+		}
+
+		if len(recs) != 0 {
+			return recs, nil
+		}
+	}
+
+	// TODO: Implement a method to get the board records with the filter.
+	//  For example: db.ReadBoardRecordsFilter(skipBoardID []string)
+	boardRecords, err := db.ReadBoardRecords()
+	if err != nil {
+		log.Println("bbs: ReadBoardRecords error:", err)
+		return nil, err
+	}
+
+	shouldSkip := func(boardID string) bool {
+		if boardID == "ALLPOST" {
+			return true
+		}
+		return false
+	}
+
+	for _, r := range boardRecords {
+		if shouldSkip(r.BoardID()) {
+			continue
+		}
+
+		ucr, err := db.GetBoardUserCommentRecord(r.BoardID(), userID)
+		if err != nil {
+			log.Println("bbs: GetUserCommentRecordOfBoard error:", err)
+			return nil, err
+		}
+		recs = append(recs, ucr...)
+	}
+
+	return recs, nil
+}
+
+// GetBoardUserCommentRecord returns the comment records of the user from the
+//  specific board.
+func (db *DB) GetBoardUserCommentRecord(boardID, userID string) (recs []UserCommentRecord, err error) {
+
+	ars, err := db.ReadBoardArticleRecordsFile(boardID)
+	if err != nil {
+		log.Println("bbs: ReadBoardArticleRecordsFile error:", err)
+		return nil, err
+	}
+
+	for _, ar := range ars {
+		crs, err := db.GetBoardArticleCommentRecords(boardID, ar.Filename())
+		if err != nil {
+			log.Println("bbs: GetBoardArticleCommentRecords error:", err)
+			return nil, err
+		}
+		for _, cr := range crs {
+			if userID != cr.CommentOwner() {
+				continue
+			}
+			recs = append(recs, cr)
+		}
+	}
+
+	return recs, nil
+}
+
+// GetBoardArticleCommentRecords returns the comment records of the specific
+//  article.
+func (db *DB) GetBoardArticleCommentRecords(boardID, filename string) (crs []UserCommentRecord, err error) {
+
+	content, err := db.ReadBoardArticleFile(boardID, filename)
+	if err != nil {
+		log.Println("bbs: ReadBoardArticleFile error:", err)
+		return nil, err
+	}
+
+	floorCnt := uint32(1)
+	scanner := bufio.NewScanner(strings.NewReader(ToString(content)))
+	for scanner.Scan() {
+		l := FilterStringANSI(scanner.Text())
+		cr, err := NewUserCommentRecord(floorCnt, l)
+		if err != nil {
+			// skip non-comment line
+			if errors.Is(err, ErrNotUserComment) {
+				continue
+			}
+			log.Println("bbs: NewUserCommentRecord error:", err)
+			return nil, err
+		}
+		crs = append(crs, cr)
+		floorCnt++
+	}
+
+	if len(crs) > 1 {
+		log.Println(content)
+	}
+
+	return crs, nil
 }

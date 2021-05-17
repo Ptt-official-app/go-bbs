@@ -39,6 +39,10 @@ func main() {
 		// Example: go run ./  --bbshome=../../home/bbs showuserarticlelist --user_id pichu
 		showuserarticlelist()
 		return
+	case "showusercommentlist":
+		// Example: go run ./  --bbshome=../../home/bbs showusercommentlist --user_id pichu -board t
+		showusercommentlist()
+		return
 	}
 
 }
@@ -185,7 +189,7 @@ func showuserarticlelist() {
 
 	records, err := bbsDB.GetUserArticleRecordFile(args["user_id"].(string))
 	if err != nil {
-		fmt.Printf("showuserarticlelist: ReadUserRecords: %v\n", err)
+		fmt.Printf("showuserarticlelist: GetUserArticleRecordFile: %v\n", err)
 		return
 	}
 
@@ -196,4 +200,31 @@ func showuserarticlelist() {
 		fmt.Println("titlex:", r.Title())
 	}
 
+}
+
+func showusercommentlist() {
+	err := chkIsDir(bbshome)
+	if err != nil {
+		fmt.Printf("showusercommentlist: error: %v\n", err)
+		return
+	}
+
+	bbsDB, err := bbs.Open(driverName, "file://"+bbshome)
+	if err != nil {
+		fmt.Printf("showusercommentlist: open db: %v\n", err)
+		return
+	}
+
+	args := parseArgsToMap(flag.Args())
+	userID := args["user_id"].(string)
+
+	records, err := bbsDB.GetUserCommentRecordFile(userID)
+	if err != nil {
+		fmt.Printf("showusercommentlist: GetUserCommentRecordFile: %v\n", err)
+		return
+	}
+
+	for _, r := range records {
+		fmt.Println("user comment record:", r.String())
+	}
 }

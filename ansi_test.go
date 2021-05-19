@@ -5,8 +5,10 @@ import (
 	"testing"
 )
 
+const strWithANSI = "\x1b[1;31m→ \x1b[33mpichu2\x1b[m\x1b[33m:推"
+
 func TestFilterStringANSI(t *testing.T) {
-	src := "[1;31m→ [33mpichu2[m[33m:推"
+	src := strWithANSI
 	expected := "→ pichu2:推"
 
 	dst := FilterStringANSI(src)
@@ -17,7 +19,7 @@ func TestFilterStringANSI(t *testing.T) {
 }
 
 func BenchmarkStringANSI(b *testing.B) {
-	src := "[1;31m→ [33mpichu2[m[33m:推"
+	src := strWithANSI
 
 	b.ResetTimer()
 

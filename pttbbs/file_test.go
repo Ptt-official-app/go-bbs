@@ -16,6 +16,7 @@ package pttbbs
 
 import (
 	"encoding/hex"
+	"os"
 	"strings"
 	"testing"
 	"time"
@@ -316,6 +317,93 @@ a3a1 4820 a4ad a46a bc65 ae65 0000 0000
 
 	}
 
+}
+
+func TestAppendFileHeaderFileRecord(t *testing.T) {
+
+	expected := []FileHeader{
+		{
+			filename:  "M.1599059246.A.CF6",
+			modified:  time.Date(2020, time.September, 02, 15, 31, 28, 0, time.UTC),
+			recommend: 0,
+			owner:     "SYSOP",
+			date:      " 9/02",
+			title:     "[閒聊] 自己的文章自己寫",
+
+			money:   0,
+			AnnoUID: 0,
+			VoteLimits: VoteLimits{
+				Posts:   0,
+				Logins:  0,
+				Regtime: 0,
+				Badpost: 0,
+			},
+			ReferRef:  0,
+			ReferFlag: true,
+			Filemode:  0,
+		},
+		{
+			filename:  "M.1599059415.A.FBA",
+			modified:  time.Date(2020, time.September, 02, 15, 31, 37, 0, time.UTC),
+			recommend: 0,
+			owner:     "SYSOP",
+			date:      " 9/02",
+			title:     "[討論] 賞大稻埕煙火遠離人潮！",
+
+			money:   0,
+			AnnoUID: 0,
+			VoteLimits: VoteLimits{
+				Posts:   0,
+				Logins:  0,
+				Regtime: 0,
+				Badpost: 0,
+			},
+			ReferRef:  0,
+			ReferFlag: true,
+			Filemode:  0,
+		},
+		{
+			filename:  "M.1599059496.A.2BE",
+			modified:  time.Date(2020, time.September, 02, 15, 31, 46, 0, time.UTC),
+			recommend: 0,
+			owner:     "SYSOP",
+			date:      " 9/02",
+			title:     "[公告] 何不？ 五大寬容",
+
+			money:   0,
+			AnnoUID: 0,
+			VoteLimits: VoteLimits{
+				Posts:   0,
+				Logins:  0,
+				Regtime: 0,
+				Badpost: 0,
+			},
+			ReferRef:  0,
+			ReferFlag: true,
+			Filemode:  0,
+		},
+	}
+
+	for i := range expected {
+		err := AppendFileHeaderFileRecord("testcase/file/77.DIR", &expected[i])
+		if err != nil {
+			t.Error(err)
+		}
+	}
+
+	headers, err := OpenFileHeaderFile("testcase/file/77.DIR")
+	if err != nil {
+		t.Error(err)
+	}
+
+	for index, header := range headers {
+		CheckPttFileHeader(t, index, header, &expected[index])
+	}
+
+	err = os.Remove("testcase/file/77.DIR")
+	if err != nil {
+		t.Error(err)
+	}
 }
 
 func hexToByte(input string) []byte {

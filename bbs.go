@@ -134,6 +134,14 @@ type ArticleRecord interface {
 	Owner() string
 }
 
+type RecommendType int
+
+const (
+	RecommendTypeGood  RecommendType = iota // 0
+	RecommendTypeBad                        // 1
+	RecommendTypeArrow                      // 2
+)
+
 // DB is whole bbs filesystem, including where file store,
 // how to connect to local cache ( system V shared memory or etc.)
 // how to parse or store it's data to bianry
@@ -172,6 +180,7 @@ type Connector interface {
 	GetBoardTreasureFilePath(boardID string, treasureID []string, name string) (string, error)
 	// ReadBoardArticleFile should returns raw file of specific file name
 	ReadBoardArticleFile(name string) ([]byte, error)
+
 }
 
 // Driver which implement WriteBoardConnector supports modify board record file.
@@ -202,6 +211,12 @@ type WriteArticleConnector interface {
 	// AddArticleRecordFileRecord given record file name and new record, should append
 	// file record in that file.
 	AddArticleRecordFileRecord(name string, article ArticleRecord) error
+}
+
+// RecommendConnector is a connector for bbs who support recommend.
+type RecommendConnector interface {
+	// DoAddRecommend add recommend to the end of article
+	DoAddRecommend(direct *string, article *ArticleRecord, ent int, buf *string, recommendType RecommendType) error
 }
 
 // UserArticleConnector is a connector for bbs who support cached user article records
@@ -436,6 +451,14 @@ func (db *DB) AddArticleRecordFileRecord(boardID string, article ArticleRecord) 
 	log.Println("path:", path)
 
 	return db.connector.(WriteArticleConnector).AddArticleRecordFileRecord(path, article)
+}
+
+func (db *DB) DoAddRecommend(
+	direct *string, article *ArticleRecord, ent int, buf *string, recommendType RecommendType,
+) error {
+	return db.connector.(RecommendConnector).DoAddRecommend(
+		direct, article, ent, buf, recommendType,
+	)
 }
 
 // GetUserArticleRecordFile returns aritcle file which user posted.

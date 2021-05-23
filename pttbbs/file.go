@@ -79,7 +79,10 @@ func (f *FileHeader) Filename() string            { return f.filename }
 func (f *FileHeader) SetFilename(newValue string) { f.filename = newValue }
 
 func (f *FileHeader) Modified() time.Time { return f.modified }
+func (f *FileHeader) SetModified(newModified time.Time) { f.modified = newModified }
+
 func (f *FileHeader) Recommend() int      { return int(f.recommend) }
+func (f *FileHeader) AddRecommend(update int8) { f.recommend = f.recommend + update }
 
 func (f *FileHeader) Owner() string            { return f.owner }
 func (f *FileHeader) SetOwner(newValue string) { f.owner = newValue }

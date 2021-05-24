@@ -51,106 +51,106 @@ func getUserFlagAllByID(userid string) (*uFlags, error) {
 		return nil, fmt.Errorf("user record not found")
 	}
 	dbanner := getAdbannerByUserrec(userrec)
-	dbanner_usong := getAdbannerUsongByUserrec(userrec)
-	rej_outtamail := getRejOuttamailByUserrec(userrec)
-	defbackup := getDefBackupByUserrec(userrec)
-	secure_login := getSecureLoginByUserrec(userrec)
-	fav_addnew := getFavAddNewByUserrec(userrec)
-	fav_nohilight := getFavNoHilightByUserrec(userrec)
-	no_modmark := getFavNoModMarkByUserrec(userrec)
-	colored_modmark := getColoredModMarkByUserrec(userrec)
+	dbannerUsong := getAdbannerUsongByUserrec(userrec)
+	rejOuttamail := getRejOuttamailByUserrec(userrec)
+	defBackup := getDefBackupByUserrec(userrec)
+	secureLogin := getSecureLoginByUserrec(userrec)
+	favAddnew := getFavAddNewByUserrec(userrec)
+	favNohilight := getFavNoHilightByUserrec(userrec)
+	noModmark := getFavNoModMarkByUserrec(userrec)
+	coloredModmark := getColoredModMarkByUserrec(userrec)
 	// TO DO...#ifdef DBCSAWARE
-	dbcs_aware := getDbcsAwareByUserrec(userrec)
-	dbcs_drop_repeat := getDbcsDropRepeatByUserrec(userrec)
-	dbcs_nointresc := getDbcsNointrescByUserrec(userrec)
+	dbcsAware := getDbcsAwareByUserrec(userrec)
+	dbcsDropRepeat := getDbcsDropRepeatByUserrec(userrec)
+	dbcsNointresc := getDbcsNointrescByUserrec(userrec)
 	// #endif
-	cursor_ascii := getCursorAsciiByUserrec(userrec)
+	cursorASCII := getCursorASCIIByUserrec(userrec)
 	// TO DO...#ifdef USE_PFTERM
-	menu_lightbar := getMenuLightBarByUserrec(userrec)
+	menuLightbar := getMenuLightBarByUserrec(userrec)
 	// #endif
 	// TO DO...#ifdef PLAY_ANGEL
-	new_angel_pager := getNewAngelPagerByUserrec(userrec)
+	newAngelPager := getNewAngelPagerByUserrec(userrec)
 	// #endif
 
 	return &uFlags{
 		dbanner,
-		dbanner_usong,
-		rej_outtamail,
-		defbackup,
-		secure_login,
-		fav_addnew,
-		fav_nohilight,
-		no_modmark,
-		colored_modmark,
-		dbcs_aware,
-		dbcs_drop_repeat,
-		dbcs_nointresc,
-		cursor_ascii,
-		menu_lightbar,
-		new_angel_pager}, nil
+		dbannerUsong,
+		rejOuttamail,
+		defBackup,
+		secureLogin,
+		favAddnew,
+		favNohilight,
+		noModmark,
+		coloredModmark,
+		dbcsAware,
+		dbcsDropRepeat,
+		dbcsNointresc,
+		cursorASCII,
+		menuLightbar,
+		newAngelPager}, nil
 }
 
 func getAdbannerByUserrec(userrec bbs.UserRecord) bool {
-	return userrec.UserFlag()&UF_ADBANNER != 0
+	return userrec.UserFlag()&UfAdbanner != 0
 }
 
 func getAdbannerUsongByUserrec(userrec bbs.UserRecord) bool {
-	return userrec.UserFlag()&UF_ADBANNER_USONG != 0
+	return userrec.UserFlag()&UfAdbannerUsong != 0
 }
 
 func getRejOuttamailByUserrec(userrec bbs.UserRecord) bool {
-	return userrec.UserFlag()&UF_REJ_OUTTAMAIL != 0
+	return userrec.UserFlag()&UfRejOuttamail != 0
 }
 
 func getDefBackupByUserrec(userrec bbs.UserRecord) bool {
-	return userrec.UserFlag()&UF_DEFBACKUP != 0
+	return userrec.UserFlag()&UfDefbackup != 0
 }
 
 func getSecureLoginByUserrec(userrec bbs.UserRecord) bool {
-	return userrec.UserFlag()&UF_SECURE_LOGIN != 0
+	return userrec.UserFlag()&UfSecureLogin != 0
 }
 
 func getFavAddNewByUserrec(userrec bbs.UserRecord) bool {
-	return userrec.UserFlag()&UF_FAV_ADDNEW != 0
+	return userrec.UserFlag()&UfFavAddnew != 0
 }
 
 func getFavNoHilightByUserrec(userrec bbs.UserRecord) bool {
-	return userrec.UserFlag()&UF_FAV_NOHILIGHT != 0
+	return userrec.UserFlag()&UfFavNohilight != 0
 }
 
 func getFavNoModMarkByUserrec(userrec bbs.UserRecord) bool {
-	return userrec.UserFlag()&UF_NO_MODMARK != 0
+	return userrec.UserFlag()&UfNoModmark != 0
 }
 
 func getColoredModMarkByUserrec(userrec bbs.UserRecord) bool {
-	return userrec.UserFlag()&UF_COLORED_MODMARK != 0
+	return userrec.UserFlag()&UfColoredModmark != 0
 }
 
 // #ifdef DBCSAWARE (Not handling yet...)
 func getDbcsAwareByUserrec(userrec bbs.UserRecord) bool {
-	return userrec.UserFlag()&UF_DBCS_AWARE != 0
+	return userrec.UserFlag()&UfDbcsAware != 0
 }
 
 // #ifdef DBCSAWARE (Not handling yet...)
 func getDbcsDropRepeatByUserrec(userrec bbs.UserRecord) bool {
-	return userrec.UserFlag()&UF_DBCS_DROP_REPEAT != 0
+	return userrec.UserFlag()&UfDbscDropRepeat != 0
 }
 
 // #ifdef DBCSAWARE (Not handling yet...)
 func getDbcsNointrescByUserrec(userrec bbs.UserRecord) bool {
-	return userrec.UserFlag()&UF_DBCS_NOINTRESC != 0
+	return userrec.UserFlag()&UfDbcsNointresc != 0
 }
 
-func getCursorAsciiByUserrec(userrec bbs.UserRecord) bool {
-	return userrec.UserFlag()&UF_CURSOR_ASCII != 0
+func getCursorASCIIByUserrec(userrec bbs.UserRecord) bool {
+	return userrec.UserFlag()&UfCursorASCII != 0
 }
 
 // #ifdef USE_PFTERM (Not handling yet...)
 func getMenuLightBarByUserrec(userrec bbs.UserRecord) bool {
-	return userrec.UserFlag()&UF_MENU_LIGHTBAR != 0
+	return userrec.UserFlag()&UfMenuLightbar != 0
 }
 
 // #ifdef PLAY_ANGEL (Not handling yet...)
 func getNewAngelPagerByUserrec(userrec bbs.UserRecord) bool {
-	return userrec.UserFlag()&UF_NEW_ANGEL_PAGER != 0
+	return userrec.UserFlag()&UfNewAngelPager != 0
 }

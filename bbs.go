@@ -569,7 +569,7 @@ func (db *DB) GetBoardArticleCommentRecords(boardID, filename string) (crs []Use
 	}
 
 	floorCnt := uint32(1)
-	scanner := bufio.NewScanner(strings.NewReader(ToString(content)))
+	scanner := bufio.NewScanner(strings.NewReader(string(content)))
 	for scanner.Scan() {
 		l := FilterStringANSI(scanner.Text())
 		cr, err := NewUserCommentRecord(floorCnt, l)

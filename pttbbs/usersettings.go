@@ -28,21 +28,21 @@ func findUserecByID(userid string) (bbs.UserRecord, error) {
 
 // get ALL UserFlag at once:
 type uFlags struct {
-	dbanner          bool
-	dbanner_usong    bool
-	rej_outtamail    bool
-	defbackup        bool
-	secure_login     bool
-	fav_addnew       bool
-	fav_nohilight    bool
-	no_modmark       bool
-	colored_modmark  bool
-	dbcs_aware       bool
-	dbcs_drop_repeat bool
-	dbcs_nointresc   bool
-	cursor_ascii     bool
-	menu_lightbar    bool
-	new_angel_pager  bool
+	dbanner        bool
+	dbannerUsong   bool
+	rejOuttamail   bool
+	defBackup      bool
+	secureLogin    bool
+	favAddnew      bool
+	favNohilight   bool
+	noModmark      bool
+	coloredModmark bool
+	dbcsAware      bool
+	dbcsDropRepeat bool
+	dbcsNointresc  bool
+	cursorASCII    bool
+	menuLightbar   bool
+	newAngelPager  bool
 }
 
 func getUserFlagAllByID(userid string) (*uFlags, error) {

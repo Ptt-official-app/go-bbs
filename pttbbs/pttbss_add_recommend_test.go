@@ -46,20 +46,20 @@ func TestDoAddRecommend(t *testing.T) {
 		t.Errorf("Unexpected Error happened: %s", err)
 	}
 
-	if file.Modified() != originalModified {
-		t.Errorf("Modified does not change, original: %s, changed: %s", originalModified, file.Modified())
+	if file.Modified() == originalModified {
+		t.Errorf("Modified does not change, original: %s, \nchanged: %s", originalModified, file.Modified())
 	}
 
 	if file.Modified().UnixNano() < originalModified.UnixNano() {
 		t.Errorf(
-			"Modified is not less than original, original: %d, changed: %d",
+			"Modified is not less tha`n original, original: %d, changed: %d",
 			originalModified.UnixNano(), originalModified.UnixNano(),
 			)
 	}
 
 	// input is arrow type
 	if file.Recommend() != expectedRecommend {
-		t.Errorf("recommend not match, expected: %d, got: %d", expectedRecommend, file.Recommend())
+		t.Errorf("recommend not match, expected: %d, \ngot: %d", expectedRecommend, file.Recommend())
 	}
 
 	stat, _ = os.Stat(filePath)
@@ -70,8 +70,8 @@ func TestDoAddRecommend(t *testing.T) {
 	_, err = fileHandle.ReadAt(buf, oriFileSize)
 	actualNewLine := bytes.NewBuffer(buf)
 
-	if expectedNewLine == actualNewLine.String() {
-		t.Errorf("newline not matched, expected: %s, got: %s", expectedNewLine, actualNewLine)
+	if expectedNewLine != actualNewLine.String() {
+		t.Errorf("newline not matched, expected: %s, \ngot: %s", expectedNewLine, actualNewLine)
 	}
 
 	removeNewLines(filePath, oriFileSize)

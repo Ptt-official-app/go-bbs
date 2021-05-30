@@ -13,13 +13,14 @@ import (
 func (c *Connector) DoAddRecommend(
 	direct *string, article *FileHeader, ent int, buf *string, recommendType bbs.RecommendType,
 ) error {
+
 	var update int8
 	path := *direct + "/" + article.Filename()
 	lockRetry, lockWait, lockSuccess := 5, time.Duration(1), false
 	// TODO: STARTSTAT
 
 	for lockRetry > 0 {
-		lockRetry++
+		lockRetry--
 		if filelock.IsLock(path) {
 			fmt.Printf("File is locked, please wait. Retry: %d", lockRetry)
 			time.Sleep(lockWait)
@@ -30,7 +31,6 @@ func (c *Connector) DoAddRecommend(
 	if !lockSuccess {
 		return fmt.Errorf("DoAddRecommend: File (%s) is locked.", path)
 	}
-
 	fileHandle, err := os.OpenFile(path, os.O_APPEND|os.O_WRONLY, 0752)
 	if err != nil {
 		return fmt.Errorf("DoAddRecommend: Cannot open file %s, err: %s", path, err)

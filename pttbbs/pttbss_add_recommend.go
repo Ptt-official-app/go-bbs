@@ -1,6 +1,5 @@
 package pttbbs
 
-
 import (
 	"fmt"
 	"os"
@@ -29,19 +28,21 @@ func (c *Connector) DoAddRecommend(
 		lockSuccess = true
 	}
 	if !lockSuccess {
-		return fmt.Errorf("DoAddRecommend: File (%s) is locked.", path)
+		return fmt.Errorf("DoAddRecommend: File (%s) is locked", path)
 	}
+
 	fileHandle, err := os.OpenFile(path, os.O_APPEND|os.O_WRONLY, 0752)
 	if err != nil {
 		return fmt.Errorf("DoAddRecommend: Cannot open file %s, err: %s", path, err)
 	}
 	defer fileHandle.Close()
+
 	if _, err = fileHandle.WriteString(*buf); err != nil {
 		return fmt.Errorf("DoAddRecommend: Write to file (%s) failed, err: %s", path, err)
 	}
-	if (recommendType == bbs.RecommendTypeGood && article.Recommend() < MaxRecommends) {
+	if recommendType == bbs.RecommendTypeGood && article.Recommend() < MaxRecommends {
 		update++
-	} else if (recommendType == bbs.RecommendTypeBad && article.Recommend() > -MaxRecommends) {
+	} else if recommendType == bbs.RecommendTypeBad && article.Recommend() > -MaxRecommends {
 		update--
 	}
 	article.AddRecommend(update)

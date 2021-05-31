@@ -180,7 +180,6 @@ type Connector interface {
 	GetBoardTreasureFilePath(boardID string, treasureID []string, name string) (string, error)
 	// ReadBoardArticleFile should returns raw file of specific file name
 	ReadBoardArticleFile(name string) ([]byte, error)
-
 }
 
 // Driver which implement WriteBoardConnector supports modify board record file.

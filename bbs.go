@@ -39,6 +39,9 @@ type UserRecord interface {
 	// LastHost return last login host of user, it is IPv4 address usually, but it
 	// could be domain name or IPv6 address.
 	LastHost() string
+	// UserFlag return user setting.
+	// uint32, see https://github.com/ptt/pttbbs/blob/master/include/uflags.h
+	UserFlag() uint32
 }
 
 // BadPostUserRecord return UserRecord interface which support NumBadPosts

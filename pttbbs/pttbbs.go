@@ -45,6 +45,10 @@ func (c *Connector) ReadUserRecordsFile(filename string) ([]bbs.UserRecord, erro
 	return ret, err
 }
 
+func (c *Connector) GetUserDraftPath(userID, draftID string) (string, error) {
+	return GetUserDraftPath(c.home, userID, draftID)
+}
+
 func (c *Connector) GetUserFavoriteRecordsPath(userID string) (string, error) {
 	return GetUserFavoritePath(c.home, userID)
 }

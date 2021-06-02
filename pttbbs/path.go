@@ -35,8 +35,13 @@ func GetBoardPath(workDirectory string) (string, error) {
 }
 
 // Get Favorite file path of user
-func GetUserFavoritePath(workDirectory string, userid string) (string, error) {
-	return fmt.Sprintf("%s/home/%c/%s/.fav", workDirectory, userid[0], userid), nil
+func GetUserFavoritePath(workDirectory string, userID string) (string, error) {
+	return fmt.Sprintf("%s/home/%c/%s/.fav", workDirectory, userID[0], userID), nil
+}
+
+// Get Draft file path of user
+func GetUserDraftPath(workDirectory string, userID string, draftID string) (string, error) {
+	return fmt.Sprintf("%s/home/%c/%s/buf.%s", workDirectory, userID[0], userID, draftID), nil
 }
 
 // Get Directory digest file path of board, `workDirectory` is BBSHome usually, `userID` means
@@ -48,8 +53,8 @@ func GetUserMailPath(workDirectory string, userID string, filename string) (stri
 }
 
 // Get Login Recent file path of user
-func GetLoginRecentPath(workDirectory string, userid string) (string, error) {
-	return fmt.Sprintf("%s/home/%c/%s/logins.recent", workDirectory, userid[0], userid), nil
+func GetLoginRecentPath(workDirectory string, userID string) (string, error) {
+	return fmt.Sprintf("%s/home/%c/%s/logins.recent", workDirectory, userID[0], userID), nil
 }
 
 // Get Directory normal file path of board

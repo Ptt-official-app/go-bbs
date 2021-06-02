@@ -151,6 +151,66 @@ func TestGetUserFavoritePath(t *testing.T) {
 
 }
 
+func TestGetUserDraftPath(t *testing.T) {
+
+	type Input struct {
+		wd      string
+		userID  string
+		draftID string
+	}
+	type TestCase struct {
+		input    Input
+		expected string
+	}
+	cases := []TestCase{
+
+		{
+			input: Input{
+				wd:      "/root",
+				userID:  "SYSOP",
+				draftID: "1",
+			},
+			expected: "/root/home/S/SYSOP/buf.1",
+		},
+		{
+			input: Input{
+				wd:      "/root/",
+				userID:  "SYSOP",
+				draftID: "2",
+			},
+			expected: "/root//home/S/SYSOP/buf.2",
+		},
+		{
+			input: Input{
+				wd:      "/root//",
+				userID:  "SYSOP",
+				draftID: "3",
+			},
+			expected: "/root///home/S/SYSOP/buf.3",
+		},
+		{
+			input: Input{
+				wd:      "/root",
+				userID:  "sysop",
+				draftID: "4",
+			},
+			expected: "/root/home/s/sysop/buf.4",
+		},
+	}
+
+	for i, c := range cases {
+		actual, err := GetUserDraftPath(c.input.wd, c.input.userID, c.input.draftID)
+		if err != nil {
+			t.Errorf("GetUserDraftPath err != nil on index %d", i)
+		}
+		if actual != c.expected {
+			t.Errorf("GetUserDraftPath result not match on index %d with input:%v , expected: %v, got: %v",
+				i, c.input, c.expected, actual)
+		}
+	}
+
+}
+
 func TestGetUserMailPath(t *testing.T) {
 
 	type Input struct {

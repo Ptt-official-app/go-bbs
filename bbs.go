@@ -233,6 +233,18 @@ type UserCommentConnector interface {
 	ReadUserCommentRecordFile(name string) ([]UserCommentRecord, error)
 }
 
+// UserDraftConnector is a connector for bbs which supports modify user
+// draft file.
+type UserDraftConnector interface {
+
+	// GetUserDraftPath should return the user's draft file path
+	// eg: BBSHome/home/{{u}}/{{userID}}/buf.{{draftID}}
+	GetUserDraftPath(userID, draftID string) (string, error)
+
+	// DeleteUserDraft should remove the named file.
+	DeleteUserDraft(name string) error
+}
+
 var drivers = make(map[string]Connector)
 
 func Register(drivername string, connector Connector) {
@@ -618,4 +630,16 @@ func (db *DB) GetBoardArticleCommentRecords(boardID, filename string) (crs []Use
 	}
 
 	return crs, nil
+}
+
+func (db *DB) DeleteUserDraft(userID, draftID string) error {
+
+	path, err := db.connector.(UserDraftConnector).GetUserDraftPath(userID, draftID)
+	if err != nil {
+		log.Println("bbs: GetUserDraftPath error:", err)
+		return err
+	}
+	log.Println("path:", path)
+
+	return db.connector.(UserDraftConnector).DeleteUserDraft(path)
 }

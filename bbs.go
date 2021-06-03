@@ -134,14 +134,6 @@ type ArticleRecord interface {
 	Owner() string
 }
 
-type RecommendType int
-
-const (
-	RecommendTypeGood  RecommendType = iota // 0
-	RecommendTypeBad                        // 1
-	RecommendTypeArrow                      // 2
-)
-
 // DB is whole bbs filesystem, including where file store,
 // how to connect to local cache ( system V shared memory or etc.)
 // how to parse or store it's data to bianry
@@ -212,10 +204,10 @@ type WriteArticleConnector interface {
 	AddArticleRecordFileRecord(name string, article ArticleRecord) error
 }
 
-// RecommendConnector is a connector for bbs who support recommend.
-type RecommendConnector interface {
-	// DoAddRecommend add recommend to the end of article
-	DoAddRecommend(direct *string, article *ArticleRecord, ent int, buf *string, recommendType RecommendType) error
+// CommonConnector is a connector for bbs common function.
+type CommonConnector interface {
+	// AddNewLine add new line to the end of article
+	AddNewLine(direct *string, article *ArticleRecord, buf string) error
 }
 
 // UserArticleConnector is a connector for bbs who support cached user article records
@@ -452,11 +444,11 @@ func (db *DB) AddArticleRecordFileRecord(boardID string, article ArticleRecord) 
 	return db.connector.(WriteArticleConnector).AddArticleRecordFileRecord(path, article)
 }
 
-func (db *DB) DoAddRecommend(
-	direct *string, article *ArticleRecord, ent int, buf *string, recommendType RecommendType,
+func (db *DB) AddNewLine(
+	direct *string, article *ArticleRecord, buf string,
 ) error {
-	return db.connector.(RecommendConnector).DoAddRecommend(
-		direct, article, ent, buf, recommendType,
+	return db.connector.(CommonConnector).AddNewLine(
+		direct, article, buf,
 	)
 }
 

@@ -11,6 +11,7 @@ func RLock(f File) error {
 }
 
 func IsLock(f File) bool {
+	// TODO: Need to complete this function, it's just return false now.
 	return false
 }
 

@@ -8,7 +8,7 @@ import (
 	"github.com/Ptt-official-app/go-bbs/filelock"
 )
 
-func (c *Connector) AddNewLine(
+func (c *Connector) AppendNewLine(
 	direct *string, article *FileHeader, buf string,
 ) error {
 	path := *direct + "/" + article.Filename()
@@ -25,17 +25,17 @@ func (c *Connector) AddNewLine(
 		lockSuccess = true
 	}
 	if !lockSuccess {
-		return fmt.Errorf("DoAddRecommend: File (%s) is locked", path)
+		return fmt.Errorf("AppendNewLine: File (%s) is locked", path)
 	}
 
 	fileHandle, err := os.OpenFile(path, os.O_APPEND|os.O_WRONLY, 0752)
 	if err != nil {
-		return fmt.Errorf("DoAddRecommend: Cannot open file %s, err: %s", path, err)
+		return fmt.Errorf("AppendNewLine: Cannot open file %s, err: %s", path, err)
 	}
 	defer fileHandle.Close()
 
 	if _, err = fileHandle.WriteString(buf); err != nil {
-		return fmt.Errorf("DoAddRecommend: Write to file (%s) failed, err: %s", path, err)
+		return fmt.Errorf("AppendNewLine: Write to file (%s) failed, err: %s", path, err)
 	}
 
 	fileStat, _ := os.Stat(path)

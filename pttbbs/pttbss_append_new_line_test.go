@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-func TestAddNewLine(t *testing.T) {
+func TestAppendNewLine(t *testing.T) {
 	c := Connector{"./testcase"}
 
 	originalModified, _ := time.Parse(time.RFC3339, "2021-05-23T15:04:05Z")
@@ -27,7 +27,7 @@ func TestAddNewLine(t *testing.T) {
 	stat, _ := os.Stat(filePath)
 	oriFileSize := stat.Size()
 
-	err := c.AddNewLine(&boardPath, file, expectedNewLine)
+	err := c.AppendNewLine(&boardPath, file, expectedNewLine)
 
 	if err != nil {
 		t.Errorf("Unexpected Error happened: %s", err)

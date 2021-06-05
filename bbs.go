@@ -206,8 +206,8 @@ type WriteArticleConnector interface {
 
 // CommonConnector is a connector for bbs common function.
 type CommonConnector interface {
-	// AddNewLine add new line to the end of article
-	AddNewLine(direct *string, article *ArticleRecord, buf string) error
+	// AppendNewLine append new line to the end of article
+	AppendNewLine(direct *string, article *ArticleRecord, buf string) error
 }
 
 // UserArticleConnector is a connector for bbs who support cached user article records
@@ -444,10 +444,10 @@ func (db *DB) AddArticleRecordFileRecord(boardID string, article ArticleRecord) 
 	return db.connector.(WriteArticleConnector).AddArticleRecordFileRecord(path, article)
 }
 
-func (db *DB) AddNewLine(
+func (db *DB) AppendNewLine(
 	direct *string, article *ArticleRecord, buf string,
 ) error {
-	return db.connector.(CommonConnector).AddNewLine(
+	return db.connector.(CommonConnector).AppendNewLine(
 		direct, article, buf,
 	)
 }

@@ -241,6 +241,9 @@ type UserDraftConnector interface {
 	// eg: BBSHome/home/{{u}}/{{userID}}/buf.{{draftID}}
 	GetUserDraftPath(userID, draftID string) (string, error)
 
+	// ReadUserDraft return the user draft from the named file.
+	ReadUserDraft(name string) ([]byte, error)
+
 	// DeleteUserDraft should remove the named file.
 	DeleteUserDraft(name string) error
 }
@@ -630,6 +633,23 @@ func (db *DB) GetBoardArticleCommentRecords(boardID, filename string) (crs []Use
 	}
 
 	return crs, nil
+}
+
+func (db *DB) GetUserDrafts(userID, draftID string) (UserDraft, error) {
+
+	path, err := db.connector.(UserDraftConnector).GetUserDraftPath(userID, draftID)
+	if err != nil {
+		log.Println("bbs: GetUserDraftPath error:", err)
+		return nil, err
+	}
+	log.Println("path:", path)
+
+	raw, err := db.connector.(UserDraftConnector).ReadUserDraft(path)
+	if err != nil {
+		return nil, err
+	}
+
+	return NewUserDraft(raw), nil
 }
 
 func (db *DB) DeleteUserDraft(userID, draftID string) error {

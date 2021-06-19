@@ -19,28 +19,34 @@ type UserCommentRecord interface {
 	CommentOrder() uint32
 	CommentOwner() string
 	CommentTime() time.Time
+	CommentIP() string
 	String() string
+	ArticleRecord() ArticleRecord
 }
 
 var _ UserCommentRecord = &userCommentRecord{}
 
 type userCommentRecord struct {
-	commentOrder uint32
-	commentOwner string
-	commentTime  time.Time
+	commentOrder  uint32
+	commentOwner  string
+	commentTime   time.Time
+	commentIP     string
+	articleRecord ArticleRecord
 }
 
 // NewUserCommentRecord parses the data and returns the user comment record.
 //  Return error when input data is not matched the user comment pattern.
-func NewUserCommentRecord(order uint32, data string) (UserCommentRecord, error) {
+func NewUserCommentRecord(order uint32, data string, ar ArticleRecord) (UserCommentRecord, error) {
 	owner, ctime, err := parseUserComment(data)
 	if err != nil {
 		return nil, err
 	}
 	return &userCommentRecord{
-		commentOrder: order,
-		commentOwner: owner,
-		commentTime:  ctime,
+		commentOrder:  order,
+		commentOwner:  owner,
+		commentTime:   ctime,
+		commentIP:     "", // TODO
+		articleRecord: ar,
 	}, nil
 }
 
@@ -56,8 +62,16 @@ func (r userCommentRecord) CommentTime() time.Time {
 	return r.commentTime
 }
 
+func (r userCommentRecord) CommentIP() string {
+	return r.commentIP
+}
+
 func (r userCommentRecord) String() string {
 	return fmt.Sprintf("order: %d, owner: %s, time: %s", r.commentOrder, r.commentOwner, r.commentTime.Format("01/02 15:04"))
+}
+
+func (r userCommentRecord) ArticleRecord() ArticleRecord {
+	return r.articleRecord
 }
 
 // parseUserComment returns the owner and time of comment data.

@@ -12,7 +12,7 @@ func TestNewUserCommentRecord(t *testing.T) {
 	expectedOwner := "lex"
 	expectedTime := time.Date(0, 5, 15, 1, 6, 0, 0, time.UTC)
 
-	got, err := NewUserCommentRecord(1, perfectData)
+	got, err := NewUserCommentRecord(1, perfectData, nil)
 
 	if got.CommentOrder() != expectedOrder {
 		t.Errorf("comment order = %v, expected %v\n", got.CommentOrder(), expectedOrder)

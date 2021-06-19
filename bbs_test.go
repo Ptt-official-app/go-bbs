@@ -4,12 +4,13 @@ import (
 	"encoding/hex"
 	"strings"
 	"testing"
+	"time"
 )
 
 func TestGetBoardArticleCommentRecords(t *testing.T) {
 
 	anyBoardID := ""
-	anyFilename := ""
+	anyArticleRecord := &MockArticleRecord{}
 	articleContent := `
 a740 aacc 3a20 5359 534f 5020 28af ab29
 20ac ddaa 4f3a 2074 6573 740a bcd0 c344
@@ -56,8 +57,8 @@ a740 aacc 3a20 5359 534f 5020 28af ab29
 		connector Connector
 	}
 	type args struct {
-		boardID  string
-		filename string
+		boardID       string
+		articleRecord ArticleRecord
 	}
 	type expected struct {
 		recordCount int
@@ -77,7 +78,7 @@ a740 aacc 3a20 5359 534f 5020 28af ab29
 					fakeReadBoardArticleFile:    returnPerfectReadBoardArticleFile,
 				},
 			},
-			args:     args{anyBoardID, anyFilename},
+			args:     args{anyBoardID, anyArticleRecord},
 			expected: expected{2, false},
 		},
 	}
@@ -86,7 +87,7 @@ a740 aacc 3a20 5359 534f 5020 28af ab29
 		t.Run(tt.name, func(t *testing.T) {
 			db := &DB{connector: tt.fields.connector}
 
-			got, err := db.GetBoardArticleCommentRecords(tt.args.boardID, tt.args.filename)
+			got, err := db.GetBoardArticleCommentRecords(tt.args.boardID, tt.args.articleRecord)
 
 			if len(got) != tt.expected.recordCount {
 				t.Errorf("record count = %v, expected %v\n", len(got), tt.expected.recordCount)
@@ -177,3 +178,21 @@ func hexToByte(input string) []byte {
 	b, _ := hex.DecodeString(s)
 	return b
 }
+
+type MockArticleRecord struct {
+	filename  string
+	modified  time.Time
+	recommend int8
+	owner     string
+	date      string
+	title     string
+	money     int
+}
+
+func (f *MockArticleRecord) Filename() string    { return f.filename }
+func (f *MockArticleRecord) Modified() time.Time { return f.modified }
+func (f *MockArticleRecord) Recommend() int      { return int(f.recommend) }
+func (f *MockArticleRecord) Owner() string       { return f.owner }
+func (f *MockArticleRecord) Date() string        { return f.date }
+func (f *MockArticleRecord) Title() string       { return f.title }
+func (f *MockArticleRecord) Money() int          { return f.money }

@@ -121,3 +121,9 @@ const (
 	// Uf??? uint32 = 0x40000000 /* reserved */
 	// Uf??? uint32 = 0x80000000 /* reserved */
 )
+
+const (
+	// commmon.h: 232
+	// MaxRecommends max recommend count
+	MaxRecommends = 100
+)

@@ -127,6 +127,7 @@ type BoardRecordInfo interface {
 type ArticleRecord interface {
 	Filename() string
 	Modified() time.Time
+	SetModified(newModified time.Time)
 	Recommend() int
 	Date() string
 	Title() string
@@ -202,6 +203,12 @@ type WriteArticleConnector interface {
 	// AddArticleRecordFileRecord given record file name and new record, should append
 	// file record in that file.
 	AddArticleRecordFileRecord(name string, article ArticleRecord) error
+}
+
+// CommentConnector is a connector for bbs common function.
+type CommentConnector interface {
+	// AppendNewLine append new line to the end of article
+	AppendNewLine(boardPath string, article ArticleRecord, buf string) error
 }
 
 // UserArticleConnector is a connector for bbs who support cached user article records
@@ -451,6 +458,14 @@ func (db *DB) AddArticleRecordFileRecord(boardID string, article ArticleRecord) 
 	log.Println("path:", path)
 
 	return db.connector.(WriteArticleConnector).AddArticleRecordFileRecord(path, article)
+}
+
+func (db *DB) AppendNewLine(
+	boardPath string, article ArticleRecord, buf string,
+) error {
+	return db.connector.(CommentConnector).AppendNewLine(
+		boardPath, article, buf,
+	)
 }
 
 // GetUserArticleRecordFile returns aritcle file which user posted.

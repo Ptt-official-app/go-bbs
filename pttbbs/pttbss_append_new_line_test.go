@@ -27,7 +27,7 @@ func TestAppendNewLine(t *testing.T) {
 	stat, _ := os.Stat(filePath)
 	oriFileSize := stat.Size()
 
-	err := c.AppendNewLine(&boardPath, file, expectedNewLine)
+	err := c.AppendNewLine(boardPath, file, expectedNewLine)
 
 	if err != nil {
 		t.Errorf("Unexpected Error happened: %s", err)

@@ -9,9 +9,9 @@ import (
 )
 
 func (c *Connector) AppendNewLine(
-	direct *string, article *FileHeader, buf string,
+	boardPath string, article *FileHeader, buf string,
 ) error {
-	path := *direct + "/" + article.Filename()
+	path := boardPath + "/" + article.Filename()
 	lockRetry, lockWait, lockSuccess := 5, time.Duration(1), false
 	// TODO: STARTSTAT
 
@@ -39,6 +39,7 @@ func (c *Connector) AppendNewLine(
 	}
 
 	fileStat, _ := os.Stat(path)
+	fmt.Println(fileStat.ModTime())
 	article.SetModified(fileStat.ModTime())
 
 	// TODO: ENDSTAT

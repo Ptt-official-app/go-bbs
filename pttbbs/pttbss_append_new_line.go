@@ -2,6 +2,7 @@ package pttbbs
 
 import (
 	"fmt"
+	"github.com/Ptt-official-app/go-bbs"
 	"os"
 	"time"
 
@@ -9,7 +10,7 @@ import (
 )
 
 func (c *Connector) AppendNewLine(
-	boardPath string, article *FileHeader, buf string,
+	boardPath string, article bbs.ArticleRecord, buf string,
 ) error {
 	path := boardPath + "/" + article.Filename()
 	lockRetry, lockWait, lockSuccess := 5, time.Duration(1), false
@@ -39,7 +40,6 @@ func (c *Connector) AppendNewLine(
 	}
 
 	fileStat, _ := os.Stat(path)
-	fmt.Println(fileStat.ModTime())
 	article.SetModified(fileStat.ModTime())
 
 	// TODO: ENDSTAT

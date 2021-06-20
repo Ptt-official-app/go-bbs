@@ -204,8 +204,8 @@ type WriteArticleConnector interface {
 	AddArticleRecordFileRecord(name string, article ArticleRecord) error
 }
 
-// CommonConnector is a connector for bbs common function.
-type CommonConnector interface {
+// CommentConnector is a connector for bbs common function.
+type CommentConnector interface {
 	// AppendNewLine append new line to the end of article
 	AppendNewLine(direct *string, article *ArticleRecord, buf string) error
 }
@@ -447,7 +447,7 @@ func (db *DB) AddArticleRecordFileRecord(boardID string, article ArticleRecord) 
 func (db *DB) AppendNewLine(
 	direct *string, article *ArticleRecord, buf string,
 ) error {
-	return db.connector.(CommonConnector).AppendNewLine(
+	return db.connector.(CommentConnector).AppendNewLine(
 		direct, article, buf,
 	)
 }

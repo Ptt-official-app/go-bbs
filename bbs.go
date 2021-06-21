@@ -253,6 +253,9 @@ type UserDraftConnector interface {
 
 	// DeleteUserDraft should remove the named file.
 	DeleteUserDraft(name string) error
+
+	// WriteUserDraft should replace user draft from named file and user draft data
+	WriteUserDraft(name string, draft []byte) error
 }
 
 var drivers = make(map[string]Connector)
@@ -677,4 +680,15 @@ func (db *DB) DeleteUserDraft(userID, draftID string) error {
 	log.Println("path:", path)
 
 	return db.connector.(UserDraftConnector).DeleteUserDraft(path)
+}
+
+func (db *DB) WriteUserDraft(userID, draftID string, draftContent userDraft) error {
+	path, err := db.connector.(UserDraftConnector).GetUserDraftPath(userID, draftID)
+	if err != nil {
+		log.Println("bbs: GetUserDraftPath error:", err)
+		return err
+	}
+
+	log.Println("path:", path)
+	return db.connector.(UserDraftConnector).WriteUserDraft(path, draftContent.Raw())
 }

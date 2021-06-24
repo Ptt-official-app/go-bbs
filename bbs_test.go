@@ -189,10 +189,11 @@ type MockArticleRecord struct {
 	money     int
 }
 
-func (f *MockArticleRecord) Filename() string    { return f.filename }
-func (f *MockArticleRecord) Modified() time.Time { return f.modified }
-func (f *MockArticleRecord) Recommend() int      { return int(f.recommend) }
-func (f *MockArticleRecord) Owner() string       { return f.owner }
-func (f *MockArticleRecord) Date() string        { return f.date }
-func (f *MockArticleRecord) Title() string       { return f.title }
-func (f *MockArticleRecord) Money() int          { return f.money }
+func (f *MockArticleRecord) Filename() string                  { return f.filename }
+func (f *MockArticleRecord) Modified() time.Time               { return f.modified }
+func (f *MockArticleRecord) SetModified(newModified time.Time) { f.modified = newModified }
+func (f *MockArticleRecord) Recommend() int                    { return int(f.recommend) }
+func (f *MockArticleRecord) Owner() string                     { return f.owner }
+func (f *MockArticleRecord) Date() string                      { return f.date }
+func (f *MockArticleRecord) Title() string                     { return f.title }
+func (f *MockArticleRecord) Money() int                        { return f.money }

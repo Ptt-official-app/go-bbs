@@ -12,3 +12,7 @@ func (c *Connector) ReadUserDraft(filename string) ([]byte, error) {
 func (c *Connector) DeleteUserDraft(filename string) error {
 	return os.Remove(filename)
 }
+
+func (c *Connector) WriteUserDraft(filename string, draft []byte) error {
+	return ioutil.WriteFile(filename, draft, 0644)
+}

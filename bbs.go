@@ -127,6 +127,7 @@ type BoardRecordInfo interface {
 type ArticleRecord interface {
 	Filename() string
 	Modified() time.Time
+	SetModified(newModified time.Time)
 	Recommend() int
 	Date() string
 	Title() string
@@ -204,6 +205,12 @@ type WriteArticleConnector interface {
 	AddArticleRecordFileRecord(name string, article ArticleRecord) error
 }
 
+// CommentConnector is a connector for bbs common function.
+type CommentConnector interface {
+	// AppendNewLine append new line to the end of article
+	AppendNewLine(boardPath string, article ArticleRecord, buf string) error
+}
+
 // UserArticleConnector is a connector for bbs who support cached user article records
 type UserArticleConnector interface {
 
@@ -246,6 +253,9 @@ type UserDraftConnector interface {
 
 	// DeleteUserDraft should remove the named file.
 	DeleteUserDraft(name string) error
+
+	// WriteUserDraft should replace user draft from named file and user draft data
+	WriteUserDraft(name string, draft []byte) error
 }
 
 var drivers = make(map[string]Connector)
@@ -451,6 +461,14 @@ func (db *DB) AddArticleRecordFileRecord(boardID string, article ArticleRecord) 
 	log.Println("path:", path)
 
 	return db.connector.(WriteArticleConnector).AddArticleRecordFileRecord(path, article)
+}
+
+func (db *DB) AppendNewLine(
+	boardPath string, article ArticleRecord, buf string,
+) error {
+	return db.connector.(CommentConnector).AppendNewLine(
+		boardPath, article, buf,
+	)
 }
 
 // GetUserArticleRecordFile returns aritcle file which user posted.
@@ -662,4 +680,15 @@ func (db *DB) DeleteUserDraft(userID, draftID string) error {
 	log.Println("path:", path)
 
 	return db.connector.(UserDraftConnector).DeleteUserDraft(path)
+}
+
+func (db *DB) WriteUserDraft(userID, draftID string, draftContent userDraft) error {
+	path, err := db.connector.(UserDraftConnector).GetUserDraftPath(userID, draftID)
+	if err != nil {
+		log.Println("bbs: GetUserDraftPath error:", err)
+		return err
+	}
+
+	log.Println("path:", path)
+	return db.connector.(UserDraftConnector).WriteUserDraft(path, draftContent.Raw())
 }

@@ -17,36 +17,39 @@ var (
 
 type UserCommentRecord interface {
 	CommentOrder() uint32
-	CommentOwner() string
 	CommentTime() time.Time
-	CommentIP() string
+	Owner() string
+	IP() string
 	String() string
-	ArticleRecord() ArticleRecord
+	BoardID() string
+	Filename() string
 }
 
 var _ UserCommentRecord = &userCommentRecord{}
 
 type userCommentRecord struct {
-	commentOrder  uint32
-	commentOwner  string
-	commentTime   time.Time
-	commentIP     string
-	articleRecord ArticleRecord
+	commentOrder uint32
+	commentTime  time.Time
+	owner        string
+	ip           string
+	boardID      string
+	filename     string
 }
 
 // NewUserCommentRecord parses the data and returns the user comment record.
 //  Return error when input data is not matched the user comment pattern.
-func NewUserCommentRecord(order uint32, data string, ar ArticleRecord) (UserCommentRecord, error) {
+func NewUserCommentRecord(order uint32, data string, boardID string, ar ArticleRecord) (UserCommentRecord, error) {
 	owner, ctime, err := parseUserComment(data)
 	if err != nil {
 		return nil, err
 	}
 	return &userCommentRecord{
-		commentOrder:  order,
-		commentOwner:  owner,
-		commentTime:   ctime,
-		commentIP:     "", // TODO
-		articleRecord: ar,
+		commentOrder: order,
+		commentTime:  ctime,
+		owner:        owner,
+		ip:           "", // TODO
+		boardID:      boardID,
+		filename:     ar.Filename(),
 	}, nil
 }
 
@@ -54,24 +57,28 @@ func (r userCommentRecord) CommentOrder() uint32 {
 	return r.commentOrder
 }
 
-func (r userCommentRecord) CommentOwner() string {
-	return r.commentOwner
-}
-
 func (r userCommentRecord) CommentTime() time.Time {
 	return r.commentTime
 }
 
-func (r userCommentRecord) CommentIP() string {
-	return r.commentIP
+func (r userCommentRecord) Owner() string {
+	return r.owner
+}
+
+func (r userCommentRecord) IP() string {
+	return r.ip
 }
 
 func (r userCommentRecord) String() string {
-	return fmt.Sprintf("order: %d, owner: %s, time: %s", r.commentOrder, r.commentOwner, r.commentTime.Format("01/02 15:04"))
+	return fmt.Sprintf("order: %d, owner: %s, time: %s", r.commentOrder, r.owner, r.commentTime.Format("01/02 15:04"))
 }
 
-func (r userCommentRecord) ArticleRecord() ArticleRecord {
-	return r.articleRecord
+func (r userCommentRecord) BoardID() string {
+	return r.boardID
+}
+
+func (r userCommentRecord) Filename() string {
+	return r.filename
 }
 
 // parseUserComment returns the owner and time of comment data.

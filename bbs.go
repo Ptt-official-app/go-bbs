@@ -591,7 +591,7 @@ func (db *DB) GetBoardUserCommentRecord(boardID, userID string) (recs []UserComm
 			return nil, err
 		}
 		for _, cr := range crs {
-			if userID != cr.CommentOwner() {
+			if userID != cr.Owner() {
 				continue
 			}
 			recs = append(recs, cr)
@@ -615,7 +615,7 @@ func (db *DB) GetBoardArticleCommentRecords(boardID string, ar ArticleRecord) (c
 	scanner := bufio.NewScanner(strings.NewReader(string(content)))
 	for scanner.Scan() {
 		l := FilterStringANSI(scanner.Text())
-		cr, err := NewUserCommentRecord(floorCnt, l, ar)
+		cr, err := NewUserCommentRecord(floorCnt, l, boardID, ar)
 		if err != nil {
 			// skip non-comment line
 			if errors.Is(err, ErrNotUserComment) {

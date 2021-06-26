@@ -603,13 +603,13 @@ func (db *DB) GetBoardUserCommentRecord(boardID, userID string) (recs []UserComm
 	}
 
 	for _, ar := range ars {
-		crs, err := db.GetBoardArticleCommentRecords(boardID, ar.Filename())
+		crs, err := db.GetBoardArticleCommentRecords(boardID, ar)
 		if err != nil {
 			log.Println("bbs: GetBoardArticleCommentRecords error:", err)
 			return nil, err
 		}
 		for _, cr := range crs {
-			if userID != cr.CommentOwner() {
+			if userID != cr.Owner() {
 				continue
 			}
 			recs = append(recs, cr)
@@ -621,9 +621,9 @@ func (db *DB) GetBoardUserCommentRecord(boardID, userID string) (recs []UserComm
 
 // GetBoardArticleCommentRecords returns the comment records of the specific
 //  article.
-func (db *DB) GetBoardArticleCommentRecords(boardID, filename string) (crs []UserCommentRecord, err error) {
+func (db *DB) GetBoardArticleCommentRecords(boardID string, ar ArticleRecord) (crs []UserCommentRecord, err error) {
 
-	content, err := db.ReadBoardArticleFile(boardID, filename)
+	content, err := db.ReadBoardArticleFile(boardID, ar.Filename())
 	if err != nil {
 		log.Println("bbs: ReadBoardArticleFile error:", err)
 		return nil, err
@@ -633,7 +633,7 @@ func (db *DB) GetBoardArticleCommentRecords(boardID, filename string) (crs []Use
 	scanner := bufio.NewScanner(strings.NewReader(string(content)))
 	for scanner.Scan() {
 		l := FilterStringANSI(scanner.Text())
-		cr, err := NewUserCommentRecord(floorCnt, l)
+		cr, err := NewUserCommentRecord(floorCnt, l, boardID, ar)
 		if err != nil {
 			// skip non-comment line
 			if errors.Is(err, ErrNotUserComment) {

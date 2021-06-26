@@ -11,19 +11,29 @@ func TestNewUserCommentRecord(t *testing.T) {
 	expectedOrder := uint32(1)
 	expectedOwner := "lex"
 	expectedTime := time.Date(0, 5, 15, 1, 6, 0, 0, time.UTC)
+	expectedBoardID := "SYSOP"
+	expectedArticleRecord := &MockArticleRecord{}
 
-	got, err := NewUserCommentRecord(1, perfectData)
+	got, err := NewUserCommentRecord(1, perfectData, expectedBoardID, expectedArticleRecord)
 
 	if got.CommentOrder() != expectedOrder {
 		t.Errorf("comment order = %v, expected %v\n", got.CommentOrder(), expectedOrder)
 	}
 
-	if strings.Compare(got.CommentOwner(), expectedOwner) != 0 {
-		t.Errorf("comment owner = %v, expected %v\n", got.CommentOwner(), expectedOwner)
+	if strings.Compare(got.Owner(), expectedOwner) != 0 {
+		t.Errorf("comment owner = %v, expected %v\n", got.Owner(), expectedOwner)
 	}
 
 	if !got.CommentTime().Equal(expectedTime) {
 		t.Errorf("comment time = %v, expected %v\n", got.CommentTime(), expectedTime)
+	}
+
+	if got.BoardID() != expectedBoardID {
+		t.Errorf("boardID = %v, expected %v\n", got.BoardID(), expectedBoardID)
+	}
+
+	if got.Filename() != expectedArticleRecord.Filename() {
+		t.Errorf("boardID = %v, expected %v\n", got.Filename(), expectedArticleRecord.Filename())
 	}
 
 	if err != nil {

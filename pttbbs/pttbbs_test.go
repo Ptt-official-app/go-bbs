@@ -9,7 +9,7 @@ func TestReadUserFavoriteRecordsFileNoFile(t *testing.T) {
 	recs, err := c.ReadUserFavoriteRecordsFile("test/.fav")
 
 	// https://github.com/Ptt-official-app/Ptt-backend/issues/235
-	if len(recs) != 0 || err != nil {
+	if err != nil || len(recs) != 0 {
 		t.Errorf("not return empty favorite records")
 	}
 }

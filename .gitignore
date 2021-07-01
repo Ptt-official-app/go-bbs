@@ -1,3 +1,4 @@
 serverlet/serverlet
 cmd/bbstool/bbstool
 home/*
+.vscode

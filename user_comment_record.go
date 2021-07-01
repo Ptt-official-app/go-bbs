@@ -4,11 +4,13 @@ import (
 	"fmt"
 	"regexp"
 	"time"
+	"strings"
 )
 
 var (
 	ErrNotUserComment         = fmt.Errorf("data is not a user comment")
 	ErrUserCommentEmptyUserID = fmt.Errorf("user comment has empty name")
+	ErrUserCommentEmptyComment = fmt.Errorf("user comment detail has empty")
 )
 
 var (
@@ -20,6 +22,7 @@ type UserCommentRecord interface {
 	CommentTime() time.Time
 	Owner() string
 	IP() string
+	Comment() string
 	String() string
 	BoardID() string
 	Filename() string
@@ -34,12 +37,13 @@ type userCommentRecord struct {
 	ip           string
 	boardID      string
 	filename     string
+	comment string
 }
 
 // NewUserCommentRecord parses the data and returns the user comment record.
 //  Return error when input data is not matched the user comment pattern.
 func NewUserCommentRecord(order uint32, data string, boardID string, ar ArticleRecord) (UserCommentRecord, error) {
-	owner, ctime, err := parseUserComment(data)
+	owner, ctime, comment, err := parseUserComment(data)
 	if err != nil {
 		return nil, err
 	}
@@ -50,6 +54,7 @@ func NewUserCommentRecord(order uint32, data string, boardID string, ar ArticleR
 		ip:           "", // TODO
 		boardID:      boardID,
 		filename:     ar.Filename(),
+		comment: comment,
 	}, nil
 }
 
@@ -69,6 +74,10 @@ func (r userCommentRecord) IP() string {
 	return r.ip
 }
 
+func (r userCommentRecord) Comment() string {
+	return r.comment
+}
+
 func (r userCommentRecord) String() string {
 	return fmt.Sprintf("order: %d, owner: %s, time: %s", r.commentOrder, r.owner, r.commentTime.Format("01/02 15:04"))
 }
@@ -84,13 +93,16 @@ func (r userCommentRecord) Filename() string {
 // parseUserComment returns the owner and time of comment data.
 //  Return ErrNotUserComment error when data doesn't match to the pattern.
 //  Return other error when data contains the ambiguous value which can't parse.
-func parseUserComment(data string) (owner string, ctime time.Time, err error) {
+func parseUserComment(data string) (owner string, ctime time.Time, comment string, err error) {
 	matches := userCommentPattern.FindStringSubmatch(data)
 	// The 1st record is entire matched result of row.
 	// The 2nd record is group owner result, EX: "pichu".
 	const ownerIdx = 1
 	// The 3rd record is group time result,  EX: "05/15 01:06".
 	const timeIdx = 2
+
+	const commentIdx = 0
+	
 	if len(matches) < 3 {
 		err = ErrNotUserComment
 		return
@@ -108,5 +120,17 @@ func parseUserComment(data string) (owner string, ctime time.Time, err error) {
 		return
 	}
 
-	return owner, ctime, nil
+	commentStr := matches[commentIdx]
+	if len(commentStr) == 0 {
+		err = ErrUserCommentEmptyComment
+		return
+	}
+
+	//TODO: improve get comment 
+	ownStr := ":"
+	commentTimeRemoveArr := strings.Split(commentStr, ctimeStr)
+	commentArr := strings.Split(commentTimeRemoveArr[0], ownStr)
+	comment = strings.TrimSpace(commentArr[1])
+
+	return owner, ctime, comment, nil
 }

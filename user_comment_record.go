@@ -130,7 +130,18 @@ func parseUserComment(data string) (owner string, ctime time.Time, comment strin
 	ownStr := ":"
 	commentTimeRemoveArr := strings.Split(commentStr, ctimeStr)
 	commentArr := strings.Split(commentTimeRemoveArr[0], ownStr)
-	comment = strings.TrimSpace(commentArr[1])
+
+	for key, value := range commentArr {
+		//key 0 為使用者名稱，跳過
+		if key == 0 {
+			continue
+		}
+		comment += strings.TrimSpace(value)
+		//key 2 開始才會有重複冒號的問題
+		if key >= 2 {
+			comment += ":"
+		}
+	}
 
 	return owner, ctime, comment, nil
 }

@@ -49,11 +49,11 @@ func TestNewUserCommentRecord(t *testing.T) {
 func TestParseUserComment(t *testing.T) {
 
 	expectedTime := time.Date(0, 5, 15, 1, 6, 0, 0, time.UTC)
-	expectedComment := "快一點"
+	expectedComment := "快一點，lex:"
 	emptyTime := time.Time{}
 	emptyComment := ""
 
-	perfectData := "→ lex: 快一點                        05/15 01:06"
+	perfectData := "→ lex: 快一點，lex:                       05/15 01:06"
 	dataWithoutOwner := ": 快一點                             05/15 01:06"
 	dataWithInvalidTime := "→ lex: 快一點                        5/15 01:06"
 	emptyData := ""

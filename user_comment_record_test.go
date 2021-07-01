@@ -62,10 +62,10 @@ func TestParseUserComment(t *testing.T) {
 		data string
 	}
 	type expected struct {
-		owner  string
-		ctime  time.Time
+		owner   string
+		ctime   time.Time
 		comment string
-		hasErr bool
+		hasErr  bool
 	}
 	tests := []struct {
 		name     string

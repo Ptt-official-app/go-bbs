@@ -3,13 +3,13 @@ package bbs
 import (
 	"fmt"
 	"regexp"
-	"time"
 	"strings"
+	"time"
 )
 
 var (
-	ErrNotUserComment         = fmt.Errorf("data is not a user comment")
-	ErrUserCommentEmptyUserID = fmt.Errorf("user comment has empty name")
+	ErrNotUserComment          = fmt.Errorf("data is not a user comment")
+	ErrUserCommentEmptyUserID  = fmt.Errorf("user comment has empty name")
 	ErrUserCommentEmptyComment = fmt.Errorf("user comment detail has empty")
 )
 
@@ -37,7 +37,7 @@ type userCommentRecord struct {
 	ip           string
 	boardID      string
 	filename     string
-	comment string
+	comment      string
 }
 
 // NewUserCommentRecord parses the data and returns the user comment record.
@@ -54,7 +54,7 @@ func NewUserCommentRecord(order uint32, data string, boardID string, ar ArticleR
 		ip:           "", // TODO
 		boardID:      boardID,
 		filename:     ar.Filename(),
-		comment: comment,
+		comment:      comment,
 	}, nil
 }
 
@@ -102,7 +102,7 @@ func parseUserComment(data string) (owner string, ctime time.Time, comment strin
 	const timeIdx = 2
 
 	const commentIdx = 0
-	
+
 	if len(matches) < 3 {
 		err = ErrNotUserComment
 		return
@@ -126,7 +126,7 @@ func parseUserComment(data string) (owner string, ctime time.Time, comment strin
 		return
 	}
 
-	//TODO: improve get comment 
+	//TODO: improve get comment
 	ownStr := ":"
 	commentTimeRemoveArr := strings.Split(commentStr, ctimeStr)
 	commentArr := strings.Split(commentTimeRemoveArr[0], ownStr)

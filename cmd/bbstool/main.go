@@ -10,8 +10,10 @@ import (
 	_ "github.com/Ptt-official-app/go-bbs/pttbbs"
 )
 
-var driverName string
-var bbshome string
+var (
+	driverName string
+	bbshome    string
+)
 
 func init() {
 	flag.StringVar(&driverName, "driver", "pttbbs", "bbs driver name, eg: pttbbs, maple, formosabbs")
@@ -44,7 +46,6 @@ func main() {
 		showusercommentlist()
 		return
 	}
-
 }
 
 func chkIsDir(dir string) error {
@@ -62,7 +63,6 @@ func chkIsDir(dir string) error {
 		return nil
 	}
 	return fmt.Errorf("%v is not dir", dir)
-
 }
 
 func parseArgsToMap(flagArgs []string) map[string]interface{} {
@@ -110,7 +110,6 @@ func showboardlist() {
 	for _, r := range records {
 		fmt.Println("title:", r.Title())
 	}
-
 }
 
 func addboard() {
@@ -141,7 +140,6 @@ func addboard() {
 		fmt.Printf("addboard: AddBoardRecordFileRecord: %v\n", err)
 		return
 	}
-
 }
 
 func showuserlist() {
@@ -169,7 +167,6 @@ func showuserlist() {
 		}
 		fmt.Println("user id:", r.UserID())
 	}
-
 }
 
 func showuserarticlelist() {
@@ -199,7 +196,6 @@ func showuserarticlelist() {
 		// }
 		fmt.Println("titlex:", r.Title())
 	}
-
 }
 
 func showusercommentlist() {

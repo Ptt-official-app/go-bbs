@@ -150,9 +150,9 @@ const (
 	// BoardGroupBoard https://github.com/ptt/pttbbs/blob/master/include/pttstruct.h#L209
 	BoardGroupBoard = 0x00000008
 	// PermSYSOP https://github.com/ptt/pttbbs/blob/master/include/perm.h#L22
-	PermSYSOP = 000000040000
+	PermSYSOP = 0o00000040000
 	// PermBM https://github.com/ptt/pttbbs/blob/master/include/perm.h#L18
-	PermBM = 000000002000
+	PermBM = 0o00000002000
 	// BoardHide https://github.com/ptt/pttbbs/blob/master/include/pttstruct.h#L210
 	BoardHide = 0x00000010
 
@@ -195,7 +195,7 @@ func OpenBoardHeaderFile(filename string) ([]*BoardHeader, error) {
 func AppendBoardHeaderFileRecord(filename string, newBoardHeader *BoardHeader) error {
 	// If the file doesn't exist, create it, or append to the file
 
-	f, err := os.OpenFile(filename, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	f, err := os.OpenFile(filename, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0o644)
 	if err != nil {
 		return err
 	}
@@ -221,8 +221,7 @@ func AppendBoardHeaderFileRecord(filename string, newBoardHeader *BoardHeader) e
 }
 
 func RemoveBoardHeaderFileRecord(filename string, index int) error {
-
-	fi, err := os.OpenFile(filename, os.O_RDONLY, 0644)
+	fi, err := os.OpenFile(filename, os.O_RDONLY, 0o644)
 	if err != nil {
 		return fmt.Errorf("fi.OpenFile error: %v", err)
 	}
@@ -234,7 +233,7 @@ func RemoveBoardHeaderFileRecord(filename string, index int) error {
 		return err
 	}
 
-	fo, err := os.OpenFile(filename, os.O_WRONLY, 0644)
+	fo, err := os.OpenFile(filename, os.O_WRONLY, 0o644)
 	if err != nil {
 		return fmt.Errorf("fo.OpenFile error: %v", err)
 	}
@@ -262,7 +261,6 @@ func RemoveBoardHeaderFileRecord(filename string, index int) error {
 	fo.Truncate(size)
 	filelock.Unlock(fi)
 	return nil
-
 }
 
 func UnmarshalBoardHeader(data []byte) (*BoardHeader, error) {
@@ -353,5 +351,4 @@ func (b *BoardHeader) MarshalBinary() ([]byte, error) {
 	binary.LittleEndian.PutUint32(ret[PosOfSRExpire:PosOfSRExpire+4], uint32(b.SRexpire.Unix()))
 
 	return ret, nil
-
 }

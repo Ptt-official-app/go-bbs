@@ -2,11 +2,13 @@
 
 package cache
 
-type keyT uint32
-type uidT uint32
-type gidT uint32
-type sizeT uint64
-type shmattT uint64
+type (
+	keyT    uint32
+	uidT    uint32
+	gidT    uint32
+	sizeT   uint64
+	shmattT uint64
+)
 
 type ShmidDs struct {
 	x struct {

@@ -129,12 +129,10 @@ func OpenFileHeaderFile(filename string) ([]*FileHeader, error) {
 	}
 
 	return ret, nil
-
 }
 
 func AppendFileHeaderFileRecord(filename string, newFileHeader *FileHeader) error {
-
-	f, err := os.OpenFile(filename, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	f, err := os.OpenFile(filename, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0o644)
 	if err != nil {
 		return err
 	}
@@ -163,7 +161,6 @@ func AppendFileHeaderFileRecord(filename string, newFileHeader *FileHeader) erro
 }
 
 func NewFileHeaderWithByte(data []byte) (*FileHeader, error) {
-
 	ret := FileHeader{}
 	ret.filename = string(bytes.Trim(data[PosOfFileHeaderFilename:+PosOfFileHeaderFilename+FileNameLength], "\x00"))
 

@@ -55,7 +55,6 @@ func OpenLoginRecentFile(filename string) ([]*LoginRecentRecord, error) {
 	}
 
 	return ret, nil
-
 }
 
 func NewLoginRecentRecord(line string) (*LoginRecentRecord, error) {

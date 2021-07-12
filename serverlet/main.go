@@ -1,18 +1,20 @@
 package main
 
 import (
-	"github.com/Ptt-official-app/go-bbs"
-	_ "github.com/Ptt-official-app/go-bbs/pttbbs"
-
 	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
 	"strings"
+
+	"github.com/Ptt-official-app/go-bbs"
+	_ "github.com/Ptt-official-app/go-bbs/pttbbs"
 )
 
-var userRecs []bbs.UserRecord
-var boardHeader []bbs.BoardRecord
+var (
+	userRecs    []bbs.UserRecord
+	boardHeader []bbs.BoardRecord
+)
 
 var bbsDB *bbs.DB
 
@@ -62,11 +64,9 @@ func routeClass(w http.ResponseWriter, r *http.Request) {
 		getClass(w, r)
 		return
 	}
-
 }
 
 func getClass(w http.ResponseWriter, r *http.Request) {
-
 	seg := strings.Split(r.URL.Path, "/")
 
 	classID := "0"
@@ -96,5 +96,4 @@ func getClass(w http.ResponseWriter, r *http.Request) {
 	b, _ := json.MarshalIndent(m, "", "  ")
 
 	w.Write(b)
-
 }

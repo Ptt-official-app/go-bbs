@@ -1,14 +1,14 @@
 package bbs
 
 import (
-	"github.com/Ptt-official-app/go-bbs"
-
 	"bytes"
 	"encoding/binary"
 	"io"
 	"log"
 	"os"
 	"time"
+
+	"github.com/Ptt-official-app/go-bbs"
 )
 
 const (
@@ -67,11 +67,9 @@ func OpenFormosaBBSFileHeaderFile(filename string) ([]*FileHeader, error) {
 	}
 
 	return ret, nil
-
 }
 
 func NewFomosaBBSFileHeaderWithByte(data []byte) (*FileHeader, error) {
-
 	ret := FileHeader{}
 	ret.Filename = string(bytes.Trim(data[PosOfFileHeaderFilename:+PosOfFileHeaderFilename+44], "\x00"))
 

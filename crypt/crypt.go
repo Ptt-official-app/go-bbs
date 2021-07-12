@@ -48,7 +48,7 @@ func cFcrypt(buf []uint8, salt []uint8, buff *[PASSLEN]uint8) {
 	}
 
 	// crypt: line 568
-	//log.Infof("fcrypt: key: %v", key)
+	// log.Infof("fcrypt: key: %v", key)
 	ks := desKeySchedule{}
 	desSetKey(&key, &ks)
 	/*
@@ -60,7 +60,7 @@ func cFcrypt(buf []uint8, salt []uint8, buff *[PASSLEN]uint8) {
 	out := [2]uint32{}
 	out[0], out[1] = body(&ks, Eswap0, Eswap1)
 
-	//log.Infof("fcrypt: after body: out: %v", out)
+	// log.Infof("fcrypt: after body: out: %v", out)
 
 	bb := [9]uint8{}
 	b := &bb
@@ -70,7 +70,7 @@ func cFcrypt(buf []uint8, salt []uint8, buff *[PASSLEN]uint8) {
 	y := 0
 	u := uint8(0x80)
 	bb[8] = 0
-	//log.Infof("fcrypt: bb: %v", bb)
+	// log.Infof("fcrypt: bb: %v", bb)
 	for i := 2; i < 13; i++ {
 		c := 0
 		for j := 0; j < 6; j++ {
@@ -85,7 +85,7 @@ func cFcrypt(buf []uint8, salt []uint8, buff *[PASSLEN]uint8) {
 			}
 		}
 		buff[i] = cov2char[c]
-		//log.Infof("fcrypt: (%d/%d) c: %v buff: %v", i, 13, c, buff[i])
+		// log.Infof("fcrypt: (%d/%d) c: %v buff: %v", i, 13, c, buff[i])
 	}
 	buff[13] = 0
 }
@@ -108,31 +108,31 @@ func desSetKey(key *desCBlock, schedule *desKeySchedule) {
 	c := c2l(in[:4])
 	d := c2l(in[4:8])
 	t := uint32(0)
-	//log.Infof("desSetKey (1): to permOp: d: %v c: %v", d, c)
+	// log.Infof("desSetKey (1): to permOp: d: %v c: %v", d, c)
 	d, c = permOp(d, c, 4, 0x0f0f0f0f)
-	//log.Infof("desSetKey (1): after permOp: d: %v c: %v", d, c)
-	//log.Infof("desSetKey (2): to hPermOp: c: %v", c)
+	// log.Infof("desSetKey (1): after permOp: d: %v c: %v", d, c)
+	// log.Infof("desSetKey (2): to hPermOp: c: %v", c)
 	c = hPermOp(c, -2, 0xcccc0000)
-	//log.Infof("desSetKey (2): after hPermOp: c: %v", c)
-	//log.Infof("desSetKey (3): to hPermOp: d: %v", d)
+	// log.Infof("desSetKey (2): after hPermOp: c: %v", c)
+	// log.Infof("desSetKey (3): to hPermOp: d: %v", d)
 	d = hPermOp(d, -2, 0xcccc0000)
-	//log.Infof("desSetKey (3): after hPermOp: d: %v", d)
-	//log.Infof("desSetKey (4): to permOp: d: %v c: %v", d, c)
+	// log.Infof("desSetKey (3): after hPermOp: d: %v", d)
+	// log.Infof("desSetKey (4): to permOp: d: %v c: %v", d, c)
 	d, c = permOp(d, c, 1, 0x55555555)
-	//log.Infof("desSetKey (4): after permOp: d: %v c: %v", d, c)
-	//log.Infof("desSetKey (5): to permOp: c: %v d: %v", c, d)
+	// log.Infof("desSetKey (4): after permOp: d: %v c: %v", d, c)
+	// log.Infof("desSetKey (5): to permOp: c: %v d: %v", c, d)
 	c, d = permOp(c, d, 8, 0x00ff00ff)
-	//log.Infof("desSetKey (5): after permOp: c: %v d: %v", c, d)
-	//log.Infof("desSetKey (6): to permOp: d: %v c: %v", d, c)
+	// log.Infof("desSetKey (5): after permOp: c: %v d: %v", c, d)
+	// log.Infof("desSetKey (6): to permOp: d: %v c: %v", d, c)
 	d, c = permOp(d, c, 1, 0x55555555)
-	//log.Infof("desSetKey (6): after permOp: d: %v c: %v", d, c)
+	// log.Infof("desSetKey (6): after permOp: d: %v c: %v", d, c)
 
 	d = ((d & 0x000000ff) << 16) | (d & 0x0000ff00) |
 		((d & 0x00ff0000) >> 16) | ((c & 0xf0000000) >> 4)
 
 	c &= 0x0fffffff
 
-	//log.Infof("desSetKey (7): to for-loop: c: %v d: %v", c, d)
+	// log.Infof("desSetKey (7): to for-loop: c: %v d: %v", c, d)
 
 	s := uint32(0)
 	for i := 0; i < desIterations; i++ {
@@ -148,7 +148,7 @@ func desSetKey(key *desCBlock, schedule *desKeySchedule) {
 			}
 		}
 
-		//log.Infof("desSetKey (8) (%v/%v): to &= 0x0fffffff: c: %v d: %v", i, ITERATIONS, c, d)
+		// log.Infof("desSetKey (8) (%v/%v): to &= 0x0fffffff: c: %v d: %v", i, ITERATIONS, c, d)
 
 		c &= 0x0fffffff
 		d &= 0x0fffffff
@@ -163,7 +163,7 @@ func desSetKey(key *desCBlock, schedule *desKeySchedule) {
 			skb[5][((d>>7)&0x03)|((d>>8)&0x3c)] |
 			skb[6][(d>>15)&0x3f] |
 			skb[7][((d>>21)&0x0f)|((d>>22)&0x30)]
-		//log.Infof("desSetKey (9) (%v/%v): to set k: s: %v t: %v", i, ITERATIONS, s, t)
+		// log.Infof("desSetKey (9) (%v/%v): to set k: s: %v t: %v", i, ITERATIONS, s, t)
 
 		/* table contained 0213 4657 */
 		k[2*i] = ((t << 16) | (s & 0x0000ffff)) & 0xffffffff
@@ -172,26 +172,26 @@ func desSetKey(key *desCBlock, schedule *desKeySchedule) {
 		s = (s << 4) | (s >> 28)
 		k[2*i+1] = s & 0xffffffff
 
-		//log.Infof("desSetKey (10) (%v/%v): after set k: (%v, %v)", i, ITERATIONS, k[2*i], k[2*i+1])
+		// log.Infof("desSetKey (10) (%v/%v): after set k: (%v, %v)", i, ITERATIONS, k[2*i], k[2*i+1])
 	}
 }
 
 func dEncrypt(L uint32, R uint32, S uint32, E0 uint32, E1 uint32, s []uint32, t uint32, u uint32) (retL uint32, retT uint32, retU uint32) {
 	t = (R ^ (R >> 16))
-	//log.Infof("dEncrypt (1): after t: R: %v t: %v", R, t)
+	// log.Infof("dEncrypt (1): after t: R: %v t: %v", R, t)
 	u = t & E0
-	//log.Infof("dEncrypt (2): after u: t: %v E0: %v u: %v E1: %v", t, E0, u, E1)
+	// log.Infof("dEncrypt (2): after u: t: %v E0: %v u: %v E1: %v", t, E0, u, E1)
 	t = t & E1
-	//log.Infof("dEncrypt (4): to u: t: %v u: %v R: %v S: %v s[S]: %v", t, u, R, S, s[S])
+	// log.Infof("dEncrypt (4): to u: t: %v u: %v R: %v S: %v s[S]: %v", t, u, R, S, s[S])
 	u = (u ^ (u << 16)) ^ R ^ s[S]
-	//log.Infof("dEncrypt (4): after u: u: %v", u)
+	// log.Infof("dEncrypt (4): after u: u: %v", u)
 
-	//log.Infof("dEncrypt (5): to t: t: %v R :%v s[S+1]: %v", t, R, s[S+1])
+	// log.Infof("dEncrypt (5): to t: t: %v R :%v s[S+1]: %v", t, R, s[S+1])
 	t = (t ^ (t << 16)) ^ R ^ s[S+1]
-	//log.Infof("dEncrypt (5): after t: t: %v", t)
+	// log.Infof("dEncrypt (5): after t: t: %v", t)
 
 	t = (t >> 4) | (t << 28)
-	//log.Infof("dEncrypt (5): after t: t: %v", t)
+	// log.Infof("dEncrypt (5): after t: t: %v", t)
 
 	L ^= spTrans[1][(t)&0x3f] |
 		spTrans[3][(t>>8)&0x3f] |
@@ -201,7 +201,7 @@ func dEncrypt(L uint32, R uint32, S uint32, E0 uint32, E1 uint32, s []uint32, t 
 		spTrans[2][(u>>8)&0x3f] |
 		spTrans[4][(u>>16)&0x3f] |
 		spTrans[6][(u>>24)&0x3f]
-	//log.Infof("dEncrypt (6): after L: L: %v t: %v u: %v", L, t, u)
+	// log.Infof("dEncrypt (6): after L: L: %v t: %v u: %v", L, t, u)
 
 	return L, t, u
 }
@@ -217,22 +217,22 @@ func body(ks *desKeySchedule, Eswap0 uint32, Eswap1 uint32) (uint32, uint32) {
 	t := uint32(0)
 	u := uint32(0)
 
-	//log.Infof("body: to for-loop: E0: %v E1: %v", E0, E1)
+	// log.Infof("body: to for-loop: E0: %v E1: %v", E0, E1)
 	for j := 0; j < 25; j++ {
 		for i := uint32(0); i < desIterations*2; i += 4 {
-			//log.Infof("body (%v/%v)(%v/%v) (1): to dEncrypt: l: %v r: %v t: %v u: %v", j, 25, i, ITERATIONS*2, l, r, t, u)
+			// log.Infof("body (%v/%v)(%v/%v) (1): to dEncrypt: l: %v r: %v t: %v u: %v", j, 25, i, ITERATIONS*2, l, r, t, u)
 			l, t, u = dEncrypt(l, r, i, E0, E1, s[:], t, u)
-			//log.Infof("body (%v/%v)(%v/%v) (1): after dEncrypt: l: %v r: %v t: %v u: %v", j, 25, i, ITERATIONS*2, l, r, t, u)
-			//log.Infof("body (%v/%v)(%v/%v) (2): to dEncrypt: l: %v r: %v t: %v u: %v", j, 25, i, ITERATIONS*2, l, r, t, u)
+			// log.Infof("body (%v/%v)(%v/%v) (1): after dEncrypt: l: %v r: %v t: %v u: %v", j, 25, i, ITERATIONS*2, l, r, t, u)
+			// log.Infof("body (%v/%v)(%v/%v) (2): to dEncrypt: l: %v r: %v t: %v u: %v", j, 25, i, ITERATIONS*2, l, r, t, u)
 			r, t, u = dEncrypt(r, l, i+2, E0, E1, s[:], t, u)
-			//log.Infof("body (%v/%v)(%v/%v) (2): after dEncrypt: l: %v r: %v t: %v u: %v", j, 25, i, ITERATIONS*2, l, r, t, u)
+			// log.Infof("body (%v/%v)(%v/%v) (2): after dEncrypt: l: %v r: %v t: %v u: %v", j, 25, i, ITERATIONS*2, l, r, t, u)
 		}
 		t = l
 		l = r
 		r = t
 
 	}
-	//log.Infof("body (3): after for-loop: l: %v r: %v t: %v u: %v", l, r, t, u)
+	// log.Infof("body (3): after for-loop: l: %v r: %v t: %v u: %v", l, r, t, u)
 
 	t = r
 	r = (l >> 1) | (l << 31)
@@ -241,21 +241,21 @@ func body(ks *desKeySchedule, Eswap0 uint32, Eswap1 uint32) (uint32, uint32) {
 	l &= 0xffffffff
 	r &= 0xffffffff
 
-	//log.Infof("body (4): to permOp: l: %v r: %v", l, r)
+	// log.Infof("body (4): to permOp: l: %v r: %v", l, r)
 	r, l = permOp(r, l, 1, 0x55555555)
-	//log.Infof("body (4): after permOp: l: %v r: %v", l, r)
-	//log.Infof("body (5): to permOp: l: %v r: %v", l, r)
+	// log.Infof("body (4): after permOp: l: %v r: %v", l, r)
+	// log.Infof("body (5): to permOp: l: %v r: %v", l, r)
 	l, r = permOp(l, r, 8, 0x00ff00ff)
-	//log.Infof("body (5): after permOp: l: %v r: %v", l, r)
-	//log.Infof("body (6): to permOp: l: %v r: %v", l, r)
+	// log.Infof("body (5): after permOp: l: %v r: %v", l, r)
+	// log.Infof("body (6): to permOp: l: %v r: %v", l, r)
 	r, l = permOp(r, l, 2, 0x33333333)
-	//log.Infof("body (6): after permOp: l: %v r: %v", l, r)
-	//log.Infof("body (7): to permOp: l: %v r: %v", l, r)
+	// log.Infof("body (6): after permOp: l: %v r: %v", l, r)
+	// log.Infof("body (7): to permOp: l: %v r: %v", l, r)
 	l, r = permOp(l, r, 16, 0x0000ffff)
-	//log.Infof("body (7): after permOp: l: %v r: %v", l, r)
-	//log.Infof("body (8): to permOp: l: %v r: %v", l, r)
+	// log.Infof("body (7): after permOp: l: %v r: %v", l, r)
+	// log.Infof("body (8): to permOp: l: %v r: %v", l, r)
 	r, l = permOp(r, l, 4, 0x0f0f0f0f)
-	//log.Infof("body (8): after permOp: l: %v r: %v", l, r)
+	// log.Infof("body (8): after permOp: l: %v r: %v", l, r)
 
 	return l, r
 }

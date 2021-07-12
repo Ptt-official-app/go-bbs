@@ -21,7 +21,6 @@ import (
 )
 
 func TestOpenUserecFile(t *testing.T) {
-
 	actualUserecs, err := OpenUserecFile("testcase/passwd/01.PASSWDS")
 	if err != nil {
 		t.Errorf("OpenUserecFile() error = %v", err)
@@ -94,7 +93,7 @@ func TestOpenUserecFile(t *testing.T) {
 			numLoginDays:  1,
 			numPosts:      0,
 			firstLogin:    time.Date(2020, 9, 22, 1, 20, 59, 0, time.UTC),
-			lastLogin:     time.Date(2020, 9, 22, 1, 26, 00, 0, time.UTC),
+			lastLogin:     time.Date(2020, 9, 22, 1, 26, 0o0, 0, time.UTC),
 			lastHost:      "59.124.167.226",
 			Email:         "x",
 			Address:       "新竹縣子虛鄉烏有村543號",
@@ -102,7 +101,7 @@ func TestOpenUserecFile(t *testing.T) {
 			Over18:        true,
 			Pager:         1,
 			Career:        "全景軟體",
-			LastSeen:      time.Date(2020, 9, 22, 1, 26, 00, 0, time.UTC),
+			LastSeen:      time.Date(2020, 9, 22, 1, 26, 0o0, 0, time.UTC),
 			TimeSetAngel:  time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
 			TimePlayAngel: time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
 			LastSong:      time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
@@ -262,7 +261,7 @@ func TestOpenUserecFile(t *testing.T) {
 			lastLogin:     time.Date(2020, 9, 22, 7, 40, 1, 0, time.UTC),
 			lastHost:      "180.217.174.18",
 			Career:        "我的服務單位",
-			LastSeen:      time.Date(2020, 9, 22, 7, 40, 01, 0, time.UTC),
+			LastSeen:      time.Date(2020, 9, 22, 7, 40, 0o1, 0, time.UTC),
 			TimeSetAngel:  time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
 			TimePlayAngel: time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
 			LastSong:      time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
@@ -523,7 +522,6 @@ func TestOpenUserecFile(t *testing.T) {
 		}
 
 	}
-
 }
 
 func TestMarshalBinaryUserec(t *testing.T) {
@@ -634,5 +632,4 @@ b36e c5e9 0000 0000 0000 0000 0000 0000
 		}
 
 	}
-
 }

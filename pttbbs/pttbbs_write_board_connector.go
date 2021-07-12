@@ -1,9 +1,9 @@
 package pttbbs
 
 import (
-	"github.com/Ptt-official-app/go-bbs"
-
 	"fmt"
+
+	"github.com/Ptt-official-app/go-bbs"
 )
 
 func (c *Connector) NewBoardRecord(args map[string]interface{}) (bbs.BoardRecord, error) {
@@ -31,7 +31,6 @@ func (c *Connector) AddBoardRecordFileRecord(name string, brd bbs.BoardRecord) e
 	b, ok := brd.(*BoardHeader)
 	if !ok {
 		return fmt.Errorf("brd should be create with NewBoardRecord")
-
 	}
 	return AppendBoardHeaderFileRecord(name, b)
 }

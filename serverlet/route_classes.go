@@ -13,11 +13,8 @@ func routeClasses(w http.ResponseWriter, r *http.Request) {
 		getClasses(w, r)
 		return
 	}
-
 }
 
 func getClasses(w http.ResponseWriter, r *http.Request) {
-
 	w.WriteHeader(http.StatusNotImplemented)
-
 }

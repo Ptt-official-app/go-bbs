@@ -16,11 +16,9 @@ func routeBoards(w http.ResponseWriter, r *http.Request) {
 		getBoards(w, r)
 		return
 	}
-
 }
 
 func getBoards(w http.ResponseWriter, r *http.Request) {
-
 	// TODO: Check JWT
 
 	// TODO: Get user Level
@@ -38,5 +36,4 @@ func getBoards(w http.ResponseWriter, r *http.Request) {
 
 	b, _ := json.MarshalIndent(responseMap, "", "  ")
 	w.Write(b)
-
 }

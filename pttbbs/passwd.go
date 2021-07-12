@@ -15,8 +15,6 @@
 package pttbbs
 
 import (
-	"github.com/Ptt-official-app/go-bbs/crypt"
-
 	"encoding/binary"
 	"fmt"
 	"io"
@@ -24,6 +22,8 @@ import (
 	"os"
 	"strings"
 	"time"
+
+	"github.com/Ptt-official-app/go-bbs/crypt"
 )
 
 const (
@@ -227,7 +227,6 @@ func OpenUserecFile(filename string) ([]*Userec, error) {
 	}
 
 	return ret, nil
-
 }
 
 func UnmarshalUserec(data []byte) (*Userec, error) {

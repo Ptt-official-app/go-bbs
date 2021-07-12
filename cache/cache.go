@@ -32,5 +32,4 @@ func NewCache(connectionString string) (Cache, error) {
 	default:
 		return nil, fmt.Errorf("unsupport scheme: %v", scheme)
 	}
-
 }

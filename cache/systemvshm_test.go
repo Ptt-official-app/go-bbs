@@ -7,7 +7,6 @@ import (
 )
 
 func TestOpenSHM(t *testing.T) {
-
 	data, err := CreateKey(10, 4)
 	data.Bytes()[0] = 42
 	if err != nil {

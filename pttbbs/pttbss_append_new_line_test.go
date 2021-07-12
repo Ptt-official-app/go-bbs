@@ -2,10 +2,11 @@ package pttbbs
 
 import (
 	"bytes"
-	"github.com/Ptt-official-app/go-bbs"
 	"os"
 	"testing"
 	"time"
+
+	"github.com/Ptt-official-app/go-bbs"
 )
 
 func TestAppendNewLine(t *testing.T) {
@@ -29,7 +30,6 @@ func TestAppendNewLine(t *testing.T) {
 	oriFileSize := stat.Size()
 
 	err := c.AppendNewLine(boardPath, file, expectedNewLine)
-
 	if err != nil {
 		t.Errorf("Unexpected Error happened: %s", err)
 	}

@@ -14,7 +14,6 @@ func openMmap(fd int, size int) ([]byte, error) {
 		return nil, fmt.Errorf("mmap error: %w", err)
 	}
 	return b, err
-
 }
 
 func closeMmap(buf []byte) error {

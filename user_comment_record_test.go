@@ -47,7 +47,6 @@ func TestNewUserCommentRecord(t *testing.T) {
 }
 
 func TestParseUserComment(t *testing.T) {
-
 	expectedTime := time.Date(0, 5, 15, 1, 6, 0, 0, time.UTC)
 	expectedComment := "快一點，lex:"
 	emptyTime := time.Time{}

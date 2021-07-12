@@ -17,8 +17,6 @@
 package pttbbs
 
 import (
-	"github.com/Ptt-official-app/go-bbs"
-
 	"bytes"
 	"encoding"
 	"encoding/binary"
@@ -26,6 +24,8 @@ import (
 	"fmt"
 	"io/ioutil"
 	"time"
+
+	"github.com/Ptt-official-app/go-bbs"
 )
 
 // For Current PTT
@@ -113,7 +113,6 @@ func (favi *FavItem) Type() bbs.FavoriteType {
 		return bbs.FavoriteTypeLine
 	}
 	return bbs.FavoriteTypeBoard
-
 }
 
 func (favi *FavItem) Records() []bbs.FavoriteRecord {

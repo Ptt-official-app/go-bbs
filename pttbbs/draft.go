@@ -14,5 +14,5 @@ func (c *Connector) DeleteUserDraft(filename string) error {
 }
 
 func (c *Connector) WriteUserDraft(filename string, draft []byte) error {
-	return ioutil.WriteFile(filename, draft, 0644)
+	return ioutil.WriteFile(filename, draft, 0o644)
 }

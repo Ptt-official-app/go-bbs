@@ -4,9 +4,7 @@ import (
 	"errors"
 )
 
-var (
-	ErrInvalidCrypt = errors.New("invalid crypt")
-)
+var ErrInvalidCrypt = errors.New("invalid crypt")
 
 //Fcrypt
 //Params

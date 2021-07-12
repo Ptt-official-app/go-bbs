@@ -1,13 +1,13 @@
 package main
 
 import (
-	"github.com/Ptt-official-app/go-bbs"
-
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 	"time"
+
+	"github.com/Ptt-official-app/go-bbs"
 )
 
 type MockUserRecord struct {
@@ -55,7 +55,6 @@ func (u *MockUserRecord) LastHost() string { return "" }
 func (u *MockUserRecord) UserFlag() uint32 { return 0x00000001 }
 
 func TestGetUserInformation(t *testing.T) {
-
 	expected := NewMockUserRecord("SYSOP")
 
 	userRecs = []bbs.UserRecord{
@@ -88,13 +87,10 @@ func TestGetUserInformation(t *testing.T) {
 	if responsedData["user_id"] != expected.UserID() {
 		t.Errorf("handler returned unexpected body, user_id not match: got %v want userID %v",
 			rr.Body.String(), expected.UserID())
-
 	}
-
 }
 
 func TestParseUserPath(t *testing.T) {
-
 	type TestCase struct {
 		input         string
 		expectdUserID string
@@ -126,7 +122,6 @@ func TestParseUserPath(t *testing.T) {
 		actualUserID, actualItem, err := parseUserPath(input)
 		if err != nil {
 			t.Errorf("error on index %d, got: %v", index, err)
-
 		}
 
 		if actualUserID != expectdUserID {
@@ -138,5 +133,4 @@ func TestParseUserPath(t *testing.T) {
 		}
 
 	}
-
 }

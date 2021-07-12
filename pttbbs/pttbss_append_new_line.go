@@ -2,9 +2,10 @@ package pttbbs
 
 import (
 	"fmt"
-	"github.com/Ptt-official-app/go-bbs"
 	"os"
 	"time"
+
+	"github.com/Ptt-official-app/go-bbs"
 
 	"github.com/Ptt-official-app/go-bbs/filelock"
 )
@@ -29,7 +30,7 @@ func (c *Connector) AppendNewLine(
 		return fmt.Errorf("AppendNewLine: File (%s) is locked", path)
 	}
 
-	fileHandle, err := os.OpenFile(path, os.O_APPEND|os.O_WRONLY, 0752)
+	fileHandle, err := os.OpenFile(path, os.O_APPEND|os.O_WRONLY, 0o752)
 	if err != nil {
 		return fmt.Errorf("AppendNewLine: Cannot open file %s, err: %s", path, err)
 	}

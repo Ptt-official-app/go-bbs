@@ -29,7 +29,7 @@ func Shmctl(shmid int, cmd int, buf *ShmidDs) (int, error) {
 }
 
 const (
-	IPCCreate = 00001000
+	IPCCreate = 0o0001000
 
 	IPCRMID = 0
 	IPCSet  = 1
@@ -44,7 +44,7 @@ func CreateKey(key int, size int) (*SHM, error) {
 	flag := 0
 	if size != 0 {
 		// create
-		flag = IPCCreate | 0600
+		flag = IPCCreate | 0o600
 	}
 
 	shmID, err := Shmget(key, size, flag)
@@ -91,6 +91,7 @@ func CreateKey(key int, size int) (*SHM, error) {
 func OpenKey(key int) (*SHM, error) {
 	return CreateKey(key, 0)
 }
+
 func RemoveKey(key int) error {
 	shmID, err := Shmget(key, 0, 0)
 	if err != nil {

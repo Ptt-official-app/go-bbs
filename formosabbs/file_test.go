@@ -5,7 +5,6 @@ import (
 )
 
 func TestParseFormosaBBSFileHeader(t *testing.T) {
-
 	headers, err := OpenFormosaBBSFileHeaderFile("testcase/file/01.DIR")
 	if err != nil {
 		t.Error(err)
@@ -155,5 +154,4 @@ func TestParseFormosaBBSFileHeader(t *testing.T) {
 		}
 
 	}
-
 }

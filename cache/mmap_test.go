@@ -7,7 +7,6 @@ import (
 )
 
 func TestOpenMMAP(t *testing.T) {
-
 	data, err := CreateMmap("./test", 20)
 	data.Bytes()[0] = 42
 	if err != nil {

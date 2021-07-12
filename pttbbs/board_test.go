@@ -386,6 +386,7 @@ var testBoardHeaders = []BoardHeader{
 		SRexpire:           time.Unix(int64(0), 0),
 	},
 }
+
 var testBoardBinary = []string{
 	`	
 			5359 534f 5000 0000 0000 0000 00bc 54ad
@@ -520,7 +521,6 @@ func TestBoardHeader(t *testing.T) {
 		}
 
 	}
-
 }
 
 func TestBoardHeaderInfo(t *testing.T) {
@@ -626,7 +626,6 @@ func TestBoardHeaderSettings(t *testing.T) {
 }
 
 func TestAppendAndRemoveBoardRecord(t *testing.T) {
-
 	tmpfile, err := ioutil.TempFile("", "board_test_*")
 	if err != nil {
 		t.Errorf("create tmp file error: %v", err)
@@ -672,6 +671,7 @@ func TestAppendAndRemoveBoardRecord(t *testing.T) {
 
 	defer os.Remove(tmpfile.Name()) // clean up
 }
+
 func TestMarshalBinary(t *testing.T) {
 	type TestCase struct {
 		Input    BoardHeader
@@ -695,5 +695,4 @@ func TestMarshalBinary(t *testing.T) {
 		}
 
 	}
-
 }

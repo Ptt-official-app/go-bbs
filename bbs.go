@@ -267,7 +267,6 @@ func Register(drivername string, connector Connector) {
 
 // Open opan a
 func Open(drivername string, dataSourceName string) (*DB, error) {
-
 	c, ok := drivers[drivername]
 	if !ok {
 		return nil, fmt.Errorf("bbs: drivername: %v not found", drivername)
@@ -285,7 +284,6 @@ func Open(drivername string, dataSourceName string) (*DB, error) {
 
 // ReadUserRecords returns the UserRecords
 func (db *DB) ReadUserRecords() ([]UserRecord, error) {
-
 	path, err := db.connector.GetUserRecordsPath()
 	if err != nil {
 		log.Println("bbs: open file error:", err)
@@ -303,7 +301,6 @@ func (db *DB) ReadUserRecords() ([]UserRecord, error) {
 
 // ReadUserFavoriteRecords returns the FavoriteRecord for specific userID
 func (db *DB) ReadUserFavoriteRecords(userID string) ([]FavoriteRecord, error) {
-
 	path, err := db.connector.GetUserFavoriteRecordsPath(userID)
 	if err != nil {
 		log.Println("bbs: get user favorite records path error:", err)
@@ -317,12 +314,10 @@ func (db *DB) ReadUserFavoriteRecords(userID string) ([]FavoriteRecord, error) {
 		return nil, err
 	}
 	return recs, nil
-
 }
 
 // ReadBoardRecords returns the UserRecords
 func (db *DB) ReadBoardRecords() ([]BoardRecord, error) {
-
 	path, err := db.connector.GetBoardRecordsPath()
 	if err != nil {
 		log.Println("bbs: open file error:", err)
@@ -339,7 +334,6 @@ func (db *DB) ReadBoardRecords() ([]BoardRecord, error) {
 }
 
 func (db *DB) ReadBoardArticleRecordsFile(boardID string) ([]ArticleRecord, error) {
-
 	path, err := db.connector.GetBoardArticleRecordsPath(boardID)
 	if err != nil {
 		log.Println("bbs: open file error:", err)
@@ -356,11 +350,9 @@ func (db *DB) ReadBoardArticleRecordsFile(boardID string) ([]ArticleRecord, erro
 		return nil, err
 	}
 	return recs, nil
-
 }
 
 func (db *DB) ReadBoardTreasureRecordsFile(boardID string, treasureID []string) ([]ArticleRecord, error) {
-
 	path, err := db.connector.GetBoardTreasureRecordsPath(boardID, treasureID)
 	if err != nil {
 		log.Println("bbs: open file error:", err)
@@ -377,7 +369,6 @@ func (db *DB) ReadBoardTreasureRecordsFile(boardID string, treasureID []string) 
 }
 
 func (db *DB) ReadBoardArticleFile(boardID string, filename string) ([]byte, error) {
-
 	path, err := db.connector.GetBoardArticleFilePath(boardID, filename)
 	if err != nil {
 		log.Println("bbs: open file error:", err)
@@ -394,7 +385,6 @@ func (db *DB) ReadBoardArticleFile(boardID string, filename string) ([]byte, err
 }
 
 func (db *DB) ReadBoardTreasureFile(boardID string, treasuresID []string, filename string) ([]byte, error) {
-
 	path, err := db.connector.GetBoardTreasureFilePath(boardID, treasuresID, filename)
 	if err != nil {
 		log.Println("bbs: open file error:", err)
@@ -415,7 +405,6 @@ func (db *DB) NewBoardRecord(args map[string]interface{}) (BoardRecord, error) {
 }
 
 func (db *DB) AddBoardRecord(brd BoardRecord) error {
-
 	path, err := db.connector.GetBoardRecordsPath()
 	if err != nil {
 		log.Println("bbs: open file error:", err)
@@ -452,7 +441,6 @@ func (db *DB) NewArticleRecord(args map[string]interface{}) (ArticleRecord, erro
 }
 
 func (db *DB) AddArticleRecordFileRecord(boardID string, article ArticleRecord) error {
-
 	path, err := db.connector.GetBoardArticleRecordsPath(boardID)
 	if err != nil {
 		log.Println("bbs: open file error:", err)
@@ -473,7 +461,6 @@ func (db *DB) AppendNewLine(
 
 // GetUserArticleRecordFile returns aritcle file which user posted.
 func (db *DB) GetUserArticleRecordFile(userID string) ([]UserArticleRecord, error) {
-
 	recs := []UserArticleRecord{}
 	uac, ok := db.connector.(UserArticleConnector)
 	if ok {
@@ -539,7 +526,6 @@ func (db *DB) GetUserArticleRecordFile(userID string) ([]UserArticleRecord, erro
 // GetUserCommentRecordFile returns the comment records of the specific user
 //  from all boards and all articles.
 func (db *DB) GetUserCommentRecordFile(userID string) ([]UserCommentRecord, error) {
-
 	recs := []UserCommentRecord{}
 	ucc, ok := db.connector.(UserCommentConnector)
 	if ok {
@@ -595,7 +581,6 @@ func (db *DB) GetUserCommentRecordFile(userID string) ([]UserCommentRecord, erro
 // GetBoardUserCommentRecord returns the comment records of the user from the
 //  specific board.
 func (db *DB) GetBoardUserCommentRecord(boardID, userID string) (recs []UserCommentRecord, err error) {
-
 	ars, err := db.ReadBoardArticleRecordsFile(boardID)
 	if err != nil {
 		log.Println("bbs: ReadBoardArticleRecordsFile error:", err)
@@ -622,7 +607,6 @@ func (db *DB) GetBoardUserCommentRecord(boardID, userID string) (recs []UserComm
 // GetBoardArticleCommentRecords returns the comment records of the specific
 //  article.
 func (db *DB) GetBoardArticleCommentRecords(boardID string, ar ArticleRecord) (crs []UserCommentRecord, err error) {
-
 	content, err := db.ReadBoardArticleFile(boardID, ar.Filename())
 	if err != nil {
 		log.Println("bbs: ReadBoardArticleFile error:", err)
@@ -654,7 +638,6 @@ func (db *DB) GetBoardArticleCommentRecords(boardID string, ar ArticleRecord) (c
 }
 
 func (db *DB) GetUserDrafts(userID, draftID string) (UserDraft, error) {
-
 	path, err := db.connector.(UserDraftConnector).GetUserDraftPath(userID, draftID)
 	if err != nil {
 		log.Println("bbs: GetUserDraftPath error:", err)
@@ -671,7 +654,6 @@ func (db *DB) GetUserDrafts(userID, draftID string) (UserDraft, error) {
 }
 
 func (db *DB) DeleteUserDraft(userID, draftID string) error {
-
 	path, err := db.connector.(UserDraftConnector).GetUserDraftPath(userID, draftID)
 	if err != nil {
 		log.Println("bbs: GetUserDraftPath error:", err)

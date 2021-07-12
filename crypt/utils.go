@@ -9,11 +9,10 @@ func l2c(l uint32, c []uint8) {
 	c[1] = uint8((l >> 8) & 0xff)
 	c[2] = uint8((l >> 16) & 0xff)
 	c[3] = uint8((l >> 24) & 0xff)
-	//log.Infof("l2c: l: %v c: (%x, %x, %x, %x)", l, c[0], c[1], c[2], c[3])
+	// log.Infof("l2c: l: %v c: (%x, %x, %x, %x)", l, c[0], c[1], c[2], c[3])
 }
 
 func permOp(a uint32, b uint32, n int, m uint32) (retA uint32, retB uint32) {
-
 	t := ((a >> n) ^ b) & m
 	b ^= t
 	a ^= t << n

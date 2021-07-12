@@ -8,7 +8,6 @@ import (
 )
 
 func TestNewArticleRecord(t *testing.T) {
-
 	c := Connector{"./testcase"}
 
 	input := map[string]interface{}{

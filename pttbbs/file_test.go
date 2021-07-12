@@ -31,7 +31,7 @@ func TestParseFileHeader(t *testing.T) {
 	expected := []FileHeader{
 		{
 			filename:  "M.1599059246.A.CF6",
-			modified:  time.Date(2020, time.September, 02, 15, 31, 28, 0, time.UTC),
+			modified:  time.Date(2020, time.September, 0o2, 15, 31, 28, 0, time.UTC),
 			recommend: 0,
 			owner:     "SYSOP",
 			date:      " 9/02",
@@ -51,7 +51,7 @@ func TestParseFileHeader(t *testing.T) {
 		},
 		{
 			filename:  "M.1599059415.A.FBA",
-			modified:  time.Date(2020, time.September, 02, 15, 31, 37, 0, time.UTC),
+			modified:  time.Date(2020, time.September, 0o2, 15, 31, 37, 0, time.UTC),
 			recommend: 0,
 			owner:     "SYSOP",
 			date:      " 9/02",
@@ -71,7 +71,7 @@ func TestParseFileHeader(t *testing.T) {
 		},
 		{
 			filename:  "M.1599059496.A.2BE",
-			modified:  time.Date(2020, time.September, 02, 15, 31, 46, 0, time.UTC),
+			modified:  time.Date(2020, time.September, 0o2, 15, 31, 46, 0, time.UTC),
 			recommend: 0,
 			owner:     "SYSOP",
 			date:      " 9/02",
@@ -105,7 +105,7 @@ func TestParseFileHeader02(t *testing.T) {
 	expected := []FileHeader{
 		{
 			filename:  "M.1604489415.A.C31",
-			modified:  time.Date(2020, 11, 04, 11, 30, 14, 0, time.UTC),
+			modified:  time.Date(2020, 11, 0o4, 11, 30, 14, 0, time.UTC),
 			recommend: 0,
 			owner:     "pichu",
 			date:      "11/04",
@@ -129,6 +129,7 @@ func TestParseFileHeader02(t *testing.T) {
 		CheckPttFileHeader(t, index, header, &expected[index])
 	}
 }
+
 func TestParsePttFileHeaderTreasures(t *testing.T) {
 	headers, err := OpenFileHeaderFile("testcase/file/03.DIR")
 	if err != nil {
@@ -164,7 +165,6 @@ func TestParsePttFileHeaderTreasures(t *testing.T) {
 }
 
 func CheckPttFileHeader(t *testing.T, index int, actual *FileHeader, expected *FileHeader) {
-
 	if actual.filename != expected.filename {
 		t.Logf("lena :%d %d", len(actual.filename), len(expected.filename))
 		t.Errorf("Filename not match in index %d, expected: %s, got: %s", index, expected.filename, actual.filename)
@@ -213,7 +213,7 @@ func TestEncodingFileHeader(t *testing.T) {
 		{
 			Input: FileHeader{
 				filename:  "M.1599059246.A.CF6",
-				modified:  time.Date(2020, time.September, 02, 15, 31, 28, 0, time.UTC),
+				modified:  time.Date(2020, time.September, 0o2, 15, 31, 28, 0, time.UTC),
 				recommend: 0,
 				owner:     "SYSOP",
 				date:      " 9/02",
@@ -245,7 +245,7 @@ func TestEncodingFileHeader(t *testing.T) {
 		{
 			Input: FileHeader{
 				filename:  "M.1599059415.A.FBA",
-				modified:  time.Date(2020, time.September, 02, 15, 31, 37, 0, time.UTC),
+				modified:  time.Date(2020, time.September, 0o2, 15, 31, 37, 0, time.UTC),
 				recommend: 0,
 				owner:     "SYSOP",
 				date:      " 9/02",
@@ -277,7 +277,7 @@ e9a1 4900 0000 0000 0000 0000 0000 0000
 		{
 			Input: FileHeader{
 				filename:  "M.1599059496.A.2BE",
-				modified:  time.Date(2020, time.September, 02, 15, 31, 46, 0, time.UTC),
+				modified:  time.Date(2020, time.September, 0o2, 15, 31, 46, 0, time.UTC),
 				recommend: 0,
 				owner:     "SYSOP",
 				date:      " 9/02",
@@ -316,15 +316,13 @@ a3a1 4820 a4ad a46a bc65 ae65 0000 0000
 		}
 
 	}
-
 }
 
 func TestAppendFileHeaderFileRecord(t *testing.T) {
-
 	expected := []FileHeader{
 		{
 			filename:  "M.1599059246.A.CF6",
-			modified:  time.Date(2020, time.September, 02, 15, 31, 28, 0, time.UTC),
+			modified:  time.Date(2020, time.September, 0o2, 15, 31, 28, 0, time.UTC),
 			recommend: 0,
 			owner:     "SYSOP",
 			date:      " 9/02",
@@ -344,7 +342,7 @@ func TestAppendFileHeaderFileRecord(t *testing.T) {
 		},
 		{
 			filename:  "M.1599059415.A.FBA",
-			modified:  time.Date(2020, time.September, 02, 15, 31, 37, 0, time.UTC),
+			modified:  time.Date(2020, time.September, 0o2, 15, 31, 37, 0, time.UTC),
 			recommend: 0,
 			owner:     "SYSOP",
 			date:      " 9/02",
@@ -364,7 +362,7 @@ func TestAppendFileHeaderFileRecord(t *testing.T) {
 		},
 		{
 			filename:  "M.1599059496.A.2BE",
-			modified:  time.Date(2020, time.September, 02, 15, 31, 46, 0, time.UTC),
+			modified:  time.Date(2020, time.September, 0o2, 15, 31, 46, 0, time.UTC),
 			recommend: 0,
 			owner:     "SYSOP",
 			date:      " 9/02",

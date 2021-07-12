@@ -11,7 +11,6 @@ const (
 )
 
 func New32aWith(offset uint32) hash.Hash32 {
-
 	h := fnv.New32a()
 	b, _ := h.(encoding.BinaryMarshaler).MarshalBinary()
 	b[4] = byte((offset >> 24) & 0xFF)

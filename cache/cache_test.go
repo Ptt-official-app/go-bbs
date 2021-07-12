@@ -7,7 +7,6 @@ import (
 )
 
 func TestNewCacheWithMmap(t *testing.T) {
-
 	data, err := CreateMmap("./test", 20)
 	if err != nil {
 		t.Logf("err should be nil, got: %v", err)
@@ -36,7 +35,6 @@ func TestNewCacheWithMmap(t *testing.T) {
 }
 
 func TestNewCacheWithSHM(t *testing.T) {
-
 	data, err := CreateKey(10, 4)
 	data.Bytes()[0] = 42
 	if err != nil {

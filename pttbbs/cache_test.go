@@ -17,12 +17,12 @@ type MockCache struct {
 func (c *MockCache) Bytes() []byte {
 	return c.buf
 }
+
 func (c *MockCache) Close() error {
 	return nil
 }
 
 func TestGetVersion(t *testing.T) {
-
 	c := Cache{
 		Cache: &MockCache{
 			buf: []byte{12, 0, 0, 0},
@@ -38,5 +38,4 @@ func TestGetVersion(t *testing.T) {
 	if c.Version() != 12 {
 		t.Errorf("version excepted 1 got: %v", c.Version())
 	}
-
 }

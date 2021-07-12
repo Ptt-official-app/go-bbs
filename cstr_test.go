@@ -6,7 +6,6 @@ import (
 )
 
 func TestCstrToBytes(t *testing.T) {
-
 	str1 := [13]byte{}
 	str2 := [13]byte{}
 	copy(str2[:], []byte("123"))
@@ -54,7 +53,6 @@ func TestCstrToBytes(t *testing.T) {
 }
 
 func TestCstrToString(t *testing.T) {
-
 	str1 := [13]byte{}
 	str2 := [13]byte{}
 	copy(str2[:], []byte("123"))

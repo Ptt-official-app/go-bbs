@@ -13,9 +13,7 @@ var (
 	ErrUserCommentEmptyComment = fmt.Errorf("user comment detail has empty")
 )
 
-var (
-	userCommentPattern = regexp.MustCompile(`([a-zA-Z][a-zA-Z0-9]+):.*([0-9][0-9]\/[0-9][0-9]\s[0-9][0-9]:[0-9][0-9])`)
-)
+var userCommentPattern = regexp.MustCompile(`([a-zA-Z][a-zA-Z0-9]+):.*([0-9][0-9]\/[0-9][0-9]\s[0-9][0-9]:[0-9][0-9])`)
 
 type UserCommentRecord interface {
 	CommentOrder() uint32
@@ -126,18 +124,18 @@ func parseUserComment(data string) (owner string, ctime time.Time, comment strin
 		return
 	}
 
-	//TODO: improve get comment
+	// TODO: improve get comment
 	ownStr := ":"
 	commentTimeRemoveArr := strings.Split(commentStr, ctimeStr)
 	commentArr := strings.Split(commentTimeRemoveArr[0], ownStr)
 
 	for key, value := range commentArr {
-		//key 0 為使用者名稱，跳過
+		// key 0 為使用者名稱，跳過
 		if key == 0 {
 			continue
 		}
 		comment += strings.TrimSpace(value)
-		//key 2 開始才會有重複冒號的問題
+		// key 2 開始才會有重複冒號的問題
 		if key >= 2 {
 			comment += ":"
 		}

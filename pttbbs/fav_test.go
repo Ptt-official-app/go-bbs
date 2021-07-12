@@ -302,5 +302,4 @@ func TestOpenFavFile(t *testing.T) {
 			t.Errorf("Encoded FavFile should be equal to the input. Expected: \n%v\nEncoded: \n%v\n ", expectedBytes, encoded)
 		}
 	}
-
 }

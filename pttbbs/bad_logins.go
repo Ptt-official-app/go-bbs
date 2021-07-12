@@ -67,9 +67,7 @@ const (
 	loginStartTimeFormatString = "[01/02/2006 15:04:05 Mon]"
 )
 
-var (
-	ErrInvalidLoginsBadFormat = errors.New("Invalid logins.bad line format")
-)
+var ErrInvalidLoginsBadFormat = errors.New("Invalid logins.bad line format")
 
 // LoginAttempt represents an entry in logins.bad file to indicate a successful or failed login
 // attempt for a UserID. Note that UserID could be empty if the logins.bad is under user dir.

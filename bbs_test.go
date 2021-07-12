@@ -8,7 +8,6 @@ import (
 )
 
 func TestGetBoardArticleCommentRecords(t *testing.T) {
-
 	anyBoardID := ""
 	anyArticleRecord := &MockArticleRecord{}
 	articleContent := `
@@ -98,7 +97,6 @@ a740 aacc 3a20 5359 534f 5020 28af ab29
 			}
 		})
 	}
-
 }
 
 type fakeConnector struct {

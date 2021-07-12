@@ -11,7 +11,6 @@ import (
 )
 
 func (c *Connector) NewArticleRecord(args map[string]interface{}) (bbs.ArticleRecord, error) {
-
 	record := NewFileHeader()
 
 	owner, ok := args["owner"].(string)
@@ -49,7 +48,7 @@ func (c *Connector) NewArticleRecord(args map[string]interface{}) (bbs.ArticleRe
 			return nil, err
 		}
 
-		f, err = os.OpenFile(path, os.O_WRONLY|os.O_CREATE|os.O_EXCL, 0644)
+		f, err = os.OpenFile(path, os.O_WRONLY|os.O_CREATE|os.O_EXCL, 0o644)
 		if err == nil {
 			break
 		}

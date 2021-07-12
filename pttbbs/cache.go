@@ -103,7 +103,6 @@ type MessageQueueCache []byte
 //
 // See: https://en.wikipedia.org/wiki/Data_structure_alignment
 func (c *Cache) caculatePos() {
-
 	c.posOfVersion = 0
 	c.posOfSize = c.posOfVersion + 4
 	c.posOfUserID = c.posOfSize + 4
@@ -294,7 +293,6 @@ func (c *Cache) caculatePos() {
 // NewCache returns Cache (SHM) by connectionString, connectionString indicate the shm location
 // with uri format  eg. shmkey:1228 or file:/tmp/ramdisk/bbs.shm
 func NewCache(connectionString string, settings *MemoryMappingSetting) (*Cache, error) {
-
 	c, err := cache.NewCache(connectionString)
 	if err != nil {
 		return nil, fmt.Errorf("cache open error: %v", err)

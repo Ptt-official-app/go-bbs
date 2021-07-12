@@ -8,7 +8,6 @@ import (
 
 func openMmap(fd int, size int) ([]byte, error) {
 	return nil, fmt.Errorf("TODO: implement open mmap")
-
 }
 
 func closeMmap(buf []byte) error {

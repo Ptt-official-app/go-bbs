@@ -58,5 +58,4 @@ func TestFnv32a(t *testing.T) {
 		}
 
 	}
-
 }

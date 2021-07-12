@@ -87,7 +87,8 @@ func getUserFlagAllByID(userid string) (*uFlags, error) {
 		dbcsNointresc,
 		cursorASCII,
 		menuLightbar,
-		newAngelPager}, nil
+		newAngelPager,
+	}, nil
 }
 
 func getAdbannerByUserrec(userrec bbs.UserRecord) bool {

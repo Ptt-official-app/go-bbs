@@ -1,12 +1,12 @@
 package pttbbs
 
 import (
-	"github.com/Ptt-official-app/go-bbs"
-
 	"fmt"
 	"io/ioutil"
 	"os"
 	"strings"
+
+	"github.com/Ptt-official-app/go-bbs"
 )
 
 type Connector struct {
@@ -21,7 +21,6 @@ func init() {
 // And it can append argument for SHM
 // for example `file:///home/bbs/?UTMP=1993`
 func (c *Connector) Open(dataSourceName string) error {
-
 	if strings.HasPrefix(dataSourceName, "file://") {
 		s := dataSourceName[len("file://"):]
 		seg := strings.Split(s, "?")
@@ -77,7 +76,6 @@ func (c *Connector) ReadUserFavoriteRecordsFile(filename string) ([]bbs.Favorite
 
 func appendBoardID(folder *FavFolder, brd []*BoardHeader) {
 	for _, item := range folder.FavItems {
-
 		switch item.Item.(type) {
 		case *FavBoardItem:
 			bid := item.Item.(*FavBoardItem).BoardID - 1
@@ -90,7 +88,6 @@ func appendBoardID(folder *FavFolder, brd []*BoardHeader) {
 			// logger.Warningf("parseFavoriteFolderItem unknown favItem type")
 		}
 	}
-
 }
 
 func (c *Connector) GetBoardRecordsPath() (string, error) {

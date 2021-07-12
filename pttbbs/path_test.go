@@ -19,7 +19,6 @@ import (
 )
 
 func TestGetPasswdsPath(t *testing.T) {
-
 	type TestCase struct {
 		input    string
 		expected string
@@ -54,11 +53,9 @@ func TestGetPasswdsPath(t *testing.T) {
 				i, c.input, c.expected, actual)
 		}
 	}
-
 }
 
 func TestGetBoardPath(t *testing.T) {
-
 	type TestCase struct {
 		input    string
 		expected string
@@ -93,11 +90,9 @@ func TestGetBoardPath(t *testing.T) {
 				i, c.input, c.expected, actual)
 		}
 	}
-
 }
 
 func TestGetUserFavoritePath(t *testing.T) {
-
 	type Input struct {
 		wd     string
 		userID string
@@ -148,11 +143,9 @@ func TestGetUserFavoritePath(t *testing.T) {
 				i, c.input, c.expected, actual)
 		}
 	}
-
 }
 
 func TestGetUserDraftPath(t *testing.T) {
-
 	type Input struct {
 		wd      string
 		userID  string
@@ -208,11 +201,9 @@ func TestGetUserDraftPath(t *testing.T) {
 				i, c.input, c.expected, actual)
 		}
 	}
-
 }
 
 func TestGetUserMailPath(t *testing.T) {
-
 	type Input struct {
 		wd       string
 		userID   string
@@ -268,11 +259,9 @@ func TestGetUserMailPath(t *testing.T) {
 				i, c.input, c.expected, actual)
 		}
 	}
-
 }
 
 func TestGetLoginRecentPath(t *testing.T) {
-
 	type Input struct {
 		wd     string
 		userID string
@@ -323,11 +312,9 @@ func TestGetLoginRecentPath(t *testing.T) {
 				i, c.input, c.expected, actual)
 		}
 	}
-
 }
 
 func TestGetBoardArticlesDirectoryPath(t *testing.T) {
-
 	type Input struct {
 		wd      string
 		boardID string
@@ -378,11 +365,9 @@ func TestGetBoardArticlesDirectoryPath(t *testing.T) {
 				i, c.input, c.expected, actual)
 		}
 	}
-
 }
 
 func TestGetBoardArticleFilePath(t *testing.T) {
-
 	type Input struct {
 		wd       string
 		boardID  string
@@ -438,11 +423,9 @@ func TestGetBoardArticleFilePath(t *testing.T) {
 				i, c.input, c.expected, actual)
 		}
 	}
-
 }
 
 func TestGetBoardTreasuresDirectoryPath(t *testing.T) {
-
 	type Input struct {
 		wd      string
 		boardID string
@@ -495,11 +478,9 @@ func TestGetBoardTreasuresDirectoryPath(t *testing.T) {
 				i, c.input, c.expected, actual)
 		}
 	}
-
 }
 
 func TestGetBoardTreasureFilePath(t *testing.T) {
-
 	type Input struct {
 		wd       string
 		boardID  string
@@ -556,11 +537,9 @@ func TestGetBoardTreasureFilePath(t *testing.T) {
 				i, c.input, c.expected, actual)
 		}
 	}
-
 }
 
 func TestGetBoardNameFilePath(t *testing.T) {
-
 	type Input struct {
 		wd      string
 		boardID string
@@ -611,5 +590,4 @@ func TestGetBoardNameFilePath(t *testing.T) {
 				i, c.input, c.expected, actual)
 		}
 	}
-
 }

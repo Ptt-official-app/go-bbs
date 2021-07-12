@@ -16,11 +16,9 @@ func routeToken(w http.ResponseWriter, r *http.Request) {
 		postToken(w, r)
 		return
 	}
-
 }
 
 func postToken(w http.ResponseWriter, r *http.Request) {
-
 	r.ParseForm()
 
 	username := r.FormValue("username")
@@ -63,7 +61,6 @@ func postToken(w http.ResponseWriter, r *http.Request) {
 	b, _ := json.MarshalIndent(m, "", "  ")
 
 	w.Write(b)
-
 }
 
 func findUserecByID(userid string) (bbs.UserRecord, error) {

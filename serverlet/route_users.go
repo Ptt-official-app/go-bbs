@@ -16,7 +16,6 @@ func routeUsers(w http.ResponseWriter, r *http.Request) {
 		getUsers(w, r)
 		return
 	}
-
 }
 
 func getUsers(w http.ResponseWriter, r *http.Request) {
@@ -43,7 +42,6 @@ func getUserInformation(w http.ResponseWriter, r *http.Request, userID string) {
 		map[string]string{
 			"user_id": userID,
 		})
-
 	if err != nil {
 		// TODO: record unauthorized access
 		w.WriteHeader(http.StatusUnauthorized)
@@ -90,6 +88,7 @@ func getUserInformation(w http.ResponseWriter, r *http.Request, userID string) {
 
 	w.Write(responseByte)
 }
+
 func getUserFavorites(w http.ResponseWriter, r *http.Request, userID string) {
 	w.WriteHeader(http.StatusNotImplemented)
 }
@@ -103,5 +102,4 @@ func parseUserPath(path string) (userID string, item string, err error) {
 	}
 
 	return pathSegment[3], pathSegment[4], nil
-
 }

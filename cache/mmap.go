@@ -27,9 +27,7 @@ func CreateMmap(filePath string, size int64) (*Mmap, error) {
 }
 
 func OpenMmap(filePath string) (*Mmap, error) {
-	// := os.Open(filePath)
 	f, err := os.OpenFile(filePath, os.O_RDWR, 0o644)
-	// f, err := os.Open("../../../dump.shm")
 	if err != nil {
 		return nil, fmt.Errorf("open error: %w", err)
 	}
@@ -38,16 +36,13 @@ func OpenMmap(filePath string) (*Mmap, error) {
 
 func openFile(f *os.File) (*Mmap, error) {
 	fd := int(f.Fd())
-	// fmt.Println("fd:", fd)
 
 	stat, err := f.Stat()
 	if err != nil {
-		// fmt.Println("stat error", err)
 		return nil, fmt.Errorf("stat error: %w", err)
 	}
 
 	size := int(stat.Size())
-	// fmt.Println("size", size)
 
 	b, err := openMmap(fd, size)
 	if err != nil {

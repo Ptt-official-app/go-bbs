@@ -1,15 +1,15 @@
 package pttbbs
 
 import (
-	"strings"
 	"testing"
 )
 
 func TestReadUserFavoriteRecordsFileNoFile(t *testing.T) {
 	c := Connector{}
-	_, err := c.ReadUserFavoriteRecordsFile("test")
+	recs, err := c.ReadUserFavoriteRecordsFile("test/.fav")
 
-	if !strings.Contains(err.Error(), "OpenFavFile") {
-		t.Errorf("err not return OpenFavFile")
+	// https://github.com/Ptt-official-app/Ptt-backend/issues/235
+	if err != nil || len(recs) != 0 {
+		t.Errorf("not return empty favorite records")
 	}
 }

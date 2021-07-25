@@ -10,7 +10,62 @@ import (
 	"github.com/Ptt-official-app/go-bbs/filelock"
 )
 
-func (c *Connector) NewArticleRecord(args map[string]interface{}) (bbs.ArticleRecord, error) {
+// NewBoardArticleFilePath get available filename for board with boardID, it will test is this filename not exist
+// And open a file to occupy this filename
+// Please see fhdr_stamp in pttbbs fhdr_stamp.c also
+func (c *Connector) NewBoardArticleFilePath(boardID string) (filename string, err error) {
+	var f *os.File
+	for {
+		dtime := time.Now().Unix()
+		// TOOD: Check 2038 Problem
+		filename = fmt.Sprintf("M.%d.A.%3.3X", dtime, rand.Intn(0x1000))
+		path, err := c.GetBoardArticleFilePath(boardID, filename)
+		if err != nil {
+			return filename, err
+		}
+
+		f, err = os.OpenFile(path, os.O_WRONLY|os.O_CREATE|os.O_EXCL, 0644)
+		if err == nil {
+			break
+		}
+
+		// TODO: Should log if can not lock file in first time, is system loading too heavy?
+
+	}
+	f.Close()
+	return
+
+}
+
+// NewArticleRecord returns a new ArticleRecord given a filename, owner, date, title
+func (c *Connector) NewArticleRecord(filename, owner, date, title string) (bbs.ArticleRecord, error) {
+	ret := &FileHeader{
+		filename: filename,
+		owner:    owner,
+		date:     date,
+		title:    title,
+	}
+	return ret, nil
+}
+
+func (c *Connector) WriteBoardArticleFile(path string, content []byte) error {
+
+	f, err := os.OpenFile(path, os.O_WRONLY|os.O_CREATE|os.O_EXCL, 0644)
+	err = filelock.Lock(f)
+	if err != nil {
+		// File is locked
+		return err
+	}
+	defer filelock.Unlock(f)
+
+	if _, err := f.Write(content); err != nil {
+		return err
+	}
+	return nil
+
+}
+
+func (c *Connector) NewArticleRecordWithMap(args map[string]interface{}) (bbs.ArticleRecord, error) {
 
 	record := NewFileHeader()
 

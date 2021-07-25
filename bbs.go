@@ -199,11 +199,17 @@ type WriteBoardConnector interface {
 // WriteArticleConnector is a connector for posting a article
 type WriteArticleConnector interface {
 
+	// NewBoardArticleFilePath returns available filename for board with boardID
+	NewBoardArticleFilePath(boardID string) (path string, err error)
+
 	// NewArticleRecord return ArticleRecord object in this driver with arguments
-	NewArticleRecord(args map[string]interface{}) (ArticleRecord, error)
+	NewArticleRecord(filename, owner, date, title string) (ArticleRecord, error)
 	// AddArticleRecordFileRecord given record file name and new record, should append
 	// file record in that file.
 	AddArticleRecordFileRecord(name string, article ArticleRecord) error
+
+	//
+	WriteBoardArticleFile(name string, content []byte) error
 }
 
 // CommentConnector is a connector for user can post a command for a article
@@ -448,10 +454,16 @@ func (db *DB) RemoveBoardRecord(index uint) error {
 	return fmt.Errorf("not implement")
 }
 
-func (db *DB) NewArticleRecord(args map[string]interface{}) (ArticleRecord, error) {
-	return db.connector.(WriteArticleConnector).NewArticleRecord(args)
+// NewArticleRecord returns new ArticleRecord with new filename in boardID and owner, date and title
+func (db *DB) NewArticleRecord(boardID, owner, date, title string) (ArticleRecord, error) {
+	filename, err := db.connector.(WriteArticleConnector).NewBoardArticleFilePath(boardID)
+	if err != nil {
+		return nil, err
+	}
+	return db.connector.(WriteArticleConnector).NewArticleRecord(filename, owner, date, title)
 }
 
+// AddArticleRecordFileRecord append article ArticleRecord to boardID
 func (db *DB) AddArticleRecordFileRecord(boardID string, article ArticleRecord) error {
 
 	path, err := db.connector.GetBoardArticleRecordsPath(boardID)
@@ -462,6 +474,29 @@ func (db *DB) AddArticleRecordFileRecord(boardID string, article ArticleRecord) 
 	log.Println("path:", path)
 
 	return db.connector.(WriteArticleConnector).AddArticleRecordFileRecord(path, article)
+}
+
+// WriteBoardArticleFile writes content into filename in boardID
+func (db *DB) WriteBoardArticleFile(boardID, filename string, content []byte) error {
+
+	_, ok := db.connector.(WriteArticleConnector)
+	if !ok {
+		return fmt.Errorf("bbs: connector don's support WriteArticleConnector")
+	}
+
+	path, err := db.connector.GetBoardArticleFilePath(boardID, filename)
+	if err != nil {
+		log.Println("bbs: open file error:", err)
+		return err
+	}
+	log.Println("path:", path)
+
+	err = db.connector.(WriteArticleConnector).WriteBoardArticleFile(path, content)
+	if err != nil {
+		log.Println("bbs: write board article file error:", err)
+		return err
+	}
+	return nil
 }
 
 func (db *DB) AppendNewLine(

@@ -10,21 +10,27 @@ import (
 func TestNewArticleRecord(t *testing.T) {
 
 	c := Connector{"./testcase"}
+	filename, _ := c.NewBoardArticleFilePath("SYSOP")
 
-	input := map[string]interface{}{
-		"board_id": "SYSOP",
+	input := map[string]string{
+		"filename": filename,
 		"owner":    "nickyanggg",
-		"date":     "5/15",
+		"date":     " 5/15",
 		"title":    "Test",
 	}
 
 	expected := bbs.ArticleRecord(&FileHeader{
-		owner: "nickyanggg",
-		date:  "5/15",
-		title: "Test",
+		filename: filename,
+		owner:    "nickyanggg",
+		date:     " 5/15",
+		title:    "Test",
 	})
-
-	actual, err := c.NewArticleRecord(input)
+	actual, err := c.NewArticleRecord(
+		input["filename"],
+		input["owner"],
+		input["date"],
+		input["title"],
+	)
 	if err != nil {
 		t.Error(err)
 	}
@@ -46,3 +52,10 @@ func TestNewArticleRecord(t *testing.T) {
 		t.Error(err)
 	}
 }
+
+// Testing implement write article connector
+var _ bbs.WriteArticleConnector = &Connector{}
+
+// func TestImplementWriteArticleConnector(t *testing.T) {
+// 	_ :=
+// }

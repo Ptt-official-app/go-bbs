@@ -196,6 +196,7 @@ type WriteBoardConnector interface {
 	RemoveBoardRecordFileRecord(name string, index uint) error
 }
 
+// WriteArticleConnector is a connector for posting a article
 type WriteArticleConnector interface {
 
 	// NewArticleRecord return ArticleRecord object in this driver with arguments
@@ -205,7 +206,7 @@ type WriteArticleConnector interface {
 	AddArticleRecordFileRecord(name string, article ArticleRecord) error
 }
 
-// CommentConnector is a connector for bbs common function.
+// CommentConnector is a connector for user can post a command for a article
 type CommentConnector interface {
 	// AppendNewLine append new line to the end of article
 	AppendNewLine(boardPath string, article ArticleRecord, buf string) error

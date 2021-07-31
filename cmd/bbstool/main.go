@@ -44,9 +44,21 @@ func main() {
 		showusercommentlist()
 		return
 
-	case "show_article_list":
-		// Example: go run ./  --bbshome=../../home/bbs show_article_list --board test
-		showArticleList()
+	case "show_board_article_list":
+		// Example: go run ./  --bbshome=../../home/bbs show_board_article_list --board test
+		showBoardArticleList()
+		return
+
+	// case "add_board_article":
+	// 	// Example: go run ./  --bbshome=../../home/bbs show_board_article_list --board test
+	// 	addBoardArticle()
+	// 	return
+
+	case "show_board_article":
+		showBoardArticle()
+		return
+	default:
+		fmt.Printf("unknown subcommand: %s\n", flag.Arg(0))
 		return
 	}
 
@@ -68,6 +80,21 @@ func chkIsDir(dir string) error {
 	}
 	return fmt.Errorf("%v is not dir", dir)
 
+}
+
+func openDB() (db *bbs.DB, err error) {
+	err = chkIsDir(bbshome)
+	if err != nil {
+		// fmt.Printf("showBoardArticleList: error: %v\n", err)
+		return
+	}
+
+	db, err = bbs.Open(driverName, "file://"+bbshome)
+	if err != nil {
+		// fmt.Printf("showBoardArticleList: open db: %v\n", err)
+		return
+	}
+	return
 }
 
 func parseArgsToMap(flagArgs []string) map[string]interface{} {

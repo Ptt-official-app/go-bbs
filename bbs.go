@@ -235,7 +235,7 @@ type UserArticleConnector interface {
 }
 
 // UserCommentConnector is a connector for bbs to access the cached user
-//  comment records.
+// comment records.
 type UserCommentConnector interface {
 
 	// GetUserCommentRecordsPath should return the file path where storing the
@@ -573,7 +573,7 @@ func (db *DB) GetUserArticleRecordFile(userID string) ([]UserArticleRecord, erro
 }
 
 // GetUserCommentRecordFile returns the comment records of the specific user
-//  from all boards and all articles.
+// from all boards and all articles.
 func (db *DB) GetUserCommentRecordFile(userID string) ([]UserCommentRecord, error) {
 
 	recs := []UserCommentRecord{}
@@ -598,7 +598,7 @@ func (db *DB) GetUserCommentRecordFile(userID string) ([]UserCommentRecord, erro
 	}
 
 	// TODO: Implement a method to get the board records with the filter.
-	//  For example: db.ReadBoardRecordsFilter(skipBoardID []string)
+	// For example: db.ReadBoardRecordsFilter(skipBoardID []string)
 	boardRecords, err := db.ReadBoardRecords()
 	if err != nil {
 		log.Println("bbs: ReadBoardRecords error:", err)
@@ -629,7 +629,7 @@ func (db *DB) GetUserCommentRecordFile(userID string) ([]UserCommentRecord, erro
 }
 
 // GetBoardUserCommentRecord returns the comment records of the user from the
-//  specific board.
+// specific board.
 func (db *DB) GetBoardUserCommentRecord(boardID, userID string) (recs []UserCommentRecord, err error) {
 
 	ars, err := db.ReadBoardArticleRecordsFile(boardID)
@@ -656,7 +656,7 @@ func (db *DB) GetBoardUserCommentRecord(boardID, userID string) (recs []UserComm
 }
 
 // GetBoardArticleCommentRecords returns the comment records of the specific
-//  article.
+// article.
 func (db *DB) GetBoardArticleCommentRecords(boardID string, ar ArticleRecord) (crs []UserCommentRecord, err error) {
 
 	content, err := db.ReadBoardArticleFile(boardID, ar.Filename())

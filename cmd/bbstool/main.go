@@ -49,12 +49,13 @@ func main() {
 		showBoardArticleList()
 		return
 
-	// case "add_board_article":
-	// 	// Example: go run ./  --bbshome=../../home/bbs show_board_article_list --board test
-	// 	addBoardArticle()
-	// 	return
+	case "add_board_article":
+		// Example: go run ./  --bbshome=../../home/bbs add_board_article --board test
+		addBoardArticle()
+		return
 
 	case "show_board_article":
+		// Example: go run ./  --bbshome=../../home/bbs show_board_article --board test --filename M.1621323571.A.4C6
 		showBoardArticle()
 		return
 	default:

@@ -10,10 +10,10 @@ import (
 	"github.com/Ptt-official-app/go-bbs/filelock"
 )
 
-// NewBoardArticleFilePath get available filename for board with boardID, it will test is this filename not exist
+// NewBoardArticleFilename get available filename for board with boardID, it will test is this filename not exist
 // And open a file to occupy this filename
 // Please see fhdr_stamp in pttbbs fhdr_stamp.c also
-func (c *Connector) NewBoardArticleFilePath(boardID string) (filename string, err error) {
+func (c *Connector) NewBoardArticleFilename(boardID string) (filename string, err error) {
 	var f *os.File
 	for {
 		dtime := time.Now().Unix()
@@ -50,11 +50,15 @@ func (c *Connector) NewArticleRecord(filename, owner, date, title string) (bbs.A
 
 func (c *Connector) WriteBoardArticleFile(path string, content []byte) error {
 
-	f, err := os.OpenFile(path, os.O_WRONLY|os.O_CREATE|os.O_EXCL, 0644)
+	f, err := os.OpenFile(path, os.O_WRONLY|os.O_CREATE, 0644)
+	if err != nil {
+		return fmt.Errorf("openfile: %w", err)
+
+	}
 	err = filelock.Lock(f)
 	if err != nil {
 		// File is locked
-		return err
+		return fmt.Errorf("filelock lock: %w", err)
 	}
 	defer filelock.Unlock(f)
 

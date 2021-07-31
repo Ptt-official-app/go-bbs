@@ -36,12 +36,17 @@ func main() {
 		showuserlist()
 		return
 	case "show_user_article_list":
-		// Example: go run ./  --bbshome=../../home/bbs showuserarticlelist --user_id pichu
+		// Example: go run ./  --bbshome=../../home/bbs show_user_article_list --user_id pichu
 		showuserarticlelist()
 		return
 	case "show_user_comment_list":
-		// Example: go run ./  --bbshome=../../home/bbs showusercommentlist --user_id pichu -board t
+		// Example: go run ./  --bbshome=../../home/bbs show_user_comment_list --user_id pichu --board t
 		showusercommentlist()
+		return
+
+	case "show_article_list":
+		// Example: go run ./  --bbshome=../../home/bbs show_article_list --board test
+		showArticleList()
 		return
 	}
 

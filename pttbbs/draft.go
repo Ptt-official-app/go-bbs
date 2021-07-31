@@ -6,6 +6,9 @@ import (
 )
 
 func (c *Connector) ReadUserDraft(filename string) ([]byte, error) {
+	if _, err := os.Stat(filename); err != nil {
+		return []byte{}, nil
+	}
 	return ioutil.ReadFile(filename)
 }
 

@@ -199,8 +199,8 @@ type WriteBoardConnector interface {
 // WriteArticleConnector is a connector for posting a article
 type WriteArticleConnector interface {
 
-	// NewBoardArticleFilename returns available filename for board with boardID
-	NewBoardArticleFilename(boardID string) (filename string, err error)
+	// CreateBoardArticleFilename returns available filename for board with boardID
+	CreateBoardArticleFilename(boardID string) (filename string, err error)
 
 	// NewArticleRecord return ArticleRecord object in this driver with arguments
 	NewArticleRecord(filename, owner, date, title string) (ArticleRecord, error)
@@ -457,7 +457,7 @@ func (db *DB) RemoveBoardRecord(index uint) error {
 // CreateArticleRecord returns new ArticleRecord with new filename in boardID and owner, date and title.
 // This method will find a usable filename in board and occupy it.
 func (db *DB) CreateArticleRecord(boardID, owner, date, title string) (ArticleRecord, error) {
-	filename, err := db.connector.(WriteArticleConnector).NewBoardArticleFilename(boardID)
+	filename, err := db.connector.(WriteArticleConnector).CreateBoardArticleFilename(boardID)
 	if err != nil {
 		return nil, err
 	}

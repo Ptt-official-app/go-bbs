@@ -10,7 +10,7 @@ import (
 func TestNewArticleRecord(t *testing.T) {
 
 	c := Connector{"./testcase"}
-	filename, _ := c.NewBoardArticleFilePath("SYSOP")
+	filename, _ := c.CreateBoardArticleFilename("SYSOP")
 
 	input := map[string]string{
 		"filename": filename,

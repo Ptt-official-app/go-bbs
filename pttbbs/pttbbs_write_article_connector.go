@@ -10,10 +10,10 @@ import (
 	"github.com/Ptt-official-app/go-bbs/filelock"
 )
 
-// NewBoardArticleFilename get available filename for board with boardID, it will test is this filename not exist
+// CreateBoardArticleFilename get available filename for board with boardID, it will test is this filename not exist
 // And open a file to occupy this filename
 // Please see fhdr_stamp in pttbbs fhdr_stamp.c also
-func (c *Connector) NewBoardArticleFilename(boardID string) (filename string, err error) {
+func (c *Connector) CreateBoardArticleFilename(boardID string) (filename string, err error) {
 	var f *os.File
 	for {
 		dtime := time.Now().Unix()

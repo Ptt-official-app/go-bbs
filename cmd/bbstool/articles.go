@@ -11,7 +11,7 @@ import (
 func showBoardArticleList() {
 	db, err := openDB()
 	if err != nil {
-		fmt.Printf("openDB: %w", err)
+		fmt.Println("openDB:", err)
 	}
 	inputArgs := parseArgsToMap(flag.Args())
 
@@ -36,7 +36,7 @@ func showBoardArticleList() {
 func addBoardArticle() {
 	db, err := openDB()
 	if err != nil {
-		fmt.Printf("openDB: %w", err)
+		fmt.Println("openDB:", err)
 	}
 	inputArgs := parseArgsToMap(flag.Args())
 
@@ -81,12 +81,12 @@ func addBoardArticle() {
 
 	record, err := db.CreateArticleRecord(boardID, owner, date, title)
 	if err != nil {
-		fmt.Printf("show_article_list: NewArticleRecord: %v\n", err)
+		fmt.Println("show_article_list: NewArticleRecord: ", err)
 		return
 	}
 	err = db.AddArticleRecordFileRecord(boardID, record)
 	if err != nil {
-		fmt.Printf("AddArticleRecordFileRecord error: %w\n", err)
+		fmt.Println("AddArticleRecordFileRecord error:", err)
 		return
 	}
 
@@ -103,7 +103,7 @@ func addBoardArticle() {
 func showBoardArticle() {
 	db, err := openDB()
 	if err != nil {
-		fmt.Printf("openDB: %w", err)
+		fmt.Println("openDB:", err)
 	}
 	inputArgs := parseArgsToMap(flag.Args())
 

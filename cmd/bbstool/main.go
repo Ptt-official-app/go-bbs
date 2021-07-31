@@ -26,20 +26,20 @@ func main() {
 	fmt.Printf("args: %v\n", flag.Args())
 
 	switch flag.Arg(0) {
-	case "showboardlist":
+	case "show_board_list":
 		showboardlist()
 		return
-	case "addboard":
+	case "add_board":
 		addboard()
 		return
-	case "showuserlist":
+	case "show_user_list":
 		showuserlist()
 		return
-	case "showuserarticlelist":
+	case "show_user_article_list":
 		// Example: go run ./  --bbshome=../../home/bbs showuserarticlelist --user_id pichu
 		showuserarticlelist()
 		return
-	case "showusercommentlist":
+	case "show_user_comment_list":
 		// Example: go run ./  --bbshome=../../home/bbs showusercommentlist --user_id pichu -board t
 		showusercommentlist()
 		return

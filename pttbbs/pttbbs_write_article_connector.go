@@ -55,6 +55,7 @@ func (c *Connector) WriteBoardArticleFile(path string, content []byte) error {
 		return fmt.Errorf("openfile: %w", err)
 
 	}
+	defer f.Close()
 	err = filelock.Lock(f)
 	if err != nil {
 		// File is locked

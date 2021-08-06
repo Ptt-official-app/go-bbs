@@ -8,7 +8,7 @@ import (
 	"strings"
 
 	"github.com/Ptt-official-app/go-bbs"
-	"github.com/dgrijalva/jwt-go"
+	"github.com/golang-jwt/jwt"
 )
 
 func routeToken(w http.ResponseWriter, r *http.Request) {

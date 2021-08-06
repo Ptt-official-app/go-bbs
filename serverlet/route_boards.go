@@ -5,7 +5,7 @@ import (
 	// "fmt"
 	// "github.com/Ptt-official-app/go-bbs"
 	// "github.com/Ptt-official-app/go-bbs/crypt"
-	// "github.com/dgrijalva/jwt-go"
+	// "github.com/golang-jwt/jwt"
 	// "log"
 	"net/http"
 	// "strings"

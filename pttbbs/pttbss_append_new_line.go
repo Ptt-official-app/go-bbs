@@ -2,46 +2,31 @@ package pttbbs
 
 import (
 	"fmt"
-	"github.com/Ptt-official-app/go-bbs"
 	"os"
-	"time"
 
-	"github.com/Ptt-official-app/go-bbs/filelock"
+	"github.com/Ptt-official-app/go-bbs"
 )
 
-func (c *Connector) AppendNewLine(
-	boardPath string, article bbs.ArticleRecord, buf string,
-) error {
-	path := boardPath + "/" + article.Filename()
-	lockRetry, lockWait, lockSuccess := 5, time.Duration(1), false
-	// TODO: STARTSTAT
+func (c *Connector) AppendBoardArticleFile(filename string, content []byte) error {
+	// TODO: Lockfile
 
-	for lockRetry > 0 {
-		lockRetry--
-		if filelock.IsLock(path) {
-			fmt.Printf("File is locked, please wait. Retry: %d", lockRetry)
-			time.Sleep(lockWait)
-			continue
-		}
-		lockSuccess = true
-	}
-	if !lockSuccess {
-		return fmt.Errorf("AppendNewLine: File (%s) is locked", path)
-	}
-
-	fileHandle, err := os.OpenFile(path, os.O_APPEND|os.O_WRONLY, 0752)
+	f, err := os.OpenFile(filename, os.O_APPEND|os.O_WRONLY, 0644)
 	if err != nil {
-		return fmt.Errorf("AppendNewLine: Cannot open file %s, err: %s", path, err)
+		return fmt.Errorf("AppendNewLine: Cannot open file %s, err: %s", filename, err)
 	}
-	defer fileHandle.Close()
+	defer f.Close()
 
-	if _, err = fileHandle.WriteString(buf); err != nil {
-		return fmt.Errorf("AppendNewLine: Write to file (%s) failed, err: %s", path, err)
+	_, err = f.Write(content)
+	if err != nil {
+		return fmt.Errorf("AppendNewLine: Write to file (%s) failed, err: %w", filename, err)
 	}
-
-	fileStat, _ := os.Stat(path)
-	article.SetModified(fileStat.ModTime())
-
-	// TODO: ENDSTAT
 	return nil
+}
+
+func (c *Connector) UpdateArticleRecordFileRecord(filename string, index uint, article bbs.ArticleRecord) error {
+	a, ok := article.(*FileHeader)
+	if !ok {
+		return fmt.Errorf("article should be create with NewArticleRecord or get by ReadArticleRecordFileRecord")
+	}
+	return UpdateFileHeaderFileRecord(filename, index, a)
 }

@@ -162,6 +162,40 @@ func AppendFileHeaderFileRecord(filename string, newFileHeader *FileHeader) erro
 	return nil
 }
 
+func UpdateFileHeaderFileRecord(filename string, index uint, fileHeader *FileHeader) error {
+	f, err := os.OpenFile(filename, os.O_WRONLY, 0644)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+
+	err = filelock.Lock(f)
+	if err != nil {
+		// File is locked
+		return err
+	}
+	defer filelock.Unlock(f)
+
+	data, err := fileHeader.MarshalToByte()
+	if err != nil {
+		return err
+	}
+
+	_, err = f.Seek(int64(index)*128, os.SEEK_SET)
+	if err != nil {
+		return err
+	}
+
+	if _, err = f.Write(data); err != nil {
+		return err
+	}
+
+	// TODO: update BoardHeader ?
+	// https://github.com/ptt/pttbbs/blob/4d56e77f264960e43e060b77e442e166e5706417/mbbsd/syspost.c#L35
+
+	return nil
+}
+
 func NewFileHeaderWithByte(data []byte) (*FileHeader, error) {
 
 	ret := FileHeader{}

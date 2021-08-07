@@ -196,7 +196,7 @@ type WriteBoardConnector interface {
 	RemoveBoardRecordFileRecord(name string, index uint) error
 }
 
-// WriteArticleConnector is a connector for posting a article
+// WriteArticleConnector is a connector for writing a article
 type WriteArticleConnector interface {
 
 	// CreateBoardArticleFilename returns available filename for board with boardID
@@ -204,18 +204,20 @@ type WriteArticleConnector interface {
 
 	// NewArticleRecord return ArticleRecord object in this driver with arguments
 	NewArticleRecord(filename, owner, date, title string) (ArticleRecord, error)
+
 	// AddArticleRecordFileRecord given record file name and new record, should append
 	// file record in that file.
 	AddArticleRecordFileRecord(name string, article ArticleRecord) error
 
-	//
-	WriteBoardArticleFile(name string, content []byte) error
-}
+	// UpdateArticleRecordFileRecord will write article in position index of name file
+	// position is start with 0.
+	UpdateArticleRecordFileRecord(name string, index uint, article ArticleRecord) error
 
-// CommentConnector is a connector for user can post a command for a article
-type CommentConnector interface {
-	// AppendNewLine append new line to the end of article
-	AppendNewLine(boardPath string, article ArticleRecord, buf string) error
+	// WriteBoardArticleFile will turncate name file and write content into that file.
+	WriteBoardArticleFile(name string, content []byte) error
+
+	// AppendNewLine append content into file
+	AppendBoardArticleFile(name string, content []byte) error
 }
 
 // UserArticleConnector is a connector for bbs who support cached user article records
@@ -482,7 +484,7 @@ func (db *DB) WriteBoardArticleFile(boardID, filename string, content []byte) er
 
 	_, ok := db.connector.(WriteArticleConnector)
 	if !ok {
-		return fmt.Errorf("bbs: connector don's support WriteArticleConnector")
+		return fmt.Errorf("bbs: connector don't support WriteArticleConnector")
 	}
 
 	path, err := db.connector.GetBoardArticleFilePath(boardID, filename)
@@ -500,12 +502,13 @@ func (db *DB) WriteBoardArticleFile(boardID, filename string, content []byte) er
 	return nil
 }
 
-func (db *DB) AppendNewLine(
-	boardPath string, article ArticleRecord, buf string,
-) error {
-	return db.connector.(CommentConnector).AppendNewLine(
-		boardPath, article, buf,
-	)
+func (db *DB) AppendBoardArticleFile(filename string, content []byte) error {
+	c, ok := db.connector.(WriteArticleConnector)
+	if !ok {
+		return fmt.Errorf("bbs: connector don't support WriteArticleConnector")
+	}
+	err := c.AppendBoardArticleFile(filename, content)
+	return err
 }
 
 // GetUserArticleRecordFile returns aritcle file which user posted.

@@ -2,13 +2,7 @@ package main
 
 import (
 	"encoding/json"
-	// "fmt"
-	// "github.com/Ptt-official-app/go-bbs"
-	// "github.com/Ptt-official-app/go-bbs/crypt"
-	// "github.com/dgrijalva/jwt-go"
-	// "log"
 	"net/http"
-	// "strings"
 )
 
 func routeBoards(w http.ResponseWriter, r *http.Request) {

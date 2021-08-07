@@ -107,11 +107,10 @@ func (b *BoardHeader) GetPostLimitLogins() uint8  { return b.PostLimitLogins }
 func (b *BoardHeader) GetPostLimitBadPost() uint8 { return b.PostLimitBadPost }
 
 func (b *BoardHeader) BM() []string {
-	bmList := strings.Split(b.bm, "/")
-	if len(bmList) == 1 && bmList[0] == "" {
+	if b.bm == "" {
 		return []string{}
 	}
-	return bmList
+	return strings.Split(b.bm, "/")
 }
 
 const (

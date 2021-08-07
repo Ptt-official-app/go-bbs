@@ -106,7 +106,12 @@ func (b *BoardHeader) GetPostLimitPosts() uint8   { return b.PostLimitPosts }
 func (b *BoardHeader) GetPostLimitLogins() uint8  { return b.PostLimitLogins }
 func (b *BoardHeader) GetPostLimitBadPost() uint8 { return b.PostLimitBadPost }
 
-func (b *BoardHeader) BM() []string { return strings.Split(b.bm, "/") }
+func (b *BoardHeader) BM() []string {
+	if b.bm == "" {
+		return []string{}
+	}
+	return strings.Split(b.bm, "/")
+}
 
 const (
 	// BoardTitleLength https://github.com/ptt/pttbbs/blob/master/include/pttstruct.h#L165

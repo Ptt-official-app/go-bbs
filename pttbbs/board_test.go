@@ -693,7 +693,12 @@ func TestMarshalBinary(t *testing.T) {
 		if hex.Dump(b) != hex.Dump(c.Expected) {
 			t.Errorf("Expected byte not match in index %d, expected: \n%s\n, got: \n%s", index, hex.Dump(c.Expected), hex.Dump(b))
 		}
-
 	}
+}
 
+func TestBM(t *testing.T) {
+	bmList := testBoardHeaders[0].BM()
+	if len(bmList) != 0 {
+		t.Errorf("BM not match, expected length: %d, got: %d", len(bmList), 0)
+	}
 }

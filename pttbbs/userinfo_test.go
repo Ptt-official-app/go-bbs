@@ -271,7 +271,7 @@ func TestOpenUserInfoCache(t *testing.T) {
 	}
 }
 
-func TestUnmarshalUserInfo(t *testing.T) {
+func TestMarshalBinaryUserInfo(t *testing.T) {
 	file, err := os.Open("testcase/userinfo/01.USERINFO")
 	if err != nil {
 		t.Errorf("Error when opening test file.")

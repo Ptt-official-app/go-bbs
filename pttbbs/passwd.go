@@ -88,7 +88,7 @@ const (
 
 // https://github.com/ptt/pttbbs/blob/master/include/pttstruct.h
 
-type UserecGameScore struct {
+type GameScore struct {
 	Win  uint16
 	Lose uint16
 	Tie  uint16
@@ -131,11 +131,11 @@ type Userec struct {
 	LoginView uint32
 
 	ViolateLaw   uint16
-	Five         UserecGameScore
-	ChineseChess UserecGameScore
-	Conn6        UserecGameScore
-	GoChess      UserecGameScore
-	DarkChess    UserecGameScore
+	Five         GameScore
+	ChineseChess GameScore
+	Conn6        GameScore
+	GoChess      GameScore
+	DarkChess    GameScore
 	UaVersion    uint8 // User Agreement Version
 
 	Signature         uint8

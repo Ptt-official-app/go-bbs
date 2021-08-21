@@ -56,27 +56,27 @@ func TestOpenUserecFile(t *testing.T) {
 			TimeViolateLaw:    time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
 			BadPost:           0x01,
 			ViolateLaw:        0x01,
-			Five: UserecGameScore{
+			Five: GameScore{
 				Win:  0x0001,
 				Lose: 0x0002,
 				Tie:  0x0003,
 			},
-			ChineseChess: UserecGameScore{
+			ChineseChess: GameScore{
 				Win:  0x0004,
 				Lose: 0x0005,
 				Tie:  0x0006,
 			},
-			Conn6: UserecGameScore{
+			Conn6: GameScore{
 				Win:  0x0007,
 				Lose: 0x0008,
 				Tie:  0x0009,
 			},
-			GoChess: UserecGameScore{
+			GoChess: GameScore{
 				Win:  0x000a,
 				Lose: 0x000b,
 				Tie:  0x000c,
 			},
-			DarkChess: UserecGameScore{
+			DarkChess: GameScore{
 				Win:  0x000d,
 				Lose: 0x000e,
 				Tie:  0x000f,
@@ -111,27 +111,27 @@ func TestOpenUserecFile(t *testing.T) {
 			TimeViolateLaw:    time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
 			BadPost:           0x02,
 			ViolateLaw:        0x02,
-			Five: UserecGameScore{
+			Five: GameScore{
 				Win:  0x0101,
 				Lose: 0x0102,
 				Tie:  0x0103,
 			},
-			ChineseChess: UserecGameScore{
+			ChineseChess: GameScore{
 				Win:  0x0104,
 				Lose: 0x0105,
 				Tie:  0x0106,
 			},
-			Conn6: UserecGameScore{
+			Conn6: GameScore{
 				Win:  0x0107,
 				Lose: 0x0108,
 				Tie:  0x0109,
 			},
-			GoChess: UserecGameScore{
+			GoChess: GameScore{
 				Win:  0x010a,
 				Lose: 0x010b,
 				Tie:  0x010c,
 			},
-			DarkChess: UserecGameScore{
+			DarkChess: GameScore{
 				Win:  0x010d,
 				Lose: 0x010e,
 				Tie:  0x010f,
@@ -166,27 +166,27 @@ func TestOpenUserecFile(t *testing.T) {
 			TimeViolateLaw:    time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
 			BadPost:           0x03,
 			ViolateLaw:        0x03,
-			Five: UserecGameScore{
+			Five: GameScore{
 				Win:  0x0011,
 				Lose: 0x0012,
 				Tie:  0x0013,
 			},
-			ChineseChess: UserecGameScore{
+			ChineseChess: GameScore{
 				Win:  0x0014,
 				Lose: 0x0015,
 				Tie:  0x0016,
 			},
-			Conn6: UserecGameScore{
+			Conn6: GameScore{
 				Win:  0x0017,
 				Lose: 0x0018,
 				Tie:  0x0019,
 			},
-			GoChess: UserecGameScore{
+			GoChess: GameScore{
 				Win:  0x001a,
 				Lose: 0x001b,
 				Tie:  0x001c,
 			},
-			DarkChess: UserecGameScore{
+			DarkChess: GameScore{
 				Win:  0x001d,
 				Lose: 0x001e,
 				Tie:  0x001f,
@@ -221,27 +221,27 @@ func TestOpenUserecFile(t *testing.T) {
 			TimeViolateLaw:    time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
 			BadPost:           0x04,
 			ViolateLaw:        0x04,
-			Five: UserecGameScore{
+			Five: GameScore{
 				Win:  0x0111,
 				Lose: 0x0112,
 				Tie:  0x0113,
 			},
-			ChineseChess: UserecGameScore{
+			ChineseChess: GameScore{
 				Win:  0x0114,
 				Lose: 0x0115,
 				Tie:  0x0116,
 			},
-			Conn6: UserecGameScore{
+			Conn6: GameScore{
 				Win:  0x0117,
 				Lose: 0x0118,
 				Tie:  0x0119,
 			},
-			GoChess: UserecGameScore{
+			GoChess: GameScore{
 				Win:  0x011a,
 				Lose: 0x011b,
 				Tie:  0x011c,
 			},
-			DarkChess: UserecGameScore{
+			DarkChess: GameScore{
 				Win:  0x011d,
 				Lose: 0x011e,
 				Tie:  0x011f,
@@ -276,27 +276,27 @@ func TestOpenUserecFile(t *testing.T) {
 			TimeViolateLaw:    time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
 			BadPost:           0x05,
 			ViolateLaw:        0x05,
-			Five: UserecGameScore{
+			Five: GameScore{
 				Win:  0x0021,
 				Lose: 0x0022,
 				Tie:  0x0023,
 			},
-			ChineseChess: UserecGameScore{
+			ChineseChess: GameScore{
 				Win:  0x0024,
 				Lose: 0x0025,
 				Tie:  0x0026,
 			},
-			Conn6: UserecGameScore{
+			Conn6: GameScore{
 				Win:  0x0027,
 				Lose: 0x0028,
 				Tie:  0x0029,
 			},
-			GoChess: UserecGameScore{
+			GoChess: GameScore{
 				Win:  0x002a,
 				Lose: 0x002b,
 				Tie:  0x002c,
 			},
-			DarkChess: UserecGameScore{
+			DarkChess: GameScore{
 				Win:  0x002d,
 				Lose: 0x002e,
 				Tie:  0x002f,
@@ -562,27 +562,27 @@ func TestMarshalBinaryUserec(t *testing.T) {
 				TimeViolateLaw:    time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
 				BadPost:           0x01,
 				ViolateLaw:        0x01,
-				Five: UserecGameScore{
+				Five: GameScore{
 					Win:  0x0001,
 					Lose: 0x0002,
 					Tie:  0x0003,
 				},
-				ChineseChess: UserecGameScore{
+				ChineseChess: GameScore{
 					Win:  0x0004,
 					Lose: 0x0005,
 					Tie:  0x0006,
 				},
-				Conn6: UserecGameScore{
+				Conn6: GameScore{
 					Win:  0x0007,
 					Lose: 0x0008,
 					Tie:  0x0009,
 				},
-				GoChess: UserecGameScore{
+				GoChess: GameScore{
 					Win:  0x000a,
 					Lose: 0x000b,
 					Tie:  0x000c,
 				},
-				DarkChess: UserecGameScore{
+				DarkChess: GameScore{
 					Win:  0x000d,
 					Lose: 0x000e,
 					Tie:  0x000f,

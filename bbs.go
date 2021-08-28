@@ -722,7 +722,7 @@ func (db *DB) DeleteUserDraft(userID, draftID string) error {
 	return db.connector.(UserDraftConnector).DeleteUserDraft(path)
 }
 
-func (db *DB) WriteUserDraft(userID, draftID string, draftContent userDraft) error {
+func (db *DB) WriteUserDraft(userID, draftID string, draftContent UserDraft) error {
 	path, err := db.connector.(UserDraftConnector).GetUserDraftPath(userID, draftID)
 	if err != nil {
 		log.Println("bbs: GetUserDraftPath error:", err)

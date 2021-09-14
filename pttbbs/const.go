@@ -49,6 +49,16 @@ const (
 	TitleLength = 64 /* Length of title */
 	// FileNameLength https://github.com/ptt/pttbbs/blob/master/include/pttstruct.h#L254
 	FileNameLength = 28 /* Length of filename */
+	// MachineName https://github.com/ptt/pttbbs/blob/master/include/pttstruct.h#L358
+	MachineNameLength = 27 /* Length of Machine Name */
+	// MaxFriend https://github.com/ptt/pttbbs/blob/master/include/config.h#L224
+	MaxFriend = 256
+	// MaxReject https://github.com/ptt/pttbbs/blob/master/include/config.h#L228
+	MaxReject = 32
+	// MaxMsgs https://github.com/ptt/pttbbs/blob/master/include/config.h#L232
+	MaxMsgs = 10
+	// ChatIDLength https://github.com/ptt/pttbbs/blob/master/include/pttstruct.h#L408
+	ChatIDLength = 11
 )
 
 const (

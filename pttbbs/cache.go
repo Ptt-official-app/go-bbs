@@ -90,9 +90,6 @@ type Cache struct {
 	cacheLen
 }
 
-// UserInfoCache is `userinfo_t` in pttstruct.h, all of those object will be store in shared memory
-type UserInfoCache []byte
-
 // MessageQueueCache is `msgque_t` in pttstruct.h, all of those object will be store in shared memory
 type MessageQueueCache []byte
 
@@ -330,7 +327,7 @@ func (c *Cache) Money(uid int) int32 {
 	return int32(binary.LittleEndian.Uint32(c.Bytes()[s : s+4]))
 }
 
-func (c *Cache) UserInfo(uid int) UserInfoCache {
+func (c *Cache) UserInfo(uid int) *UserInfoCache {
 	// TODO: Check if it is out of range
-	return UserInfoCache(c.Bytes()[c.posOfUserInfo+c.lenOfUserInfo*uid : c.posOfUserInfo+c.lenOfUserInfo*(uid+1)])
+	return UnmarshalUserInfo(c.Bytes()[c.posOfUserInfo+c.lenOfUserInfo*uid : c.posOfUserInfo+c.lenOfUserInfo*(uid+1)])
 }

@@ -502,12 +502,16 @@ func (db *DB) WriteBoardArticleFile(boardID, filename string, content []byte) er
 	return nil
 }
 
-func (db *DB) AppendBoardArticleFile(filename string, content []byte) error {
+func (db *DB) AppendBoardArticleFile(boardID string, filename string, content []byte) error {
+	path, err := db.connector.GetBoardArticleFilePath(boardID, filename)
+	if err != nil {
+		return err
+	}
 	c, ok := db.connector.(WriteArticleConnector)
 	if !ok {
 		return fmt.Errorf("bbs: connector don't support WriteArticleConnector")
 	}
-	err := c.AppendBoardArticleFile(filename, content)
+	err = c.AppendBoardArticleFile(path, content)
 	return err
 }
 

@@ -736,3 +736,57 @@ func (db *DB) WriteUserDraft(userID, draftID string, draftContent UserDraft) err
 	log.Println("path:", path)
 	return db.connector.(UserDraftConnector).WriteUserDraft(path, draftContent.Raw())
 }
+
+type UnimplementedConnector struct{}
+
+func (c *UnimplementedConnector) Open(dataSourceName string) error {
+	return fmt.Errorf("bbs: UnimplementedConnector: Open not implemented")
+}
+
+func (c *UnimplementedConnector) GetUserRecordsPath() (string, error) {
+	return "", fmt.Errorf("bbs: UnimplementedConnector: GetUserRecordsPath not implemented")
+}
+
+func (c *UnimplementedConnector) ReadUserRecordsFile(name string) ([]UserRecord, error) {
+	return nil, fmt.Errorf("bbs: UnimplementedConnector: ReadUserRecordsFile not implemented")
+}
+
+func (c *UnimplementedConnector) GetUserFavoriteRecordsPath(userID string) (string, error) {
+	return "", fmt.Errorf("bbs: UnimplementedConnector: GetUserFavoriteRecordsPath not implemented")
+}
+
+func (c *UnimplementedConnector) ReadUserFavoriteRecordsFile(name string) ([]FavoriteRecord, error) {
+	return nil, fmt.Errorf("bbs: UnimplementedConnector: ReadUserFavoriteRecordsFile not implemented")
+}
+
+func (c *UnimplementedConnector) GetBoardRecordsPath() (string, error) {
+	return "", fmt.Errorf("bbs: UnimplementedConnector: GetBoardRecordsPath not implemented")
+}
+
+func (c *UnimplementedConnector) ReadBoardRecordsFile(name string) ([]BoardRecord, error) {
+	return nil, fmt.Errorf("bbs: UnimplementedConnector: ReadBoardRecordsFile not implemented")
+}
+
+func (c *UnimplementedConnector) GetBoardArticleRecordsPath(boardID string) (string, error) {
+	return "", fmt.Errorf("bbs: UnimplementedConnector: GetBoardArticleRecordsPath not implemented")
+}
+
+func (c *UnimplementedConnector) GetBoardTreasureRecordsPath(boardID string, treasureID []string) (string, error) {
+	return "", fmt.Errorf("bbs: UnimplementedConnector: GetBoardTreasureRecordsPath not implemented")
+}
+
+func (c *UnimplementedConnector) ReadArticleRecordsFile(name string) ([]ArticleRecord, error) {
+	return nil, fmt.Errorf("bbs: UnimplementedConnector: ReadArticleRecordsFile not implemented")
+}
+
+func (c *UnimplementedConnector) GetBoardArticleFilePath(boardID string, filename string) (string, error) {
+	return "", fmt.Errorf("bbs: UnimplementedConnector: GetBoardArticleFilePath not implemented")
+}
+
+func (c *UnimplementedConnector) GetBoardTreasureFilePath(boardID string, treasureID []string, name string) (string, error) {
+	return "", fmt.Errorf("bbs: UnimplementedConnector: GetBoardTreasureFilePath not implemented")
+}
+
+func (c *UnimplementedConnector) ReadBoardArticleFile(name string) ([]byte, error) {
+	return nil, fmt.Errorf("bbs: UnimplementedConnector: ReadBoardArticleFile not implemented")
+}

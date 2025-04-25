@@ -7,7 +7,7 @@ import (
 )
 
 func TestNewComment(t *testing.T) {
-	c := Connector{"./testcase"}
+	c := Connector{home: "./testcase"}
 
 	fileName := "M.1606672292.A.B23"
 

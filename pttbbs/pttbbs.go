@@ -10,6 +10,7 @@ import (
 )
 
 type Connector struct {
+	bbs.UnimplementedConnector
 	home string
 }
 

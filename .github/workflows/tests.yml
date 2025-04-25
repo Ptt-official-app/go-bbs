@@ -18,7 +18,11 @@ jobs:
           - ^1.16
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
+      - name: Setup Go ${{ matrix.go-version }}
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ matrix.go-version }}
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v7
         with:

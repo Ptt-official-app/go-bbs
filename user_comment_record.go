@@ -41,7 +41,7 @@ type userCommentRecord struct {
 }
 
 // NewUserCommentRecord parses the data and returns the user comment record.
-//  Return error when input data is not matched the user comment pattern.
+// Return error when input data is not matched the user comment pattern.
 func NewUserCommentRecord(order uint32, data string, boardID string, ar ArticleRecord) (UserCommentRecord, error) {
 	owner, ctime, comment, err := parseUserComment(data)
 	if err != nil {
@@ -91,8 +91,9 @@ func (r userCommentRecord) Filename() string {
 }
 
 // parseUserComment returns the owner and time of comment data.
-//  Return ErrNotUserComment error when data doesn't match to the pattern.
-//  Return other error when data contains the ambiguous value which can't parse.
+//
+//	Return ErrNotUserComment error when data doesn't match to the pattern.
+//	Return other error when data contains the ambiguous value which can't parse.
 func parseUserComment(data string) (owner string, ctime time.Time, comment string, err error) {
 	matches := userCommentPattern.FindStringSubmatch(data)
 	// The 1st record is entire matched result of row.

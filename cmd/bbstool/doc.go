@@ -8,11 +8,9 @@ User can use bbstool from this format:
 
 	bbstool showboardlist
 
-
 The full support list is as following:
 
-    showaccountlist  show full account list [TBD]
-    showboardlist    show full board list [TBD]
-
+	showaccountlist  show full account list [TBD]
+	showboardlist    show full board list [TBD]
 */
 package main

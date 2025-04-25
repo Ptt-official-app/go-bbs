@@ -1,3 +1,4 @@
+//go:build linux || unix || darwin
 // +build linux unix darwin
 
 package cache

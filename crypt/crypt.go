@@ -1,13 +1,13 @@
 package crypt
 
-//cFcrypt
+// cFcrypt is the DES encryption function
 //
-//This is the go-implementation of
+// # This is the go-implementation of
 //
-//https://github.com/ptt/pttbbs/blob/master/common/sys/crypt.c
-//commit: 6bdd36898bde207683a441cdffe2981e95de5b20
+// https://github.com/ptt/pttbbs/blob/master/common/sys/crypt.c
+// commit: 6bdd36898bde207683a441cdffe2981e95de5b20
 //
-//Params
+// Params
 //
 //	buf: input-buffer (raw)
 //	salt: salt
@@ -90,14 +90,14 @@ func cFcrypt(buf []uint8, salt []uint8, buff *[PASSLEN]uint8) {
 	buff[13] = 0
 }
 
-//cFcrypt
+// cFcrypt
 //
-//This is the go-implementation of
+// # This is the go-implementation of
 //
-//https://github.com/ptt/pttbbs/blob/master/common/sys/crypt.c
-//commit: 6bdd36898bde207683a441cdffe2981e95de5b20
+// https://github.com/ptt/pttbbs/blob/master/common/sys/crypt.c
+// commit: 6bdd36898bde207683a441cdffe2981e95de5b20
 //
-//Params
+// Params
 //
 //	key: input-key
 //	schedule: output-schedule

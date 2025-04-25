@@ -71,7 +71,7 @@ type cacheLen struct {
 }
 
 // MemoryMappingSetting provides parameters for calculating the memory position of
-//  the relevant fields.
+// the relevant fields.
 type MemoryMappingSetting struct {
 	AlignmentBytes int // 1, 2, 4 or 8, 1 for no aligment
 

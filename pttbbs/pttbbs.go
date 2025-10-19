@@ -115,7 +115,8 @@ func (c *Connector) GetBoardArticleRecordsPath(boardID string) (string, error) {
 	return GetBoardArticlesDirectoryPath(c.home, boardID)
 }
 
-func (c *Connector) ReadArticleRecordsFile(filename string) ([]bbs.ArticleRecord, error) {
+// TODO: readrecord nummber according offset and length
+func (c *Connector) ReadArticleRecordsFile(filename string, offset, length uint) ([]bbs.ArticleRecord, error) {
 	var fileHeaders []*FileHeader
 	var err error
 	fileHeaders, err = OpenFileHeaderFile(filename)

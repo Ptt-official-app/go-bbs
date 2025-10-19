@@ -44,6 +44,24 @@ type UserRecord interface {
 	UserFlag() uint32
 }
 
+var _ UserRecord = &UnimplementedUserRecord{}
+
+type UnimplementedUserRecord struct{}
+
+func (u *UnimplementedUserRecord) UserID() string         { return "" }
+func (u *UnimplementedUserRecord) HashedPassword() string { return "" }
+func (u *UnimplementedUserRecord) VerifyPassword(password string) error {
+	return fmt.Errorf("bbs: UnimplementedUserRecord: VerifyPassword not implemented")
+}
+func (u *UnimplementedUserRecord) Nickname() string     { return "" }
+func (u *UnimplementedUserRecord) RealName() string     { return "" }
+func (u *UnimplementedUserRecord) NumLoginDays() int    { return 0 }
+func (u *UnimplementedUserRecord) NumPosts() int        { return 0 }
+func (u *UnimplementedUserRecord) Money() int           { return 0 }
+func (u *UnimplementedUserRecord) LastLogin() time.Time { return time.Time{} }
+func (u *UnimplementedUserRecord) LastHost() string     { return "" }
+func (u *UnimplementedUserRecord) UserFlag() uint32     { return 0 }
+
 // BadPostUserRecord return UserRecord interface which support NumBadPosts
 type BadPostUserRecord interface {
 	// NumBadPosts return how many bad post this use have
@@ -92,6 +110,14 @@ type BoardRecord interface {
 	BM() []string
 }
 
+type UnimplementedBoardRecord struct{}
+
+func (u *UnimplementedBoardRecord) BoardID() string { return "" }
+func (u *UnimplementedBoardRecord) Title() string   { return "" }
+func (u *UnimplementedBoardRecord) IsClass() bool   { return false }
+func (u *UnimplementedBoardRecord) ClassID() string { return "" }
+func (u *UnimplementedBoardRecord) BM() []string    { return nil }
+
 type BoardRecordSettings interface {
 	IsHide() bool
 	IsPostMask() bool
@@ -135,6 +161,17 @@ type ArticleRecord interface {
 	Owner() string
 }
 
+type UnimplementedArticleRecord struct{}
+
+func (u *UnimplementedArticleRecord) Filename() string                  { return "" }
+func (u *UnimplementedArticleRecord) Modified() time.Time               { return time.Time{} }
+func (u *UnimplementedArticleRecord) SetModified(newModified time.Time) {}
+func (u *UnimplementedArticleRecord) Recommend() int                    { return 0 }
+func (u *UnimplementedArticleRecord) Date() string                      { return "" }
+func (u *UnimplementedArticleRecord) Title() string                     { return "" }
+func (u *UnimplementedArticleRecord) Money() int                        { return 0 }
+func (u *UnimplementedArticleRecord) Owner() string                     { return "" }
+
 // DB is whole bbs filesystem, including where file store,
 // how to connect to local cache ( system V shared memory or etc.)
 // how to parse or store it's data to bianry
@@ -166,7 +203,7 @@ type Connector interface {
 	// eg: BBSHome/man/boards/{{b}}/{{boardID}}/{{treasureID}}/.DIR
 	GetBoardTreasureRecordsPath(boardID string, treasureID []string) (string, error)
 	// ReadArticleRecordsFile returns ArticleRecord list in file, name is the file name
-	ReadArticleRecordsFile(name string) ([]ArticleRecord, error)
+	ReadArticleRecordsFile(name string, offset, length uint) ([]ArticleRecord, error)
 	// GetBoardArticleFilePath return file path for specific boardID and filename
 	GetBoardArticleFilePath(boardID string, filename string) (string, error)
 	// GetBoardTreasureFilePath return file path for specific boardID, treasureID and filename
@@ -347,7 +384,7 @@ func (db *DB) ReadBoardRecords() ([]BoardRecord, error) {
 	return recs, nil
 }
 
-func (db *DB) ReadBoardArticleRecordsFile(boardID string) ([]ArticleRecord, error) {
+func (db *DB) ReadBoardArticleRecordsFile(boardID string, offset, length uint) ([]ArticleRecord, error) {
 
 	path, err := db.connector.GetBoardArticleRecordsPath(boardID)
 	if err != nil {
@@ -356,7 +393,7 @@ func (db *DB) ReadBoardArticleRecordsFile(boardID string) ([]ArticleRecord, erro
 	}
 	log.Println("path:", path)
 
-	recs, err := db.connector.ReadArticleRecordsFile(path)
+	recs, err := db.connector.ReadArticleRecordsFile(path, offset, length)
 	if err != nil {
 		if strings.Contains(err.Error(), "no such file or directory") {
 			return []ArticleRecord{}, nil
@@ -377,7 +414,7 @@ func (db *DB) ReadBoardTreasureRecordsFile(boardID string, treasureID []string) 
 	}
 	log.Println("path:", path)
 
-	recs, err := db.connector.ReadArticleRecordsFile(path)
+	recs, err := db.connector.ReadArticleRecordsFile(path, 0, ^uint(0))
 	if err != nil {
 		log.Println("bbs: get user rec error:", err)
 		return nil, err
@@ -558,7 +595,7 @@ func (db *DB) GetUserArticleRecordFile(userID string) ([]UserArticleRecord, erro
 			continue
 		}
 
-		ars, err := db.ReadBoardArticleRecordsFile(r.BoardID())
+		ars, err := db.ReadBoardArticleRecordsFile(r.BoardID(), 0, ^uint(0))
 		if err != nil {
 			log.Println("bbs: ReadBoardArticleRecordsFile error:", err)
 			return nil, err
@@ -640,7 +677,7 @@ func (db *DB) GetUserCommentRecordFile(userID string) ([]UserCommentRecord, erro
 // specific board.
 func (db *DB) GetBoardUserCommentRecord(boardID, userID string) (recs []UserCommentRecord, err error) {
 
-	ars, err := db.ReadBoardArticleRecordsFile(boardID)
+	ars, err := db.ReadBoardArticleRecordsFile(boardID, 0, ^uint(0))
 	if err != nil {
 		log.Println("bbs: ReadBoardArticleRecordsFile error:", err)
 		return nil, err

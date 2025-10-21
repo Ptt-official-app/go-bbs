@@ -14,7 +14,7 @@ func (c *Connector) NewBoardRecord(args map[string]interface{}) (bbs.BoardRecord
 	if !ok {
 		return nil, fmt.Errorf("NewBoardRecord: board_id must not be empty")
 	}
-	record.SetBoardID(boardID)
+	record.SetBoardName(boardID)
 
 	title, ok := args["title"].(string)
 	if !ok {

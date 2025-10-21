@@ -99,7 +99,8 @@ type FavoriteRecord interface {
 }
 
 type BoardRecord interface {
-	BoardID() string
+	BoardName() string // eg: Gossiping
+	BoardID() uint32   // eg: 1
 
 	Title() string
 
@@ -112,11 +113,12 @@ type BoardRecord interface {
 
 type UnimplementedBoardRecord struct{}
 
-func (u *UnimplementedBoardRecord) BoardID() string { return "" }
-func (u *UnimplementedBoardRecord) Title() string   { return "" }
-func (u *UnimplementedBoardRecord) IsClass() bool   { return false }
-func (u *UnimplementedBoardRecord) ClassID() string { return "" }
-func (u *UnimplementedBoardRecord) BM() []string    { return nil }
+func (u *UnimplementedBoardRecord) BoardName() string { return "" }
+func (u *UnimplementedBoardRecord) BoardID() uint32   { return 0 }
+func (u *UnimplementedBoardRecord) Title() string     { return "" }
+func (u *UnimplementedBoardRecord) IsClass() bool     { return false }
+func (u *UnimplementedBoardRecord) ClassID() string   { return "" }
+func (u *UnimplementedBoardRecord) BM() []string      { return nil }
 
 type BoardRecordSettings interface {
 	IsHide() bool
@@ -591,20 +593,20 @@ func (db *DB) GetUserArticleRecordFile(userID string) ([]UserArticleRecord, erro
 	}
 
 	for _, r := range boardRecords {
-		if shouldSkip(r.BoardID()) {
+		if shouldSkip(r.BoardName()) {
 			continue
 		}
 
-		ars, err := db.ReadBoardArticleRecordsFile(r.BoardID(), 0, ^uint(0))
+		ars, err := db.ReadBoardArticleRecordsFile(r.BoardName(), 0, ^uint(0))
 		if err != nil {
 			log.Println("bbs: ReadBoardArticleRecordsFile error:", err)
 			return nil, err
 		}
 		for _, ar := range ars {
 			if ar.Owner() == userID {
-				log.Println("board: ", r.BoardID(), len(recs))
+				log.Println("board: ", r.BoardName(), len(recs))
 				r := userArticleRecord{
-					"board_id":   r.BoardID(),
+					"board_id":   r.BoardName(),
 					"title":      ar.Title(),
 					"owner":      ar.Owner(),
 					"article_id": ar.Filename(),
@@ -658,11 +660,11 @@ func (db *DB) GetUserCommentRecordFile(userID string) ([]UserCommentRecord, erro
 	}
 
 	for _, r := range boardRecords {
-		if shouldSkip(r.BoardID()) {
+		if shouldSkip(r.BoardName()) {
 			continue
 		}
 
-		ucr, err := db.GetBoardUserCommentRecord(r.BoardID(), userID)
+		ucr, err := db.GetBoardUserCommentRecord(r.BoardName(), userID)
 		if err != nil {
 			log.Println("bbs: GetUserCommentRecordOfBoard error:", err)
 			return nil, err

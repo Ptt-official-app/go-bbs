@@ -174,6 +174,7 @@ func OpenBoardHeaderFile(filename string) ([]*BoardHeader, error) {
 		log.Println(err)
 		return nil, err
 	}
+	defer file.Close()
 
 	ret := []*BoardHeader{}
 

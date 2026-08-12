@@ -97,7 +97,7 @@ func (b *BoardHeader) IsCPLog() bool            { return b.Brdattr&0x00200000 !=
 func (b *BoardHeader) IsNoFastRecommend() bool  { return b.Brdattr&0x00400000 != 0 }
 func (b *BoardHeader) IsIPLogRecommend() bool   { return b.Brdattr&0x00800000 != 0 }
 func (b *BoardHeader) IsOver18() bool           { return b.Brdattr&0x01000000 != 0 }
-func (b *BoardHeader) IsNoReply() bool          { return b.Brdattr&0x02000000 != 0 }
+func (b *BoardHeader) IsNoReply() bool           { return b.Brdattr&0x02000000 != 0 }
 func (b *BoardHeader) IsAlignedComment() bool   { return b.Brdattr&0x04000000 != 0 }
 func (b *BoardHeader) IsNoSelfDeletePost() bool { return b.Brdattr&0x08000000 != 0 }
 func (b *BoardHeader) IsBMMaskContent() bool    { return b.Brdattr&0x10000000 != 0 }
@@ -174,9 +174,9 @@ func OpenBoardHeaderFile(filename string) ([]*BoardHeader, error) {
 		log.Println(err)
 		return nil, err
 	}
+	defer file.Close()
 
 	ret := []*BoardHeader{}
-
 	for {
 		hdr := make([]byte, BoardHeaderRecordLength)
 		_, err := file.Read(hdr)

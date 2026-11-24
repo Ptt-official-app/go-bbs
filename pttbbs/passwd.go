@@ -207,6 +207,8 @@ func OpenUserecFile(filename string) ([]*Userec, error) {
 		return nil, err
 	}
 
+	defer file.Close()
+
 	ret := []*Userec{}
 
 	for {

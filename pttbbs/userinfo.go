@@ -144,6 +144,8 @@ func OpenUserInfoCache(filename string) ([]*UserInfoCache, error) {
 		return nil, err
 	}
 
+	defer file.Close()
+
 	ret := []*UserInfoCache{}
 
 	for {

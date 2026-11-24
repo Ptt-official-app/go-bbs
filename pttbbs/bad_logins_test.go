@@ -206,3 +206,21 @@ func TestLoginAttempt(t *testing.T) {
 		}
 	}
 }
+
+func TestLoginAttemptUnmarshalTextMalformed(t *testing.T) {
+	lines := []string{
+		"",
+		" ",
+		"-SYSOP",
+		" SYSOP       ",
+		" SYSOP       [01/01/2021 10:08:56",
+		"[01/01/2021 10:08:56 Fri]",
+		"x",
+	}
+	for _, line := range lines {
+		a := &LoginAttempt{}
+		if err := a.UnmarshalText([]byte(line)); err == nil {
+			t.Errorf("UnmarshalText(%q) expected error, got nil", line)
+		}
+	}
+}

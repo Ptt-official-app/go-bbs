@@ -89,6 +89,7 @@ func OpenBadLoginFile(filename string) ([]*LoginAttempt, error) {
 		log.Println(err)
 		return nil, err
 	}
+	defer file.Close()
 
 	var ret []*LoginAttempt
 
@@ -102,23 +103,35 @@ func OpenBadLoginFile(filename string) ([]*LoginAttempt, error) {
 		}
 		ret = append(ret, a)
 	}
+	if err := scanner.Err(); err != nil {
+		return nil, err
+	}
 	return ret, nil
 }
 
 // UnmarshalText implements encoding.TextUnmarshaler to unmarshal text to the receiver
 func (l *LoginAttempt) UnmarshalText(text []byte) error {
 	str := string(text)
+	if len(str) == 0 {
+		return ErrInvalidLoginsBadFormat
+	}
 
 	idx := 0 // current index of str
 	// Handle Success and UserID
 	switch str[idx] {
 	case ' ':
+		if len(str) < 1+UserIDLength {
+			return ErrInvalidLoginsBadFormat
+		}
 		idx++
 		l.Success = true
 		// Next 12 is UserID
 		l.UserID = str[idx : idx+UserIDLength]
 		idx += UserIDLength
 	case '-':
+		if len(str) < 1+UserIDLength {
+			return ErrInvalidLoginsBadFormat
+		}
 		idx++
 		l.Success = false
 		l.UserID = str[idx : idx+UserIDLength]
@@ -132,6 +145,9 @@ func (l *LoginAttempt) UnmarshalText(text []byte) error {
 	}
 	l.UserID = strings.TrimSpace(l.UserID)
 	// Now idx points to the start of time
+	if len(str) < idx+len(loginStartTimeFormatString) {
+		return ErrInvalidLoginsBadFormat
+	}
 	// TODO: do we need to consider timezone? This Parse returns UTC
 	t, err := time.Parse(loginStartTimeFormatString, str[idx:idx+len(loginStartTimeFormatString)])
 	if err != nil {
@@ -140,6 +156,9 @@ func (l *LoginAttempt) UnmarshalText(text []byte) error {
 	l.LoginStartTime = t
 	idx += len(loginStartTimeFormatString)
 
+	if len(str) < idx+1 {
+		return ErrInvalidLoginsBadFormat
+	}
 	l.FromHost = strings.TrimLeft(str[idx+1:], fromHostPrefix)
 	return nil
 }

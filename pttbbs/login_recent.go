@@ -35,6 +35,7 @@ func OpenLoginRecentFile(filename string) ([]*LoginRecentRecord, error) {
 		log.Println(err)
 		return nil, err
 	}
+	defer file.Close()
 
 	ret := []*LoginRecentRecord{}
 
@@ -51,7 +52,7 @@ func OpenLoginRecentFile(filename string) ([]*LoginRecentRecord, error) {
 	}
 
 	if err := scanner.Err(); err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 
 	return ret, nil

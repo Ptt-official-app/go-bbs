@@ -16,6 +16,10 @@ package pttbbs
 
 import (
 	// "log"
+	"bufio"
+	"os"
+	"path/filepath"
+	"strings"
 	"testing"
 	"time"
 )
@@ -59,4 +63,18 @@ func TestParseLoginRecent(t *testing.T) {
 
 	}
 
+}
+
+func TestOpenLoginRecentFileScannerError(t *testing.T) {
+	filename := filepath.Join(t.TempDir(), "logins.recent")
+	// A line longer than bufio.MaxScanTokenSize makes the scanner fail.
+	line := "01/01/2021 10:08:56 " + strings.Repeat("a", bufio.MaxScanTokenSize) + "\n"
+	if err := os.WriteFile(filename, []byte(line), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	records, err := OpenLoginRecentFile(filename)
+	if err == nil {
+		t.Errorf("OpenLoginRecentFile() expected error, got records: %v", records)
+	}
 }

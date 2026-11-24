@@ -47,6 +47,8 @@ func OpenFormosaBBSFileHeaderFile(filename string) ([]*FileHeader, error) {
 		return nil, err
 	}
 
+	defer file.Close()
+
 	ret := []*FileHeader{}
 
 	for {
